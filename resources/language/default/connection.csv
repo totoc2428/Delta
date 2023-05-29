@@ -1,0 +1,11 @@
+Welcome;Bienvenue sur le résaux Delta;
+WelcomeChoiceP;La connexion par default est réglée sur  Clé USB.
+WelcomeChoice1;Si vous voulez utilisez un autre moyen apuyez sur [espace].
+WelcomeChoice2;Si non appyez sur [entrée].;
+USBKeyWaiting;En attente de la clef de connexion...;
+PublicKeyFind;Clé pulique trouvé.;
+PrivateKeyWaiting;En attente de la clè privée.;
+PrivateKeyFind;Clé privée trouvé;
+NetworkConnect;Connexion au résau Delta...;
+NetworkConnected;Connexion réussie !;
+UserOpen;Ouverture du profil utilisateur...;
