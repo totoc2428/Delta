@@ -9,15 +9,15 @@ import java.util.HashMap;
 import src.exception.data.DataNotFoundExecption;
 
 public class DataCSV implements Data {
-    public static ArrayList<ArrayList<String>> totable(File file){
+    public static ArrayList<ArrayList<String>> totable(File file) {
         ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = "";
-            while((line = br.readLine()) != null ){
+            while ((line = br.readLine()) != null) {
                 String[] linelist = line.split(";");
-                ArrayList<String> lineArrayList = new ArrayList<String>(); 
-                for(String str : linelist){
+                ArrayList<String> lineArrayList = new ArrayList<String>();
+                for (String str : linelist) {
                     lineArrayList.add(str);
                 }
                 data.add(lineArrayList);
@@ -28,10 +28,11 @@ public class DataCSV implements Data {
         }
         return data;
     }
-    public static HashMap<String,String> toHashMap(File file){
-        HashMap<String,String> data = new HashMap<String,String>();
+
+    public static HashMap<String, String> toHashMap(File file) {
+        HashMap<String, String> data = new HashMap<String, String>();
         ArrayList<ArrayList<String>> tabledata = DataCSV.totable(file);
-        for(ArrayList<String> list : tabledata){
+        for (ArrayList<String> list : tabledata) {
             data.put(list.get(0), list.get(1));
         }
         return data;

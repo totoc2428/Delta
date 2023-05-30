@@ -11,13 +11,15 @@ public class Identity {
     String birsthPostalCode;
     String postalCode;
     Signature signature;
-    public Identity(String name, String forename,LocalDate birsthDate, boolean birsthGender, Signature signature){
+
+    public Identity(String name, String forename, LocalDate birsthDate, boolean birsthGender, Signature signature) {
         this.name = name;
         this.forename = forename;
         this.birsthDate = birsthDate;
         this.birsthGender = birsthGender;
         this.signature = signature;
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -30,6 +32,7 @@ public class Identity {
         result = prime * result + ((postalCode == null) ? 0 : postalCode.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -68,5 +71,5 @@ public class Identity {
             return false;
         return true;
     }
-    
+
 }

@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyboardInput {
     private static boolean isPressed;
+
     public static boolean isKeyPressed(int KeyEventNumber) {
         Object lock = new Object();
 
