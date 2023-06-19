@@ -7,7 +7,7 @@ public class LocationZone {
     private double sizeInKilometers;
     private double perimeterSize;
 
-    public LocationZone(ArrayList<Double> perimeter, double sizeInKilometers, double perimeterSize) {
+    public LocationZone(ArrayList<LocationPoint> perimeter, double sizeInKilometers, double perimeterSize) {
         this.perimeter = perimeter;
         this.sizeInKilometers = sizeInKilometers;
         this.perimeterSize = perimeterSize;

@@ -1,3 +1,5 @@
+package src.serveur.util.repot.format;
+
 import src.serveur.util.repot.Repot;
 
 public class RepotFormat {

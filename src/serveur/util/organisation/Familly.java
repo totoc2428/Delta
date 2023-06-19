@@ -18,7 +18,7 @@ public class Familly {
     }
 
     public Familly(Identity father, Identity mother) {
-        this(father, mother, new ArrayList<Identity>(), false);
+        this(father, mother, new ArrayList<Identity>());
     }
 
     public Identity getFather() {
@@ -33,7 +33,7 @@ public class Familly {
         return childs;
     }
 
-    public getSignature(){
+    public Key getSignature() {
         return signature;
     }
 

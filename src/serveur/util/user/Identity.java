@@ -29,17 +29,19 @@ public class Identity {
         this.famillies = famillies;
     }
 
-    public Identity(String name, Stringg firstName, LocalDate birthDate, boolean birsthGender) {
+    public Identity(String name, String firstName, LocalDate birthDate, boolean birsthGender) {
         this(name, firstName, new ArrayList<String>(), birthDate, birsthGender, null, null, null);
     }
 
     public Identity(String name, String firstName, ArrayList<String> otherName, LocalDate birsthDate,
             String birsthGender) {
-        this(name, firstName, otherName, birsthDate, !birsthGender.contains("female"));
+        this(name, firstName, otherName, birsthDate, !birsthGender.contains("female"), null, new ArrayList<Familly>(),
+                new ArrayList<Familly>());
     }
 
     public Identity(String name, String firstName, LocalDate birsthDate, String birsthGender) {
-        this(name, firstName, new ArrayList<String>(), birsthDate, !birsthGender.contains("female"));
+        this(name, firstName, new ArrayList<String>(), birsthDate, !birsthGender.contains("female"), null,
+                new ArrayList<Familly>(), new ArrayList<Familly>());
     }
 
     public String getName() {
