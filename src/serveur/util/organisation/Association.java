@@ -1,11 +1,22 @@
 package src.serveur.util.organisation;
 
 import src.serveur.util.location.Address;
-import src.serveur.util.user.Account;
+import src.serveur.util.user.Identity;
 
 public class Association {
-    private Account president;
+    private Identity president;
     private String name;
-    private Address address;
+    private Address mainAddress;
 
+    public Identity getPresident() {
+        return president;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Address getAddress() {
+        return mainAddress;
+    }
 }
