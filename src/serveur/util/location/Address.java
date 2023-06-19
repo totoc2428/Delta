@@ -1,4 +1,4 @@
-package src.serveur.util.location;
+package serveur.util.location;
 
 public class Address {
     private String complements;

@@ -1,4 +1,4 @@
-package src.serveur.util.user;
+package serveur.util.user;
 
 import java.time.LocalDate;
 

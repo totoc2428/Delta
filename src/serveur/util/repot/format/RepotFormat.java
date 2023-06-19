@@ -1,6 +1,6 @@
-package src.serveur.util.repot.format;
+package serveur.util.repot.format;
 
-import src.serveur.util.repot.Repot;
+import serveur.util.repot.Repot;
 
 public class RepotFormat {
     private String message;

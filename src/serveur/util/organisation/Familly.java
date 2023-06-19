@@ -1,9 +1,9 @@
-package src.serveur.util.organisation;
+package serveur.util.organisation;
 
 import java.util.ArrayList;
 
-import src.serveur.util.security.key.Key;
-import src.serveur.util.user.Identity;
+import serveur.util.security.key.Key;
+import serveur.util.user.Identity;
 
 public class Familly {
     private Identity father;

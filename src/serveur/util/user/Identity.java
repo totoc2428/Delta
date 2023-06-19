@@ -1,10 +1,10 @@
-package src.serveur.util.user;
+package serveur.util.user;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import src.serveur.util.location.Address;
-import src.serveur.util.organisation.Familly;
+import serveur.util.location.Address;
+import serveur.util.organisation.Familly;
 
 public class Identity {
     private String name;

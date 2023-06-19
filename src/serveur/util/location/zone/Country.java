@@ -1,9 +1,9 @@
-package src.serveur.util.location.zone;
+package serveur.util.location.zone;
 
 import java.util.ArrayList;
 
-import src.serveur.util.organisation.Association;
-import src.serveur.util.security.key.Key;
+import serveur.util.organisation.Association;
+import serveur.util.security.key.Key;
 
 public class Country extends LocationZone {
     private Association legislator;

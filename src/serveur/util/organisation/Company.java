@@ -1,7 +1,7 @@
-package src.serveur.util.organisation;
+package serveur.util.organisation;
 
-import src.serveur.util.location.Address;
-import src.serveur.util.user.Identity;
+import serveur.util.location.Address;
+import serveur.util.user.Identity;
 
 public class Company {
     Identity president;

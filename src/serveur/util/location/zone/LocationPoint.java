@@ -1,4 +1,4 @@
-package src.serveur.util.location.zone;
+package serveur.util.location.zone;
 
 public class LocationPoint {
     double latitude;

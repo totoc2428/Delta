@@ -1,8 +1,8 @@
-package src.serveur.util.location.zone;
+package serveur.util.location.zone;
 
 import java.util.ArrayList;
 
-import src.serveur.util.security.key.Key;
+import serveur.util.security.key.Key;
 
 public abstract class LocationZone {
     private Key signature;

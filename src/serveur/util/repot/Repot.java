@@ -1,10 +1,10 @@
-package src.serveur.util.repot;
+package serveur.util.repot;
 
 import java.util.ArrayList;
 
-import src.serveur.util.repot.format.RepotFormat;
-import src.serveur.util.repot.format.RepotFormatName;
-import src.serveur.util.security.key.Key;
+import serveur.util.repot.format.RepotFormat;
+import serveur.util.repot.format.RepotFormatName;
+import serveur.util.security.key.Key;
 
 public class Repot {
     private Key signature;
