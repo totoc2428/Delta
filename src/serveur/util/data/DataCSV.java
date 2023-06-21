@@ -5,9 +5,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class DataCSV {
-    static HashMap<String, String> toStringHashMap(File fileName) {
+    static HashMap<String, String> filetoStringHashMap(File fileName) {
         HashMap<String, String> map = new HashMap<String, String>();
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line = "";
@@ -23,7 +24,7 @@ public class DataCSV {
         }
     }
 
-    static ArrayList<String> toStringArrayList(File fileName) {
+    static ArrayList<String> filetoStringArrayList(File fileName) {
         ArrayList<String> list = new ArrayList<String>();
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line = "";
@@ -48,16 +49,30 @@ public class DataCSV {
 
     }
 
-    static ArrayList<Double> stringValueToDoubleArrayList(String value) {
-        ArrayList<Double> list = new ArrayList<Double>();
+    static HashMap<String, String> stringValueToStringHashMap(String value) {
+        HashMap<String, String> dic = new HashMap<String, String>();
         for (String str : value.split(",")) {
-            try {
-                list.add(Double.parseDouble(str));
-            } catch (NumberFormatException e) {
-                System.out.println(e.getMessage());
+            if (str.split("|").length == 1) {
+                dic.put(str.split("|")[0], str.split("|")[1]);
             }
         }
-        return list;
-
+        return dic;
     }
+
+    static String stringArrayListToString(ArrayList<String> list) {
+        String strList = "";
+        for (String str : list) {
+            strList += str;
+        }
+        return strList;
+    }
+
+    static String StringHashMaptoString(HashMap<String, String> dic) {
+        String strDic = "";
+        for (Map.Entry<String, String> m : dic.entrySet()) {
+            strDic += m.getKey() + "|" + m.getValue() + ",";
+        }
+        return strDic.substring(0, strDic.length() - 1);
+    }
+
 }
