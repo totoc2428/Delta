@@ -45,4 +45,19 @@ public abstract class Identity extends ChainObject {
         return publicAccounts;
     }
 
+    @Override
+    public String toWriteFormat() {
+        String strPrivateAccount = "";
+        String strPublicAccount = "";
+        for (Account a : privateAccounts) {
+            strPrivateAccount += a.getSignature() + ",";
+        }
+        for (Account a : publicAccounts) {
+            strPublicAccount += a.getSignature() + ",";
+        }
+        return super.toWriteFormat() + ";" + name + ";" + birthDate + ";" + address.getSignature() + ";"
+                + strPrivateAccount.substring(0, strPrivateAccount.length() - 1) + ";"
+                + strPublicAccount.subSequence(0, strPublicAccount.length() - 1) + ";";
+    }
+
 }
