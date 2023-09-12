@@ -2,91 +2,60 @@ package serveur.util.data;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import serveur.util.ChainObject.ChainObject;
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.NoSuchPaddingException;
 import serveur.util.security.Block;
 
 public class DataCSV {
-    public static HashMap<String, String> filetoStringHashMap(File fileName) {
-        HashMap<String, String> map = new HashMap<String, String>();
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                String[] lineList = line.split(";");
-                map.put(lineList[0], lineList[1]);
+    public static void encryptCSV(File file, PublicKey publicKey) {
+
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            CipherInputStream cipherInputStream = new CipherInputStream(inputStream, cipher);
+            FileOutputStream outputStream = new FileOutputStream(file.getName() + ".enc");
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = cipherInputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
             }
-            br.close();
-            return map;
-
-        } catch (Exception e) {
-            return null;
+            cipherInputStream.close();
+            outputStream.close();
+        } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static ArrayList<String> filetoStringArrayList(File fileName) {
-        ArrayList<String> list = new ArrayList<String>();
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                list.add(line);
-
+    public static ArrayList<String> decryptCSV(File file, PrivateKey privateKey) {
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            CipherInputStream cipherInputStream = new CipherInputStream(inputStream, cipher);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(cipherInputStream));
+            ArrayList<String> lines = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
             }
-            br.close();
-            return list;
-
-        } catch (Exception e) {
-            return null;
+            cipherInputStream.close();
+            reader.close();
+            return lines;
+        } catch (IOException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
+            e.printStackTrace();
         }
-    }
-
-    public static ArrayList<String> stringValueToStringArrayList(String value) {
-        ArrayList<String> list = new ArrayList<String>();
-        for (String str : value.split(",")) {
-            list.add(str);
-        }
-        return list;
-
-    }
-
-    public static HashMap<String, String> stringValueToStringHashMap(String value) {
-        HashMap<String, String> dic = new HashMap<String, String>();
-        for (String str : value.split(",")) {
-            if (str.split("|").length == 1) {
-                dic.put(str.split("|")[0], str.split("|")[1]);
-            }
-        }
-        return dic;
-    }
-
-    public static String stringArrayListToString(ArrayList<String> list) {
-        String strList = "";
-        for (String str : list) {
-            strList += str;
-        }
-        return strList;
-    }
-
-    public static String stringHashMaptoString(HashMap<String, String> dic) {
-        String strDic = "";
-        for (Map.Entry<String, String> m : dic.entrySet()) {
-            strDic += m.getKey() + "|" + m.getValue() + ",";
-        }
-        return strDic.substring(0, strDic.length() - 1);
-    }
-
-    public static void writeChainObject(ChainObject chO, String filePath) {
-        // chO.toWriteFormat();
-        try (FileWriter fileWriter = new FileWriter(filePath)) {
-            fileWriter.append(chO.toWriteFormat());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        return null;
     }
 
     public static Block readBlock(String fileName) {
