@@ -17,8 +17,6 @@ public class Logo implements ShowObject {
         this.strList = DataText
                 .TextToArrayListOfString(Paths.get("." + File.separator + "resources" + File.separator + "serveur"
                         + File.separator + "logo" + File.separator + "logo" + size + "x" + size + ".txt").toFile());
-        System.out.println(Paths.get("." + File.separator + "resources" + File.separator + "serveur"
-                + File.separator + "logo" + File.separator + "logo" + size + "x" + size + ".txt").toFile().exists());
     }
 
     public void show() {
