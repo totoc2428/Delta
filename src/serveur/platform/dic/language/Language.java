@@ -1,4 +1,4 @@
-package serveur.platform.dic;
+package serveur.platform.dic.language;
 
 public enum Language {
     DEFAULT("DEFAULT", "default"),
