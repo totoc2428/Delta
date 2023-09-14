@@ -2,11 +2,12 @@ package serveur.platform.show.style;
 
 public enum TerminalStyle {
     BLUE("\033[34m", "/B/", '#'), BOLD("\033[1m", "~B~", '~'),
-    GREEN("\033[32m", "/G/", '&'), ITALIC("\033[2m", "", '~'),
+    GREEN("\033[32m", "/G/", '&'), ITALIC("\033[2m", "~I~", '~'),
     RED("\033[31m", "/R/", '.'),
     PURPLE("\033[35m", "/P/", '/'),
     WHITE("\033[37m", "/W/", ','),
-    YELLOW("\033[33m", "/Y/", ':');
+    YELLOW("\033[33m", "/Y/", ':'),
+    RESET("\033[0m", "_R_", '_');
 
     private String showValue;
     private String writeValue;

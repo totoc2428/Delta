@@ -10,4 +10,5 @@ public class DicPlatform extends Dic {
         super(Paths.get("." + File.separator + "resources" + File.separator + "serveur"
                 + File.separator + "platform" + File.separator + name + ".csv").toFile());
     }
+
 }

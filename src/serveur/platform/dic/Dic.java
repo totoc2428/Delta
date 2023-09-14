@@ -22,7 +22,7 @@ public abstract class Dic {
     }
 
     public String getDicValue(String key) {
-        return dic.get(key);
+        return dic.get(key) != null ? dic.get(key) : "";
     }
 
     public String getDicKey(String value) {

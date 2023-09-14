@@ -1,4 +1,6 @@
-language;default
+language;DEFAULT
 user;null
 coinValue;1
 totalUser;0
+owner;null
+deviceIdentity;null
