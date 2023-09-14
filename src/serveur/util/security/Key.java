@@ -1,10 +1,14 @@
 package serveur.util.security;
 
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 public class Key {
@@ -16,6 +20,9 @@ public class Key {
     public Key(String publickeyString, String privateKeyString) {
         this.publickeyString = publickeyString;
         this.privateKeyString = privateKeyString;
+        this.publicKey = Key.PublicKeyfromString(publickeyString);
+        this.privateKey = Key.PrivateKeyfromString(privateKeyString);
+
     }
 
     public Key() {
@@ -48,4 +55,29 @@ public class Key {
         return publickeyString;
     }
 
+    private static PublicKey PublicKeyfromString(String string) {
+        try {
+            byte[] keyBytes = Base64.getDecoder().decode(string);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+            return keyFactory.generatePublic(keySpec);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private static PrivateKey PrivateKeyfromString(String string) {
+        try {
+            byte[] keyBytes = Base64.getDecoder().decode(string);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+            return keyFactory.generatePrivate(keySpec);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

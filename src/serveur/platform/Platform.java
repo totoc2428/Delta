@@ -38,19 +38,20 @@ public class Platform {
         logo = new Logo(100);
         showStyle = logo.savedShow(showStyle);
 
+        System.out.println(showInformationDic.getDicKey("noDeviceIdentity"));
         listen = new Thread(new Runnable() {
             @Override
             public void run() {
                 showStyle.addLine(showDic.getDicValue("welcome") + "\n");
                 if (initDic.getDicValue("deviceIdentity").equals("null")) {
                     showStyle.addLine(showWarningDic.getDicValue("noDeviceIdentity"));
-                    showStyle.addLine(showInformationDic.getDicKey("noDeviceIdentity"));
+                    showStyle.addLine(showInformationDic.getDicValue("noDeviceIdentity"));
                     if (initDic.getDicValue("owner").equals("null")) {
                         showStyle.addLine(showWarningDic.getDicValue("noDeviceOwner"));
-                        showStyle.addLine(showInformationDic.getDicKey("noDeviceOwner"));
+                        showStyle.addLine(showInformationDic.getDicValue("noDeviceOwner"));
                         if (initDic.getDicValue("user").equals("null")) {
                             showStyle.addLine(showWarningDic.getDicValue("noDeviceUser"));
-                            showStyle.addLine(showInformationDic.getDicKey("noDeviceUser"));
+                            showStyle.addLine(showInformationDic.getDicValue("noDeviceUser"));
                         }
                     }
                 }
