@@ -21,7 +21,7 @@ public class Key {
         this.publickeyString = publickeyString;
         this.privateKeyString = privateKeyString;
         this.publicKey = Key.PublicKeyfromString(publickeyString);
-        this.privateKey = Key.PrivateKeyfromString(privateKeyString);
+        this.privateKey = privateKeyString == null ? Key.PrivateKeyfromString(privateKeyString) : null;
 
     }
 
@@ -37,6 +37,10 @@ public class Key {
         } catch (NoSuchAlgorithmException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public Key(String publicKey) {
+        this(publicKey, null);
     }
 
     public PrivateKey getPrivateKey() {

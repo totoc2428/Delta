@@ -30,4 +30,8 @@ public abstract class ChainObject {
     public String toWriteFormat() {
         return signature.getPublickeyString();
     }
+
+    public static void write() {
+
+    }
 }

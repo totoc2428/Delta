@@ -8,16 +8,20 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import serveur.util.security.Key;
+
 public class Node {
 
     private String ipAddress;
     private int port;
     private List<Node> neighbors;
+    private Key signature;
 
-    public Node(String ipAddress, int port) {
+    public Node(String ipAddress, int port, Key signature) {
         this.ipAddress = ipAddress;
         this.port = port;
         this.neighbors = new ArrayList<>();
+        this.signature = signature;
     }
 
     public String getIpAddress() {
@@ -26,10 +30,6 @@ public class Node {
 
     public int getPort() {
         return port;
-    }
-
-    public List<Node> getNeighbors() {
-        return neighbors;
     }
 
     public void addNeighbor(Node neighbor) {
@@ -48,7 +48,7 @@ public class Node {
         socket.close();
     }
 
-    public void listenForMessages() throws IOException {
+    public void listenForMessages() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (true) {
                 Socket socket = serverSocket.accept();
@@ -59,8 +59,13 @@ public class Node {
                 System.out.println("Received message: " + message);
                 socket.close();
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
     }
 
+    public Key getSignature() {
+        return signature;
+    }
 }
