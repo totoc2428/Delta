@@ -1,4 +1,4 @@
-package serveur.util.data;
+package serveur.util.data.text;
 
 import java.io.BufferedReader;
 import java.io.File;

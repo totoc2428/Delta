@@ -29,7 +29,7 @@ public class Platform {
 
         initDic = new DicPlatform("init");
 
-        language = Language.valueOfWriteValue(initDic.getDicValue("language"));
+        language = Language.valueOfWriteValue((String) initDic.getValue("language"));
         showDic = new DicShow(language, "util");
         showWarningDic = new DicShowWarning(language);
         showInformationDic = new DicShowInformation(language);
@@ -38,20 +38,19 @@ public class Platform {
         logo = new Logo(100);
         showStyle = logo.savedShow(showStyle);
 
-        System.out.println(showInformationDic.getDicKey("noDeviceIdentity"));
         listen = new Thread(new Runnable() {
             @Override
             public void run() {
-                showStyle.addLine(showDic.getDicValue("welcome") + "\n");
-                if (initDic.getDicValue("deviceIdentity").equals("null")) {
-                    showStyle.addLine(showWarningDic.getDicValue("noDeviceIdentity"));
-                    showStyle.addLine(showInformationDic.getDicValue("noDeviceIdentity"));
-                    if (initDic.getDicValue("owner").equals("null")) {
-                        showStyle.addLine(showWarningDic.getDicValue("noDeviceOwner"));
-                        showStyle.addLine(showInformationDic.getDicValue("noDeviceOwner"));
-                        if (initDic.getDicValue("user").equals("null")) {
-                            showStyle.addLine(showWarningDic.getDicValue("noDeviceUser"));
-                            showStyle.addLine(showInformationDic.getDicValue("noDeviceUser"));
+                showStyle.addLine(showDic.getValue("welcome") + "\n");
+                if (initDic.getValue("deviceIdentity").equals("null")) {
+                    showStyle.addLine(showWarningDic.getValue("noDeviceIdentity"));
+                    showStyle.addLine(showInformationDic.getValue("noDeviceIdentity"));
+                    if (initDic.getValue("owner").equals("null")) {
+                        showStyle.addLine(showWarningDic.getValue("noDeviceOwner"));
+                        showStyle.addLine(showInformationDic.getValue("noDeviceOwner"));
+                        if (initDic.getValue("user").equals("null")) {
+                            showStyle.addLine(showWarningDic.getValue("noDeviceUser"));
+                            showStyle.addLine(showInformationDic.getValue("noDeviceUser"));
                         }
                     }
                 }

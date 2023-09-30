@@ -16,7 +16,7 @@ public class DicShowWarning extends DicShow {
     }
 
     @Override
-    public String getDicValue(String key) {
-        return COLOR.getShowValue() + dic.get(key) + TerminalStyle.RESET.getShowValue() + "\n";
+    public String getValue(String key) {
+        return COLOR.getShowValue() + super.getValue(key) + TerminalStyle.RESET.getShowValue() + "\n";
     }
 }

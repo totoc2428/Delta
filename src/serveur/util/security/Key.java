@@ -84,4 +84,48 @@ public class Key {
 
         return null;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((publicKey == null) ? 0 : publicKey.hashCode());
+        result = prime * result + ((privateKey == null) ? 0 : privateKey.hashCode());
+        result = prime * result + ((publickeyString == null) ? 0 : publickeyString.hashCode());
+        result = prime * result + ((privateKeyString == null) ? 0 : privateKeyString.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Key other = (Key) obj;
+        if (publicKey == null) {
+            if (other.publicKey != null)
+                return false;
+        } else if (!publicKey.equals(other.publicKey))
+            return false;
+        if (privateKey == null) {
+            if (other.privateKey != null)
+                return false;
+        } else if (!privateKey.equals(other.privateKey))
+            return false;
+        if (publickeyString == null) {
+            if (other.publickeyString != null)
+                return false;
+        } else if (!publickeyString.equals(other.publickeyString))
+            return false;
+        if (privateKeyString == null) {
+            if (other.privateKeyString != null)
+                return false;
+        } else if (!privateKeyString.equals(other.privateKeyString))
+            return false;
+        return true;
+    }
+
 }

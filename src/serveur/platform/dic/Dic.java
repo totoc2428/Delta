@@ -1,36 +1,24 @@
 package serveur.platform.dic;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Properties;
 
-import serveur.util.data.DataCSV;
+import serveur.util.data.prop.DataProp;
 
 public abstract class Dic {
-    protected HashMap<String, String> dic;
+    protected Properties dic;
 
     public Dic(File file) {
         if (file.exists()) {
-            this.dic = DataCSV.toHashMap(file);
+            this.dic = DataProp.read(file);
+
         } else {
             // exception
         }
     }
 
-    public HashMap<String, String> getDic() {
-        return dic;
+    public Object getValue(String propertie) {
+        return dic.get(propertie);
     }
 
-    public String getDicValue(String key) {
-        return dic.get(key) != null ? dic.get(key) : "";
-    }
-
-    public String getDicKey(String value) {
-        for (Map.Entry<String, String> entry : dic.entrySet()) {
-            if (entry.getValue().equals(value)) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
 }

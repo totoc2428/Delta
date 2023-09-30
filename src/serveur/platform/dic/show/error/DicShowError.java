@@ -7,16 +7,15 @@ import serveur.platform.show.style.TerminalStyle;
 public class DicShowError extends DicShow {
     private static final TerminalStyle COLOR = TerminalStyle.RED;
 
-    public DicShowError(Language l) {
-        super(l, "error");
+    public DicShowError(Language language) {
+        super(language, "error");
     }
 
     public static TerminalStyle getColor() {
         return COLOR;
     }
 
-    @Override
-    public String getDicValue(String key) {
-        return COLOR.getShowValue() + dic.get(key) + TerminalStyle.RESET.getShowValue() + "\n";
+    public String getValue(String key) {
+        return COLOR.getShowValue() + super.getValue(key) + TerminalStyle.RESET.getShowValue() + "\n";
     }
 }

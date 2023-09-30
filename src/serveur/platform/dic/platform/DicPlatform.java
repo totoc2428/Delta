@@ -8,7 +8,7 @@ import serveur.platform.dic.Dic;
 public class DicPlatform extends Dic {
     public DicPlatform(String name) {
         super(Paths.get("." + File.separator + "resources" + File.separator + "serveur"
-                + File.separator + "platform" + File.separator + name + ".csv").toFile());
+                + File.separator + "platform" + File.separator + name + ".prop").toFile());
     }
 
 }

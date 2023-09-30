@@ -1,4 +1,4 @@
-package serveur.util.data;
+package serveur.util.data.csv;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,14 +13,10 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Properties;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.NoSuchPaddingException;
-
-import serveur.util.ChainObject.block.Block;
-import serveur.util.security.Key;
 
 public class DataCSV {
     public static void encryptCSV(File file, PublicKey publicKey) {

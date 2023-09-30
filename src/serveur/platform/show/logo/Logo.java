@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import serveur.platform.show.ShowObject;
 import serveur.platform.show.style.ShowStyle;
 import serveur.platform.show.style.TerminalStyle;
-import serveur.util.data.DataText;
+import serveur.util.data.text.DataText;
 
 public class Logo implements ShowObject {
     private int size;
