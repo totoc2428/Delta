@@ -1,13 +1,17 @@
 package serveur.util.ChainObject;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Properties;
 
-import serveur.util.data.csv.DataCSV;
+import serveur.util.data.prop.DataProp;
 import serveur.util.security.Key;
 
-public abstract class ChainObject {
-
+public class ChainObject {
+    protected final static String SRC_PATH = (String) (DataProp
+            .read(Paths.get("./ressouces/platform/init.prop").toFile()))
+            .get("ChainObjectSourcePath");
     private Key signature;
 
     /* Construcor */
@@ -19,25 +23,16 @@ public abstract class ChainObject {
 
     /* Construcor */
     /* File init constructor */
-    public ChainObject(String file) {
-
+    public ChainObject(File file) {
+        this(file.exists() ? ChainObject.readChainObject(file).getSignature() : null);
     }
-
-    /* Construcor */
-    /* String init constructor */
-    public ChainObject(String signature, Key privatekey) {
-        if (Paths.get(signature + ".csv").toFile().exists()) {
-            ArrayList<String> list = DataCSV.decryptCSV(Paths.get(signature + ".csv").toFile(),
-                    privatekey.getPrivateKey());
-            System.out.println(list);
-        } else {
-            // ..
-        }
-    }
-
     /* Object method */
-    public String toWriteFormat() {
-        return signature.getPublickeyString();
+
+    public Properties toWriteFormat() {
+        Properties properties = new Properties();
+        properties.setProperty("publicKey", signature.getPublickeyString());
+        properties.setProperty("privateKey", signature.getPrivateKeyString());
+        return properties;
     }
 
     public void write() {
@@ -68,7 +63,47 @@ public abstract class ChainObject {
 
     /* Static Method */
     /* Read a block saved in a file */
+    private static ChainObject readChainObject(File fileName) {
+        Properties properties = DataProp.read(fileName);
+        if (properties != null) {
+            return new ChainObject(
+                    new Key((String) properties.get("publicKey"), (String) properties.get("privateKey")));
+        } else {
+            return null;
+        }
+    }
+
+    /* Check if the Object is valid ChainObject */
     public static boolean isAValidChainObject(Object obj) {
         return obj instanceof ChainObject;
     }
+
+    /* Get an arrayList of the signature of each ChainObject */
+    public static ArrayList<Key> getChainObjectSignature(ArrayList<ChainObject> chainObjectList) {
+        ArrayList<Key> keyArrayList = new ArrayList<Key>();
+        for (ChainObject chainObj : chainObjectList) {
+            keyArrayList.add(chainObj.getSignature());
+        }
+
+        return keyArrayList;
+    }
+
+    /* Get a String arrayList of the Public signature of each ChainObject */
+    public static ArrayList<String> getChainObjectSignaturePublicKeytoSring(ArrayList<ChainObject> chainObjectsList) {
+        ArrayList<String> stringArrayList = new ArrayList<String>();
+        for (Key signatureChaiObj : getChainObjectSignature(chainObjectsList)) {
+            stringArrayList.add(signatureChaiObj.getPublickeyString());
+        }
+        return stringArrayList;
+    }
+
+    /* Get a String arrayList of the Private signature of each ChainObject */
+    public static ArrayList<String> getChainObjectSignaturePrivateKeytoSring(ArrayList<ChainObject> chainObjectsList) {
+        ArrayList<String> stringArrayList = new ArrayList<String>();
+        for (Key signatureChaiObj : getChainObjectSignature(chainObjectsList)) {
+            stringArrayList.add(signatureChaiObj.getPrivateKeyString());
+        }
+        return stringArrayList;
+    }
+
 }

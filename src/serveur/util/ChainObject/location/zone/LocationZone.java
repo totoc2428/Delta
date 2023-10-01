@@ -27,17 +27,4 @@ public abstract class LocationZone extends ChainObject {
         return owner;
     }
 
-    @Override
-    public String toWriteFormat() {
-        String strLocationPoint = "";
-        for (LocationPoint l : border) {
-            strLocationPoint += l.toWriteFormat() + ",";
-        }
-        String strOwner = "";
-        for (Map.Entry<Identity, Double> ow : owner.entrySet()) {
-            strOwner += ow.getKey().getSignature() + "|" + ow.getValue() + ",";
-        }
-        return super.toWriteFormat() + ";" + strLocationPoint.substring(0, strLocationPoint.length() - 1) + ";"
-                + strOwner.substring(0, strOwner.length() - 1);
-    }
 }

@@ -1,5 +1,6 @@
 package serveur.util.security;
 
+import java.io.File;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -10,6 +11,9 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Properties;
+
+import serveur.util.data.prop.DataProp;
 
 public class Key {
     private PublicKey publicKey;
@@ -17,32 +21,46 @@ public class Key {
     private String publickeyString;
     private String privateKeyString;
 
+    /* Construcor */
+    /* Base constructor */
     public Key(String publickeyString, String privateKeyString) {
         this.publickeyString = publickeyString;
         this.privateKeyString = privateKeyString;
-        this.publicKey = Key.PublicKeyfromString(publickeyString);
-        this.privateKey = privateKeyString == null ? Key.PrivateKeyfromString(privateKeyString) : null;
+        this.publicKey = publickeyString != null ? Key.PublicKeyfromString(publickeyString) : null;
+        this.privateKey = privateKeyString != null ? Key.PrivateKeyfromString(privateKeyString) : null;
 
     }
+
+    /* Construcor */
+    /* new Key */
 
     public Key() {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
             keyPairGenerator.initialize(2048);
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
-            this.publicKey = keyPair.getPublic();
-            this.privateKey = keyPair.getPrivate();
-            publickeyString = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
-            privateKeyString = Base64.getEncoder().encodeToString(keyPair.getPrivate().getEncoded());
+            publicKey = keyPair.getPublic();
+            privateKey = keyPair.getPrivate();
+            publickeyString = Key.publicKeytoString(publicKey);
+            privateKeyString = Key.privateKeytoString(privateKey);
         } catch (NoSuchAlgorithmException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public Key(String publicKey) {
-        this(publicKey, null);
+    /* Construcor */
+    /* new Key with privateKey null */
+    public Key(PublicKey publicKey) {
+        this(Key.publicKeytoString(publicKey), null);
     }
 
+    /* Construcor */
+    /* new Key read in a file */
+    public Key(File fileName) {
+        this(Key.readKey(fileName).getPublickeyString(), Key.readKey(fileName).getPrivateKeyString());
+    }
+
+    /* Getter and setter method */
     public PrivateKey getPrivateKey() {
         return privateKey;
     }
@@ -59,32 +77,7 @@ public class Key {
         return publickeyString;
     }
 
-    private static PublicKey PublicKeyfromString(String string) {
-        try {
-            byte[] keyBytes = Base64.getDecoder().decode(string);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
-            return keyFactory.generatePublic(keySpec);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    private static PrivateKey PrivateKeyfromString(String string) {
-        try {
-            byte[] keyBytes = Base64.getDecoder().decode(string);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
-            return keyFactory.generatePrivate(keySpec);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
+    /* Override method */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -128,4 +121,53 @@ public class Key {
         return true;
     }
 
+    /* Static Method */
+
+    /* Transform a String to PublicKey */
+    public static PublicKey PublicKeyfromString(String string) {
+        try {
+            byte[] keyBytes = Base64.getDecoder().decode(string);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+            return keyFactory.generatePublic(keySpec);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /* Transform a String to PrivateKey */
+    public static PrivateKey PrivateKeyfromString(String string) {
+        try {
+            byte[] keyBytes = Base64.getDecoder().decode(string);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+            return keyFactory.generatePrivate(keySpec);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /* Transform a PublicKey to a String */
+    private static String publicKeytoString(PublicKey publicKey) {
+        return Base64.getEncoder().encodeToString(publicKey.getEncoded());
+    }
+
+    /* Transform a PrivateKey to a String */
+    private static String privateKeytoString(PrivateKey privateKey) {
+        return Base64.getEncoder().encodeToString(privateKey.getEncoded());
+    }
+
+    /* Read a block saved in a file */
+    private static Key readKey(File fileName) {
+        Properties properties = DataProp.read(fileName);
+        if (properties != null) {
+            return new Key((String) properties.get("publicKey"), (String) properties.get("privateKey"));
+        } else {
+            return null;
+        }
+    }
 }

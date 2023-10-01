@@ -33,8 +33,4 @@ public class Town extends LocationZone {
         return parent;
     }
 
-    @Override
-    public String toWriteFormat() {
-        return super.getSignature() + ";" + number + ";" + name + ";" + parent + ";" + parent.getSignature();
-    }
 }

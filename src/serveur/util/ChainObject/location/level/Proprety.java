@@ -47,9 +47,4 @@ public class Proprety extends LocationZone {
         return parent;
     }
 
-    @Override
-    public String toWriteFormat() {
-        return super.toWriteFormat() + ";" + complements + ";" + number + ";" + street + ";" + tenant + ";"
-                + parent.getSignature();
-    }
 }

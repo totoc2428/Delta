@@ -4,3 +4,7 @@ coinValue=1
 totalUser=0
 owner=null
 deviceIdentity=null
+ChainObjectSourcePath=./resources/chainobject/
+AddressChainObjectSourcePath=address/
+IdentityChainObjectSourcePath=identity/
+UserIdentityChainObjectSourcePath=user/

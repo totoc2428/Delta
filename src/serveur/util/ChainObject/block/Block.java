@@ -1,10 +1,13 @@
 package serveur.util.ChainObject.block;
 
-import java.io.FileInputStream;
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 import serveur.util.ChainObject.ChainObject;
+import serveur.util.data.prop.DataProp;
 import serveur.util.security.Key;
 
 public class Block extends ChainObject {
@@ -21,15 +24,16 @@ public class Block extends ChainObject {
         this.elements = elements;
     }
 
-    /* Construcor */
-    /* File init constructor */
-    public Block(String fileName) {
-        this(Block.readBlock(fileName).getSignature(),
-                Block.readBlock(fileName).getLastHash(),
-                Block.readBlock(fileName).getElements());
+    /* Key init constructor */
+    public Block(Key signature) {
+        this(Paths.get(SRC_PATH + signature.getPublickeyString() + ".prop").toFile());
     }
 
-    /* Constructor */
+    /* File init constructor */
+    public Block(File fileName) {
+        this(readBlock(fileName).getSignature(), readBlock(fileName).getLastHash(), readBlock(fileName).getElements());
+    }
+
     /* New element consctrutor */
     public Block() {
         this(new Key(), "", new ArrayList<String>());
@@ -45,7 +49,7 @@ public class Block extends ChainObject {
     }
 
     public boolean isValid() {
-        Block block = new Block(lastHash + ".csv");
+        Block block = new Block(new Key(Key.PublicKeyfromString(lastHash)));
         return getElements().size() == stamp && block != null && block.isValid();
     }
 
@@ -108,27 +112,35 @@ public class Block extends ChainObject {
 
     @Override
     public String toString() {
-        return "Block [lastHash=" + lastHash + ", elements=" + elements + "]";
+        return "Block [lastHash=" + lastHash + ", elements=" + elements + "] extended " + super.toString();
+    }
+
+    @Override
+    public Properties toWriteFormat() {
+        Properties properties = super.toWriteFormat();
+        properties.setProperty("lastHash", lastHash);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String str : elements) {
+            stringBuilder.append(str);
+            stringBuilder.append(" ");
+        }
+        properties.setProperty("elements", lastHash);
+        return properties;
+
     }
 
     /* Static Method */
     /* Read a block saved in a file */
-    public static Block readBlock(String fileName) {
-        Properties properties = new Properties();
-        try {
-            properties.load(new FileInputStream(fileName));
+    protected static Block readBlock(File fileName) {
+        Properties properties = DataProp.read(fileName);
+        if (properties != null) {
             String name = properties.getProperty("name");
-            ArrayList<String> keyChain = new ArrayList<String>();
-            for (String str : properties.getProperty("keyChain").split(" ")) {
-                keyChain.add(str);
-            }
-            Key lastBlock = new Key(properties.getProperty("lastkey"));
-            return new Block(lastBlock, name, keyChain);
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            Key lastBlock = new Key(Key.PublicKeyfromString((String) properties.get("lastHash")));
+            return new Block(lastBlock, name,
+                    new ArrayList<>(Arrays.asList(properties.getProperty("elements").split(" "))));
+        } else {
+            return null;
         }
-        return null;
     }
 
 }

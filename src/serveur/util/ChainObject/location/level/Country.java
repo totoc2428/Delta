@@ -21,8 +21,4 @@ public class Country extends LocationZone {
         return name;
     }
 
-    @Override
-    public String toWriteFormat() {
-        return super.toWriteFormat() + ";" + name;
-    }
 }

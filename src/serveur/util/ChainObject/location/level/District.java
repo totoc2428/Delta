@@ -32,9 +32,4 @@ public class District extends LocationZone {
     public LocationZone getParent() {
         return parent;
     }
-
-    @Override
-    public String toWriteFormat() {
-        return super.toWriteFormat() + ";" + number + ";" + name + ";" + parent.getSignature();
-    }
 }
