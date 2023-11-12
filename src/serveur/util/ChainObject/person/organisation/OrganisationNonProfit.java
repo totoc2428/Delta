@@ -1,18 +1,30 @@
-package serveur.util.ChainObject.person.organisation;
+package serveur.util.chainobject.person.organisation;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 
-import serveur.util.ChainObject.location.Address;
-import serveur.util.ChainObject.person.Identity;
-import serveur.util.ChainObject.person.user.User;
+import serveur.util.chainobject.location.Address;
+import serveur.util.chainobject.person.Identity;
+import serveur.util.chainobject.person.user.User;
 import serveur.util.security.Key;
 
-public class OrganisationNonProfit extends Organisation {
+public class OrganisationNonProfit {// extends Organisation {
 
-    OrganisationNonProfit(Key signature, String name, LocalDate localDate, Address address, User president,
+    /* Constructor : */
+    /**
+     * @param signature the signature of the Organisation
+     *                  {@link serveur.util.security.Key}.
+     * @param name      the name of the Non profit Organisation.
+     * @param birthDate the birth date of the Non profit Organisation.
+     * @param address   the main adress of the Non profit Organisation.
+     * @param president the president of the Non profit Organisation.
+     * @param owners    the owners/members of the Non profit Organisation.
+     */
+    OrganisationNonProfit(Key signature, boolean encryptedSave, String name, LocalDate birthDate, Address address,
+            User president,
             HashMap<Identity, Double> owners) {
-        super(signature, name, localDate, address, president, owners);
+        // super(signature, encryptedSave, name, birthDate, address, president, owners);
 
     }
+
 }

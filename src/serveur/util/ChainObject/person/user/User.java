@@ -1,4 +1,4 @@
-package serveur.util.ChainObject.person.user;
+package serveur.util.chainobject.person.user;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
 
-import serveur.util.ChainObject.person.Identity;
+import serveur.util.chainobject.ChainObject;
+import serveur.util.chainobject.location.Address;
+import serveur.util.chainobject.person.Identity;
 import serveur.util.data.prop.DataProp;
-import serveur.util.ChainObject.ChainObject;
-import serveur.util.ChainObject.location.Address;
 import serveur.util.security.Key;
 
 public class User extends Identity {
@@ -25,10 +25,11 @@ public class User extends Identity {
 
     /* Construcor */
     /* Base constructor */
-    public User(Key signature, String name, LocalDate birthDate, Address address, String firstName,
+    public User(Key signature, boolean encryptedSave, String name, LocalDate birthDate, Address address,
+            String firstName,
             ArrayList<String> otherName, Account mainAccount, ArrayList<Account> privateAccount,
             ArrayList<Account> publicAccount) {
-        super(signature, name, birthDate, address);
+        super(signature, encryptedSave, name, birthDate, address);
         this.firstName = firstName;
         this.otherName = otherName;
         this.mainAccount = mainAccount;
@@ -38,7 +39,8 @@ public class User extends Identity {
 
     /* File Constructor */
     public User(File fileName) {
-        this(readUser(fileName).getSignature(), readUser(fileName).getName(), readUser(fileName).getBirthDate(),
+        this(readUser(fileName).getSignature(), readUser(fileName).getEncryptedSave(), readUser(fileName).getName(),
+                readUser(fileName).getBirthDate(),
                 readUser(fileName).getAddress(), readUser(fileName).getFirstName(), readUser(fileName).getOtherName(),
                 readUser(fileName).getMainAccount(), readUser(fileName).getPrivateAccounts(),
                 readUser(fileName).getPublicAccounts());
@@ -49,10 +51,26 @@ public class User extends Identity {
         this(Paths.get(SRC_PATH + signature.getPublickeyString() + ".prop").toFile());
     }
 
+    /* Parent parameter construcor : */
+    /**
+     * @param identity       the identity object of the constructor.
+     * @param firstName      the first name of the User
+     * @param otherName      the other name of the User
+     * @param mainAccount    the mainAccount linked to the User. It's consediring
+     *                       like the main account of the user. The main account is
+     *                       public.
+     * @param privateAccount the private account of the User
+     *                       {@link java.util.ArrayList} is contain all the private
+     *                       account of the User.
+     * @param publicAccount  the public account of the User
+     *                       {@link java.util.ArrayList} is contain all the public
+     *                       account of the user.
+     */
     private User(Identity identity, String firstName,
             ArrayList<String> otherName, Account mainAccount, ArrayList<Account> privateAccount,
             ArrayList<Account> publicAccount) {
-        this(identity.getSignature(), identity.getName(), identity.getBirthDate(), identity.getAddress(), firstName,
+        this(identity.getSignature(), identity.getEncryptedSave(), identity.getName(), identity.getBirthDate(),
+                identity.getAddress(), firstName,
                 otherName, mainAccount, privateAccount, publicAccount);
     }
 

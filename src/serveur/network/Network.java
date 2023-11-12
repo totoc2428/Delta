@@ -8,4 +8,8 @@ public class Network {
     public ArrayList<Node> getNodeList() {
         return nodeList;
     }
+
+    public int size() {
+        return nodeList.size();
+    }
 }

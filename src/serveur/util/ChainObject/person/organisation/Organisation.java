@@ -1,24 +1,39 @@
-package serveur.util.ChainObject.person.organisation;
+package serveur.util.chainobject.person.organisation;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Properties;
 
-import serveur.util.ChainObject.location.Address;
-import serveur.util.ChainObject.person.Identity;
-import serveur.util.ChainObject.person.user.User;
+import serveur.util.chainobject.ChainObject;
+import serveur.util.chainobject.location.Address;
+import serveur.util.chainobject.person.Identity;
+import serveur.util.chainobject.person.user.User;
+import serveur.util.data.prop.DataProp;
 import serveur.util.security.Key;
 
-public abstract class Organisation extends Identity {
+public class Organisation extends Identity {
     private User president;
-    private HashMap<Identity, Double> owners;
     private double capital;
-    private HashMap<Object, Double> proprety;
+    private HashMap<Identity, Double> owners;
+    private HashMap<ChainObject, Double> proprety;
 
-    public Organisation(Key signature, String name, LocalDate birthDate, Address address, User president,
-            HashMap<Identity, Double> owners) {
-        super(signature, name, birthDate, address);
+    public Organisation(Key signature, boolean encryptedSave, String name, LocalDate birthDate, Address address,
+            User president,
+            HashMap<Identity, Double> owners, HashMap<ChainObject, Double> proprety) {
+        super(signature, encryptedSave, name, birthDate, address);
         this.president = president;
         this.owners = isOwnersValid(owners) ? owners : new HashMap<Identity, Double>();// Mettre une exception
+        this.proprety = proprety;
+    }
+
+    public Organisation(File fileName) {
+        this(readOrganisation(fileName).getSignature(), readOrganisation(fileName).getEncryptedSave(),
+                readOrganisation(fileName).getName(),
+                readOrganisation(fileName).getBirthDate(), readOrganisation(fileName).getAddress(),
+                readOrganisation(fileName).getPresident(), readOrganisation(fileName).getOwners(),
+                readOrganisation(fileName).getProprety());
     }
 
     public HashMap<Identity, Double> getOwners() {
@@ -51,7 +66,7 @@ public abstract class Organisation extends Identity {
         return capital;
     }
 
-    public HashMap<Object, Double> getProprety() {
+    public HashMap<ChainObject, Double> getProprety() {
         return proprety;
     }
 
@@ -65,4 +80,15 @@ public abstract class Organisation extends Identity {
         return organisationMap;
     }
 
+    private static Organisation readOrganisation(File fileName) {
+        Properties properties = DataProp.read(fileName);
+        if (properties != null) {
+            Identity identity = new Identity(fileName);
+            User user = new User(Paths.get(properties.getProperty("president") + ".prop").toFile());
+            return new Organisation(identity.getSignature(), identity.getEncryptedSave(), identity.getName(),
+                    identity.getBirthDate(), identity.getAddress(), user, null, null);
+        }
+        return null;
+
+    }
 }

@@ -1,12 +1,12 @@
-package serveur.util.ChainObject.person;
+package serveur.util.chainobject.person;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Properties;
 
-import serveur.util.ChainObject.ChainObject;
-import serveur.util.ChainObject.location.Address;
+import serveur.util.chainobject.ChainObject;
+import serveur.util.chainobject.location.Address;
 import serveur.util.data.prop.DataProp;
 import serveur.util.security.Key;
 
@@ -21,8 +21,8 @@ public class Identity extends ChainObject {
     /* Construcor */
     /* Base constructor */
 
-    public Identity(Key signature, String name, LocalDate birthDate, Address address) {
-        super(signature);
+    public Identity(Key signature, boolean encryptedSave, String name, LocalDate birthDate, Address address) {
+        super(signature, encryptedSave);
         this.name = name;
         this.birthDate = birthDate;
         this.address = address;
@@ -35,7 +35,8 @@ public class Identity extends ChainObject {
 
     /* File Constructor */
     public Identity(File fileName) {
-        this(readIdentity(fileName).getSignature(), readIdentity(fileName).getName(),
+        this(readIdentity(fileName).getSignature(), readIdentity(fileName).getEncryptedSave(),
+                readIdentity(fileName).getName(),
                 readIdentity(fileName).getBirthDate(), readIdentity(fileName).getAddress());
     }
 
@@ -110,9 +111,12 @@ public class Identity extends ChainObject {
     private static Identity readIdentity(File fileName) {
         Properties properties = DataProp.read(fileName);
         if (properties != null) {
-            return new Identity(new Key(fileName), (String) properties.get("name"),
-                    (LocalDate) properties.get("birthDate"),
-                    new Address(new Key(Key.PublicKeyfromString((String) properties.get("Address")))));
+            ChainObject chainObject = new ChainObject(fileName);
+            Address address = new Address(new Key(Key.PublicKeyfromString(properties.getProperty("address"))));
+
+            return new Identity(chainObject.getSignature(), chainObject.getEncryptedSave(),
+                    (String) properties.get("name"),
+                    (LocalDate) properties.get("birthDate"), address);
         } else {
             return null;
         }
