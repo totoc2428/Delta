@@ -35,6 +35,11 @@ public abstract class ChainObject {
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectKeySize"));
 
+    protected final static String SRC_PATH = DataProp
+            .read(Paths.get(DataProp.read(Paths.get("./resources/config/init.conf").toFile())
+                    .getProperty("ChainObjectConfig")).toFile())
+            .getProperty("ChainObjectSrcFolder");
+
     private String hash;
     private PublicKey publicKey;
     private PrivateKey privateKey;
@@ -97,6 +102,11 @@ public abstract class ChainObject {
         object.setPrivateKey(privateKey);
         object.setPublicKey(publicKey);
         object.setHash(hashString);
+    }
+
+    @Override
+    public String toString() {
+        return "ChainObject";
     }
 
 }
