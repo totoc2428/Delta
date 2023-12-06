@@ -1,21 +1,72 @@
 package chainobject.person;
 
-class Person extends ChainObject{
-    protected static final String SRC_PATH = super.SRC_PATH + DataProp
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+import chainobject.ChainObject;
+import chainobject.account.hidden.PrivateAccount;
+import chainobject.account.visible.PublicAccount;
+import chainobject.person.skills.Skill;
+import util.data.DataProp;
+
+public abstract class Person extends ChainObject {
+    protected static final String SRC_PATH = ChainObject.SRC_PATH + DataProp
             .read(Paths.get(DataProp.read(Paths.get("./resources/config/init.conf").toFile())
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("PersonChainObjectSrcFolder");
-    
+
     private String name;
-    private String foreName;
+    private LocalDate birthDate;
     private boolean isVerified;
-    public Person(String hash, PublicKey publicKey, PrivateKey privateKey,String name, String foreName,boolean isVerified ){
+
+    private PublicAccount mainAccount;
+    private ArrayList<PrivateAccount> privateAccounts;
+    private ArrayList<Skill> skills;
+
+    public Person(String name, LocalDate birthDate, boolean isVerified, PublicAccount mainAccount,
+            ArrayList<PrivateAccount> privateAccounts, ArrayList<Skill> skills) {
+        super();
         this.name = name;
-        this.foreName = foreName;
+        this.birthDate = birthDate;
         this.isVerified = isVerified;
+
+        this.mainAccount = mainAccount;
+        this.privateAccounts = privateAccounts;
+
+        this.skills = skills;
+
+        ChainObject.generate(this);
     }
-    
 
+    public String getName() {
+        return name;
+    }
 
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public boolean getIsVerified() {
+        return isVerified;
+    }
+
+    public PublicAccount getMainAccount() {
+        return mainAccount;
+    }
+
+    public ArrayList<PrivateAccount> getPrivateAccounts() {
+        return privateAccounts;
+    }
+
+    public ArrayList<Skill> getSkills() {
+        return skills;
+    }
+
+    @Override
+    public String toString() {
+        return "Person [name=" + name + ", birthDate=" + birthDate + ", isVerified=" + isVerified + ", mainAccount="
+                + mainAccount + ", privateAccounts=" + privateAccounts + ", skills=" + skills + "]";
+    }
 
 }
