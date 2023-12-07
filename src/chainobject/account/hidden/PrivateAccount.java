@@ -1,5 +1,7 @@
 package chainobject.account.hidden;
 
-public class PrivateAccount {
+import chainobject.ChainObject;
+
+public class PrivateAccount extends ChainObject {
 
 }

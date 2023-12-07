@@ -11,7 +11,10 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Properties;
 
+import javax.crypto.Cipher;
+
 import util.data.DataProp;
+import util.exception.util.security.KeyEncryptWithPublicKeyException;
 import util.exception.util.security.KeyInvalidKeyException;
 import util.exception.util.security.KeyNoSuchAlgorithmException;
 
@@ -66,4 +69,28 @@ public class Key {
         return null;
     }
 
+    public static String publicKeyToString(PublicKey publicKey) {
+        byte[] publicKeyBytes = publicKey.getEncoded();
+
+        return Base64.getEncoder().encodeToString(publicKeyBytes);
+    }
+
+    public static String privateKeyToString(PrivateKey privateKey) {
+        byte[] privateKeyBytes = privateKey.getEncoded();
+
+        return Base64.getEncoder().encodeToString(privateKeyBytes);
+    }
+
+    public static String encryptWithPublicKey(String plaintext, PublicKey publicKey) {
+        try {
+            Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            byte[] encryptedBytes = cipher.doFinal(plaintext.getBytes());
+            return Base64.getEncoder().encodeToString(encryptedBytes);
+        } catch (Exception e) {
+            new KeyEncryptWithPublicKeyException();
+        }
+
+        return null;
+    }
 }

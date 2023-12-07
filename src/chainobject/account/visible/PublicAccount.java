@@ -1,5 +1,7 @@
 package chainobject.account.visible;
 
-public class PublicAccount {
+import chainobject.ChainObject;
+
+public class PublicAccount extends ChainObject {
 
 }

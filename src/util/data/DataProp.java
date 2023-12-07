@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+import util.exception.util.data.DataPropWriteConfigException;
 
 public class DataProp {
     public static Properties read(File fileName) {
@@ -20,16 +21,11 @@ public class DataProp {
         return properties;
     }
 
-    public static void write(Properties properties, String fileName, String comment) {
-        try {
-            FileOutputStream out = new FileOutputStream(fileName + ".prop");
-            try {
-                properties.store(out, comment != null ? comment : "//");
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
+    public static void writeConfig(Properties properties, String filePath) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(filePath)) {
+            properties.store(fileOutputStream, "Configuration File");
+        } catch (IOException e) {
+            new DataPropWriteConfigException();
         }
     }
 }

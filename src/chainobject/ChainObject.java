@@ -14,6 +14,8 @@ import java.security.SignatureException;
 import java.util.Properties;
 
 import util.data.DataProp;
+import util.exception.chainobject.ChainObjectGenerateException;
+import util.security.Key;
 
 public abstract class ChainObject {
     private final static Properties INIT_PROPERTIES = DataProp.read(Paths.get("./resources/config/init.conf").toFile());
@@ -118,10 +120,41 @@ public abstract class ChainObject {
             object.setPublicKey(publicKey);
             object.setHash(hashString);
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            new ChainObjectGenerateException();
         }
 
+    }
+
+    public void write() {
+        write(initwrite(), SRC_PATH + hash);
+    }
+
+    protected void write(Properties propertiesParameter, String hashParameter) {
+        DataProp.writeConfig(propertiesParameter, hashParameter + ".conf");
+    }
+
+    protected Properties initwrite() {
+        Properties properties = new Properties();
+        writeInProperties(properties, "encrypted", (privateKey != null) + "");
+        writeInProperties(properties, "publicKey", Key.publicKeyToString(publicKey));
+        writeInProperties(properties, "privateKey", Key.privateKeyToString(privateKey));
+
+        return properties;
+    }
+
+    protected void writeInProperties(Properties properties, String key, String value) {
+        if (key != null && properties != null && value != null) {
+            if (value.isEmpty() || value.isBlank()) {
+                value = "null";
+            }
+            if (!key.isEmpty() && !key.isBlank()) {
+                if (privateKey != null) {
+                    properties.put(key, Key.encryptWithPublicKey(value, publicKey));
+                } else {
+                    properties.put(key, value);
+                }
+            }
+        }
     }
 
     @Override

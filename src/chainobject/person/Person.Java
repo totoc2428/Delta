@@ -3,12 +3,14 @@ package chainobject.person;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import chainobject.ChainObject;
 import chainobject.account.hidden.PrivateAccount;
 import chainobject.account.visible.PublicAccount;
 import chainobject.person.skills.Skill;
 import util.data.DataProp;
+import util.security.Key;
 
 public abstract class Person extends ChainObject {
     protected static final String SRC_PATH = ChainObject.SRC_PATH + DataProp
@@ -67,6 +69,33 @@ public abstract class Person extends ChainObject {
     public String toString() {
         return "Person [name=" + name + ", birthDate=" + birthDate + ", isVerified=" + isVerified + ", mainAccount="
                 + mainAccount + ", privateAccounts=" + privateAccounts + ", skills=" + skills + "]";
+    }
+
+    @Override
+    public void write() {
+        super.write(initwrite(), SRC_PATH + super.getHash());
+    }
+
+    @Override
+    protected Properties initwrite() {
+        Properties properties = super.initwrite();
+
+        writeInProperties(properties, "name", name);
+        writeInProperties(properties, "birthDate", birthDate.toString());
+        writeInProperties(properties, "isVerified", isVerified + "");
+        writeInProperties(properties, "mainAccount", mainAccount.getHash());
+        StringBuilder stringBuilder = new StringBuilder();
+        for (PrivateAccount privateAccount : privateAccounts) {
+            stringBuilder.append(privateAccount.getHash() + " ");
+        }
+        writeInProperties(properties, "privateAccounts", stringBuilder.toString());
+        stringBuilder = new StringBuilder();
+        for (Skill skill : skills) {
+            stringBuilder.append(skill.getHash() + " ");
+        }
+        writeInProperties(properties, "privateAccounts", stringBuilder.toString());
+
+        return properties;
     }
 
 }
