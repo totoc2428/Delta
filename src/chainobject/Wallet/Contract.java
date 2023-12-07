@@ -77,7 +77,7 @@ public class Contract extends ChainObject {
         try {
 
         } catch (Exception e) {
-            new BeneficiarySignException(Paths.get(SRC_PATH).toFile());
+            new BeneficiarySignException();
         }
     }
 

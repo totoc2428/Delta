@@ -3,9 +3,10 @@ package util.exception.chainobject;
 import java.io.File;
 
 import util.data.DataProp;
+import util.exception.DictionaryException;
 
-public class ChainObjectGenerateException extends Exception {
-    public ChainObjectGenerateException(File fileName) {
-        super(DataProp.read(fileName).getProperty("ChainObjectGenerateException"));
+public class ChainObjectGenerateException extends DictionaryException {
+    public ChainObjectGenerateException() {
+        super("ChainObjectGenerateException");
     }
 }
