@@ -1,8 +1,15 @@
 package chainobject.Wallet;
 
+import java.nio.file.Paths;
+
 import chainobject.ChainObject;
+import util.data.DataProp;
 
 public class Transaction extends ChainObject {
+    protected static final String SRC_PATH = ChainObject.SRC_PATH + DataProp
+            .read(Paths.get(DataProp.read(Paths.get("./resources/config/init.conf").toFile())
+                    .getProperty("ChainObjectConfig")).toFile())
+            .getProperty("TransactionChainObjectSrcFolder");
     private Wallet giver;
     private Wallet receiver;
     private String name;

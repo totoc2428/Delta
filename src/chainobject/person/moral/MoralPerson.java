@@ -1,5 +1,6 @@
 package chainobject.person.moral;
 
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,9 +9,14 @@ import chainobject.ChainObject;
 import chainobject.account.hidden.PrivateAccount;
 import chainobject.account.visible.PublicAccount;
 import chainobject.person.Person;
-import chainobject.person.skills.Skill;
+import chainobject.person.skill.Skill;
+import util.data.DataProp;
 
 public class MoralPerson extends Person {
+    protected static final String SRC_PATH = ChainObject.SRC_PATH + DataProp
+            .read(Paths.get(DataProp.read(Paths.get("./resources/config/init.conf").toFile())
+                    .getProperty("ChainObjectConfig")).toFile())
+            .getProperty("MoralPersonChainObjectSrcFolder");
     private Person president;
     private HashMap<Person, Double> menbers;
     private String rules;

@@ -7,7 +7,7 @@ import chainobject.ChainObject;
 import chainobject.account.hidden.PrivateAccount;
 import chainobject.account.visible.PublicAccount;
 import chainobject.person.Person;
-import chainobject.person.skills.Skill;
+import chainobject.person.skill.Skill;
 
 public class PhysicalPerson extends Person {
     private ArrayList<String> foreNames;

@@ -1,4 +1,4 @@
-package chainobject.person.skills;
+package chainobject.person.skill;
 
 import java.nio.file.Paths;
 import java.util.Properties;

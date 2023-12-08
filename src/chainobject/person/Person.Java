@@ -8,7 +8,7 @@ import java.util.Properties;
 import chainobject.ChainObject;
 import chainobject.account.hidden.PrivateAccount;
 import chainobject.account.visible.PublicAccount;
-import chainobject.person.skills.Skill;
+import chainobject.person.skill.Skill;
 import util.data.DataProp;
 import util.security.Key;
 
@@ -73,25 +73,24 @@ public abstract class Person extends ChainObject {
 
     @Override
     public void write() {
-        super.write(initwrite(), SRC_PATH + super.getHash());
+        super.write(this.initwrite(), SRC_PATH + Key.publicKeyToString(getPublicKey()));
     }
 
     @Override
     protected Properties initwrite() {
         Properties properties = super.initwrite();
-
         writeInProperties(properties, "name", name);
         writeInProperties(properties, "birthDate", birthDate.toString());
         writeInProperties(properties, "isVerified", isVerified + "");
-        writeInProperties(properties, "mainAccount", mainAccount.getHash());
+        writeInProperties(properties, "mainAccount", Key.privateKeyToString(getPrivateKey()));
         StringBuilder stringBuilder = new StringBuilder();
         for (PrivateAccount privateAccount : privateAccounts) {
-            stringBuilder.append(privateAccount.getHash() + " ");
+            stringBuilder.append(Key.privateKeyToString(privateAccount.getPrivateKey()) + " ");
         }
         writeInProperties(properties, "privateAccounts", stringBuilder.toString());
         stringBuilder = new StringBuilder();
         for (Skill skill : skills) {
-            stringBuilder.append(skill.getHash() + " ");
+            stringBuilder.append(Key.privateKeyToString(skill.getPrivateKey()) + " ");
         }
         writeInProperties(properties, "privateAccounts", stringBuilder.toString());
 

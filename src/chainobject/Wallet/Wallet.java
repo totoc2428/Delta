@@ -1,11 +1,17 @@
 package chainobject.Wallet;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import chainobject.ChainObject;
+import util.data.DataProp;
 
 public class Wallet extends ChainObject {
+    protected static final String SRC_PATH = ChainObject.SRC_PATH + DataProp
+            .read(Paths.get(DataProp.read(Paths.get("./resources/config/init.conf").toFile())
+                    .getProperty("ChainObjectConfig")).toFile())
+            .getProperty("WalletChainObjectSrcFolder");
     private Double globalAmount;
     private HashMap<ChainObject, Double> propety;
     private ArrayList<Transaction> transactionsHistory;

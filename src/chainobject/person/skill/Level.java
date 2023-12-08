@@ -1,10 +1,16 @@
-package chainobject.person.skills;
+package chainobject.person.skill;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import chainobject.ChainObject;
+import util.data.DataProp;
 
 public class Level extends ChainObject {
+    protected static final String SRC_PATH = ChainObject.SRC_PATH + DataProp
+            .read(Paths.get(DataProp.read(Paths.get("./resources/config/init.conf").toFile())
+                    .getProperty("ChainObjectConfig")).toFile())
+            .getProperty("LevelChainObjectSrcFolder");
     private ArrayList<Domain> domains;
     private int value;
     private String name;

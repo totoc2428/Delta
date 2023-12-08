@@ -21,11 +21,11 @@ public class Contract extends ChainObject {
     private boolean finished;
     private String name;
     private String text;
-    private boolean BeneficiarySigned;
-    private boolean SignatorySigned;
+    private boolean beneficiarySigned;
+    private boolean signatorySigned;
 
     public Contract(Person beneficiary, Person signatory, ArrayList<Transaction> transactions, boolean finished,
-            String name, String text, boolean BeneficiarySigned, boolean SignatorySigned) {
+            String name, String text, boolean beneficiarySigned, boolean signatorySigned) {
         super();
         this.beneficiary = beneficiary;
         this.signatory = signatory;
@@ -33,8 +33,8 @@ public class Contract extends ChainObject {
         this.finished = finished;
         this.name = name;
         this.text = text;
-        this.BeneficiarySigned = BeneficiarySigned;
-        this.SignatorySigned = SignatorySigned;
+        this.beneficiarySigned = beneficiarySigned;
+        this.signatorySigned = signatorySigned;
 
         ChainObject.generate(this);
     }
@@ -64,12 +64,12 @@ public class Contract extends ChainObject {
         return text;
     }
 
-    public boolean getBeneficiarySigned() {
-        return BeneficiarySigned;
+    public boolean getbeneficiarySigned() {
+        return beneficiarySigned;
     }
 
-    public boolean getSignatorySigned() {
-        return SignatorySigned;
+    public boolean getsignatorySigned() {
+        return signatorySigned;
     }
 
     /* method : */
@@ -86,8 +86,8 @@ public class Contract extends ChainObject {
     public String toString() {
         return super.toString() + "Contract [beneficiary=" + beneficiary + ", signatory=" + signatory
                 + ", transactions=" + transactions
-                + ", finished=" + finished + ", name=" + name + ", text=" + text + ", BeneficiarySigned="
-                + BeneficiarySigned + ", SignatorySigned=" + SignatorySigned + "]";
+                + ", finished=" + finished + ", name=" + name + ", text=" + text + ", beneficiarySigned="
+                + beneficiarySigned + ", signatorySigned=" + signatorySigned + "]";
     }
 
 }
