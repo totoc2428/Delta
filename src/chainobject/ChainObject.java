@@ -11,6 +11,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import util.data.DataProp;
@@ -44,20 +46,46 @@ public abstract class ChainObject {
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectSrcFolder");
 
+    protected final static String SAVED_LIST_SPACES = DataProp
+            .read(Paths.get(INIT_PROPERTIES
+                    .getProperty("ChainObjectConfig")).toFile())
+            .getProperty("ChainObjectSavedListSpaceValue");
+    protected final static String SAVED_HASHMAP_SPACES = DataProp
+            .read(Paths.get(INIT_PROPERTIES
+                    .getProperty("ChainObjectConfig")).toFile())
+            .getProperty("ChainObjectSavedHashMapSpaceValue");
+    protected final static String SAVED_PRIVATE_KEY = DataProp
+            .read(Paths.get(INIT_PROPERTIES
+                    .getProperty("ChainObjectConfig")).toFile())
+            .getProperty("ChainObjectSavedPrivateKey");
+    protected final static String SAVED_PUBLIC_KEY = DataProp
+            .read(Paths.get(INIT_PROPERTIES
+                    .getProperty("ChainObjectConfig")).toFile())
+            .getProperty("ChainObjectSavedPublicKey");
+
     private PublicKey publicKey;
     private PrivateKey privateKey;
 
     protected boolean isOwnable;
 
+    /**
+     * If this attribut is true, all the data of the object will be set at true.
+     */
+    private boolean isPublic;
+
+    /* constructor */
     public ChainObject(PublicKey publicKey, PrivateKey privateKey) {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
         this.isOwnable = false;
+        this.isPublic = false;
     }
 
     public ChainObject() {
         this(null, null);
     }
+
+    /* getter */
 
     public PublicKey getPublicKey() {
         return publicKey;
@@ -71,13 +99,11 @@ public abstract class ChainObject {
         return isOwnable;
     }
 
-    private void setPublicKey(PublicKey publicKey) {
-        this.publicKey = publicKey;
+    public boolean getIsPublic() {
+        return isPublic;
     }
 
-    private void setPrivateKey(PrivateKey privateKey) {
-        this.privateKey = privateKey;
-    }
+    /* chainobject method */
 
     /**
      * Generate the public and the private key with the hash of the object. Any
@@ -101,8 +127,8 @@ public abstract class ChainObject {
             Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
             signature.initSign(privateKey);
             signature.update(hashString.getBytes());
-            object.setPrivateKey(privateKey);
-            object.setPublicKey(publicKey);
+            object.privateKey = privateKey;
+            object.publicKey = publicKey;
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
             new ChainObjectGenerateException();
         }
@@ -127,8 +153,8 @@ public abstract class ChainObject {
      */
     protected Properties initWrite() {
         Properties properties = new Properties();
-        writeInProperties(properties, "publicKey", Key.publicKeyToString(publicKey));
-        writeInProperties(properties, "privateKey", Key.privateKeyToString(privateKey));
+        writeInProperties(properties, "publicKey", Key.publicKeyToString(publicKey), true);
+        writeInProperties(properties, "privateKey", Key.privateKeyToString(privateKey), false);
 
         return properties;
     }
@@ -137,32 +163,87 @@ public abstract class ChainObject {
      * With writeInPropertie methode you can write a ChainObject in file who can be
      * saved.
      * 
-     * @param properties the properties of any atribut value of the ChainObject.
-     *                   /!\ Important ! If the attribut is a ChainObject we save
-     *                   the
-     *                   privateKey in the properties.
-     *                   [i] In the reading we refind the public key with the
-     *                   private key who is the name of any ChainObject file and we
-     *                   read the ChainObject.
-     *                   [i] If the value of the atribut is null,
-     *                   {@link String#isblanck()}, {@link String#isEmpty()}, it
-     *                   will be set at "null".
-     * @param key        the name of the atribut
-     * @param value      the value of the attribut.
+     * @param properties        the properties of any atribut value of the
+     *                          ChainObject.
+     *                          /!\ Important ! If the attribut is a ChainObject we
+     *                          save
+     *                          the
+     *                          privateKey in the properties.
+     *                          [i] In the reading we refind the public key with the
+     *                          private key who is the name of any ChainObject file
+     *                          and we
+     *                          read the ChainObject.
+     *                          [i] If the value of the atribut is null,
+     *                          {@link String#isblanck()}, {@link String#isEmpty()},
+     *                          it will be set at "null".
+     * @param key               the name of the atribut
+     * @param value             the atribut you cann pass in a parameter.
+     * @param isPublicParameter if this parameter is true the data contain in the
+     *                          value will be never encrypted.
+     *                          /!\ to be encrypted the {@link chainObject#isPublic}
+     *                          attribut need to be false (default value).
      */
-    protected void writeInProperties(Properties properties, String key, String value) {
-        if (key != null && properties != null && value != null) {
-            if (value.isEmpty() || value.isBlank()) {
+    protected void writeInProperties(Properties properties, String key, Object value, boolean isPublicParameter) {
+        if (key != null && properties != null) {
+            if (value == null) {
                 value = "null";
             }
             if (!key.isEmpty() && !key.isBlank()) {
-                if (privateKey != null) {
-                    properties.put(key, Key.encryptWithPublicKey(value, publicKey));
+                String stringValue;
+                if (value instanceof HashMap) {
+                    HashMap<Object, Object> hashMapValue = (HashMap<Object, Object>) value;
+                    ArrayList<Object> keyArrayList = new ArrayList<Object>();
+                    ArrayList<Object> valueArrayList = new ArrayList<Object>();
+                    for (Object keyObjectArrayList : hashMapValue.keySet()) {
+                        keyArrayList.add(keyObjectArrayList);
+                    }
+                    for (Object valueObjectArrayList : hashMapValue.values()) {
+                        valueArrayList.add(valueObjectArrayList);
+                    }
+                    stringValue = writeInitPropertiesToString(keyArrayList, isPublicParameter) + SAVED_HASHMAP_SPACES
+                            + writeInitPropertiesToString(valueArrayList, isPublicParameter);
                 } else {
-                    properties.put(key, value);
+                    stringValue = writeInitPropertiesToString(value, isPublicParameter);
                 }
+                if (privateKey != null && !isPublic && !isPublicParameter) {
+                    key = SAVED_PRIVATE_KEY + key;
+                    stringValue = Key.encryptWithPublicKey(stringValue, publicKey);
+                } else {
+                    key = SAVED_PUBLIC_KEY + key;
+                }
+                properties.put(key, stringValue);
             }
         }
+    }
+
+    /**
+     * This method prepare any atribute of a ChainObject to be readble in a file.
+     * 
+     * @param value             the value of the atribute.
+     * @param isPublicParameter if the value need to be encrypted with the publicKey
+     *                          of this
+     *                          Object.
+     * @return the value in string format the publicKey if the object is
+     *         {@link ChainObject} type.
+     */
+    private String writeInitPropertiesToString(Object value, boolean isPublicParameter) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (value instanceof ChainObject) {
+            ChainObject chainObjectValue = (ChainObject) value;
+            if (!isPublicParameter || privateKey != null) {
+                stringBuilder.append(chainObjectValue.getPrivateKey());
+            } else {
+                stringBuilder.append(chainObjectValue.getPublicKey());
+            }
+        }
+        if (value instanceof ArrayList) {
+            ArrayList<Object> valueArrayList = (ArrayList<Object>) value;
+            for (Object object : valueArrayList) {
+                stringBuilder.append(writeInitPropertiesToString(object, isPublic) + SAVED_LIST_SPACES);
+            }
+        }
+
+        return stringBuilder.toString();
     }
 
     @Override

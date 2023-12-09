@@ -79,20 +79,12 @@ public abstract class Person extends ChainObject {
     @Override
     protected Properties initWrite() {
         Properties properties = super.initWrite();
-        writeInProperties(properties, "name", name);
-        writeInProperties(properties, "birthDate", birthDate.toString());
-        writeInProperties(properties, "isVerified", isVerified + "");
-        writeInProperties(properties, "mainAccount", Key.privateKeyToString(getPrivateKey()));
-        StringBuilder stringBuilder = new StringBuilder();
-        for (PrivateAccount privateAccount : privateAccounts) {
-            stringBuilder.append(Key.privateKeyToString(privateAccount.getPrivateKey()) + " ");
-        }
-        writeInProperties(properties, "privateAccounts", stringBuilder.toString());
-        stringBuilder = new StringBuilder();
-        for (Skill skill : skills) {
-            stringBuilder.append(Key.privateKeyToString(skill.getPrivateKey()) + " ");
-        }
-        writeInProperties(properties, "privateAccounts", stringBuilder.toString());
+        writeInProperties(properties, "name", name, true);
+        writeInProperties(properties, "birthDate", birthDate.toString(), false);
+        writeInProperties(properties, "isVerified", isVerified + "", true);
+        writeInProperties(properties, "mainAccount", Key.privateKeyToString(getPrivateKey()), true);
+        writeInProperties(properties, "privateAccounts", privateAccounts, false);
+        writeInProperties(properties, "skills", skills, false);
 
         return properties;
     }

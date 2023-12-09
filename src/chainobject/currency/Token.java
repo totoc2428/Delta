@@ -4,11 +4,24 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import chainobject.ChainObject;
+import chainobject.Wallet.Wallet;
 import util.security.Key;
 
 public class Token extends ChainObject {
+
+    /**
+     * The currency who is linked to the Token.
+     */
     private Currency currency;
+
+    /**
+     * The number of the token. Is the number of the generated token.
+     */
     private final int NUMBER;
+    /*
+     * The owners of the token. The String is the signature of any owners of the
+     * token. The double is the per of the token who everyOne have.
+     */
     private HashMap<String, Double> owners;
 
     public Token(Currency currency, int NUMBER, HashMap<String, Double> owners) {
@@ -41,25 +54,26 @@ public class Token extends ChainObject {
 
     @Override
     public void write() {
-
+        super.write(this.initWrite(), SRC_PATH + Key.publicKeyToString(getPublicKey()));
     }
 
     @Override
     protected Properties initWrite() {
         Properties properties = super.initWrite();
-        writeInProperties(properties, "currency", Key.publicKeyToString(currency.getPublicKey()));
-        writeInProperties(properties, "NUMBER", NUMBER + "");
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String signature : owners.keySet()) {
-            stringBuilder.append(signature + " ");
-        }
-        writeInProperties(properties, "ownersKEY_MAP", stringBuilder.toString());
-        stringBuilder = new StringBuilder();
-        for (Double value : owners.values()) {
-            stringBuilder.append(value + " ");
-        }
-        writeInProperties(properties, "ownersVALUE_MAP", stringBuilder.toString());
+        writeInProperties(properties, "currency", currency, true);
+        writeInProperties(properties, "NUMBER", NUMBER, true);
+        writeInProperties(properties, "owners", owners, false);
 
         return properties;
+    }
+
+    /* token medthod */
+
+    public boolean isOwners(Wallet giver, Wallet receiver) {
+        return false;
+    }
+
+    public boolean sell(double value, String signature) {
+        return false;
     }
 }

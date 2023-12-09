@@ -86,20 +86,26 @@ public class Currency extends ChainObject {
     protected Properties initWrite() {
         Properties properties = super.initWrite();
 
-        writeInProperties(properties, "name", name);
-        writeInProperties(properties, "numberToken", numberToken + "");
-        writeInProperties(properties, "maxTokenCapacity", maxTokenCapacity + "");
-        writeInProperties(properties, "capacityCanEvolve", capacityCanEvolve + "");
+        writeInProperties(properties, "name", name, true);
+        writeInProperties(properties, "numberToken", numberToken + "", true);
+        writeInProperties(properties, "maxTokenCapacity", maxTokenCapacity + "", true);
+        writeInProperties(properties, "capacityCanEvolve", capacityCanEvolve + "", true);
 
         return properties;
     }
 
     /* currency method */
+    /**
+     * @param signature the signature of the name of the currency signed with the
+     *                  user to check if is in the saved result.
+     * @return a {@link Boolean} type : true if the token is generated.
+     */
     public boolean generateToken(String signature) {
         boolean generated = false;
         if (Key.verifySignature(getPublicKey(), name, signature)) {
             if (numberToken + 1 <= maxTokenCapacity) {
                 // new Token();
+                // TODO check the generation
             }
         }
 
