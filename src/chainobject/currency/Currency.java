@@ -1,11 +1,18 @@
 package chainobject.currency;
 
-import java.security.PrivateKey;
+import java.nio.file.Paths;
+import java.util.Properties;
 
 import chainobject.ChainObject;
+import util.data.DataProp;
+import util.exception.chainobject.currency.CurrencySetMaxTokenCapacityException;
+import util.security.Key;
 
 public class Currency extends ChainObject {
-
+    protected static final String SRC_PATH = ChainObject.SRC_PATH + DataProp
+            .read(Paths.get(DataProp.read(Paths.get("./resources/config/init.conf").toFile())
+                    .getProperty("ChainObjectConfig")).toFile())
+            .getProperty("CurrencyChainObjectSrcFolder");
     /**
      * The name of the currency.
      */
@@ -26,6 +33,7 @@ public class Currency extends ChainObject {
      */
     private boolean capacityCanEvolve;
 
+    /* base constructor */
     public Currency(String name, int numberToken, int maxTokenCapacity, boolean capacityCanEvolve) {
         super();
         this.name = name;
@@ -36,6 +44,7 @@ public class Currency extends ChainObject {
         ChainObject.generate(this);
     }
 
+    /* getter */
     public String getName() {
         return name;
     }
@@ -52,14 +61,49 @@ public class Currency extends ChainObject {
         return capacityCanEvolve;
     }
 
-    public boolean generateToken(PrivateKey UserprivateKey) {
-        boolean generated = false;
-        if (getPrivateKey().equals(UserprivateKey)) {
-            if (numberToken + 1 > maxTokenCapacity) {
+    /* setter */
+    public void SetMaxTokenCapacity(int maxTokenCapacity) {
+        if (capacityCanEvolve) {
+            this.maxTokenCapacity = maxTokenCapacity;
+        } else {
+            new CurrencySetMaxTokenCapacityException();
+        }
+    }
 
+    /* overrided method */
+    @Override
+    public String toString() {
+        return "Currency [name=" + name + ", numberToken=" + numberToken + ", maxTokenCapacity=" + maxTokenCapacity
+                + ", capacityCanEvolve=" + capacityCanEvolve + "]";
+    }
+
+    @Override
+    public void write() {
+        super.write(this.initWrite(), SRC_PATH + Key.publicKeyToString(getPublicKey()));
+    }
+
+    @Override
+    protected Properties initWrite() {
+        Properties properties = super.initWrite();
+
+        writeInProperties(properties, "name", name);
+        writeInProperties(properties, "numberToken", numberToken + "");
+        writeInProperties(properties, "maxTokenCapacity", maxTokenCapacity + "");
+        writeInProperties(properties, "capacityCanEvolve", capacityCanEvolve + "");
+
+        return properties;
+    }
+
+    /* currency method */
+    public boolean generateToken(String signature) {
+        boolean generated = false;
+        if (Key.verifySignature(getPublicKey(), name, signature)) {
+            if (numberToken + 1 <= maxTokenCapacity) {
+                // new Token();
             }
         }
 
         return generated;
     }
+
 }

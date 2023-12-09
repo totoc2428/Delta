@@ -156,7 +156,7 @@ public class Key {
      * @return {@link Boolean} true if the signature of the message encoded with the
      *         publicKey is the same of the signature.
      */
-    public boolean verifySignature(PublicKey publicKey, String data, String signature) {
+    public static boolean verifySignature(PublicKey publicKey, String data, String signature) {
         try {
             Signature sig = Signature.getInstance(DIGEST_ALGORITHM);
             sig.initVerify(publicKey);

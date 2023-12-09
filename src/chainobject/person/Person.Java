@@ -73,12 +73,12 @@ public abstract class Person extends ChainObject {
 
     @Override
     public void write() {
-        super.write(this.initwrite(), SRC_PATH + Key.publicKeyToString(getPublicKey()));
+        super.write(this.initWrite(), SRC_PATH + Key.publicKeyToString(getPublicKey()));
     }
 
     @Override
-    protected Properties initwrite() {
-        Properties properties = super.initwrite();
+    protected Properties initWrite() {
+        Properties properties = super.initWrite();
         writeInProperties(properties, "name", name);
         writeInProperties(properties, "birthDate", birthDate.toString());
         writeInProperties(properties, "isVerified", isVerified + "");

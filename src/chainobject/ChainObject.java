@@ -71,25 +71,12 @@ public abstract class ChainObject {
         return isOwnable;
     }
 
-    protected void setPublicKey(PublicKey publicKey) {
+    private void setPublicKey(PublicKey publicKey) {
         this.publicKey = publicKey;
     }
 
-    protected void setPrivateKey(PrivateKey privateKey) {
+    private void setPrivateKey(PrivateKey privateKey) {
         this.privateKey = privateKey;
-    }
-
-    public boolean verify() {
-        Signature verificationSignature;
-        try {
-            verificationSignature = Signature.getInstance(SIGNATURE_ALGORITHM);
-            verificationSignature.initVerify(publicKey);
-            return verificationSignature.verify(privateKey.getEncoded());
-        } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
-            new ChainObjectGenerateException();
-        }
-
-        return false;
     }
 
     /**
@@ -123,7 +110,7 @@ public abstract class ChainObject {
     }
 
     public void write() {
-        write(initwrite(), SRC_PATH + Key.publicKeyToString(publicKey));
+        write(initWrite(), SRC_PATH + Key.publicKeyToString(publicKey));
     }
 
     protected void write(Properties propertiesParameter, String src) {
@@ -138,7 +125,7 @@ public abstract class ChainObject {
      * 
      * @return properties who is a properties of any
      */
-    protected Properties initwrite() {
+    protected Properties initWrite() {
         Properties properties = new Properties();
         writeInProperties(properties, "publicKey", Key.publicKeyToString(publicKey));
         writeInProperties(properties, "privateKey", Key.privateKeyToString(privateKey));
