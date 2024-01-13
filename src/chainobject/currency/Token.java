@@ -30,6 +30,8 @@ public class Token extends ChainObject {
         this.NUMBER = NUMBER;
         this.owners = owners;
 
+        isOwnable = true;
+
         ChainObject.generate(this);
     }
 
@@ -76,4 +78,5 @@ public class Token extends ChainObject {
     public boolean sell(double value, String signature) {
         return false;
     }
+
 }

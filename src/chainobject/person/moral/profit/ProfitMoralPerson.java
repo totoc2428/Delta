@@ -20,9 +20,11 @@ public class ProfitMoralPerson extends MoralPerson {
                         .getProperty("ProfitMoralPersonChainObjectSrcFolder");
 
         public ProfitMoralPerson(String name, LocalDate birthDate, boolean isVerified, PublicAccount mainAccount,
-                        ArrayList<PrivateAccount> privateAccounts, ArrayList<Skill> skills, Person president,
+                        ArrayList<PrivateAccount> privateAccounts, ArrayList<PublicAccount> publicAccounts,
+                        ArrayList<Skill> skills, Person president,
                         HashMap<Person, Double> menbers, String rules) {
-                super(name, birthDate, isVerified, mainAccount, privateAccounts, skills, president, menbers, rules);
+                super(name, birthDate, isVerified, mainAccount, privateAccounts, publicAccounts, skills, president,
+                                menbers, rules);
                 isOwnable = true;
 
                 ChainObject.generate(this);

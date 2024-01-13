@@ -63,9 +63,18 @@ public abstract class ChainObject {
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectSavedPublicKey");
 
+    /*
+     * The publicKey of the ChainObject.
+     */
     private PublicKey publicKey;
+    /**
+     * The privateKey of the ChainObject.
+     */
     private PrivateKey privateKey;
 
+    /*
+     * if the object is ownable or sellable.
+     */
     protected boolean isOwnable;
 
     /**
@@ -103,6 +112,12 @@ public abstract class ChainObject {
         return isPublic;
     }
 
+    /* overrided method */
+    @Override
+    public String toString() {
+        return "ChainObject";
+    }
+
     /* chainobject method */
 
     /**
@@ -135,10 +150,24 @@ public abstract class ChainObject {
 
     }
 
+    /**
+     * This method write the chainobject in file.
+     * /!\ Important ! All object who is a child of {@link ChainObject} must to
+     * {@overide} this method.
+     */
     public void write() {
         write(initWrite(), SRC_PATH + Key.publicKeyToString(publicKey));
     }
 
+    /**
+     * Take a propertie and sources files destination to save the chainObject in a
+     * file.
+     * 
+     * @param propertiesParameter the {@link ChainObject} in a {@link Properties}
+     *                            format.
+     * @param src                 the sources file where the {@link ChainObject}
+     *                            will be saved.
+     */
     protected void write(Properties propertiesParameter, String src) {
         DataProp.writeConfig(propertiesParameter, src + ".conf");
     }
@@ -230,10 +259,13 @@ public abstract class ChainObject {
         StringBuilder stringBuilder = new StringBuilder();
         if (value instanceof ChainObject) {
             ChainObject chainObjectValue = (ChainObject) value;
-            if (!isPublicParameter || privateKey != null) {
+            stringBuilder.append(SAVED_PUBLIC_KEY);
+            stringBuilder.append(chainObjectValue.getPublicKey());
+            stringBuilder.append(SAVED_PRIVATE_KEY);
+            if (!isPublicParameter && chainObjectValue.privateKey != null) {
                 stringBuilder.append(chainObjectValue.getPrivateKey());
             } else {
-                stringBuilder.append(chainObjectValue.getPublicKey());
+                stringBuilder.append("null");
             }
         }
         if (value instanceof ArrayList) {
@@ -246,9 +278,20 @@ public abstract class ChainObject {
         return stringBuilder.toString();
     }
 
-    @Override
-    public String toString() {
-        return "ChainObject";
+    /**
+     * This medhod make a singature of the Object to be checked.
+     * /!\ All ellemant called in this medthod need to be in saved in a public
+     * format. It's recommanded to make public general information who is all ready
+     * saved in public (not encrypted).
+     * /!\ All the child of any chainObject must overide this method.
+     * 
+     * @return the element of all attribut who make the signature.
+     */
+    protected String signHash() {
+        return "chainObject";
     }
 
+    public String sign() {
+        return Key.signData(privateKey, signHash());
+    }
 }

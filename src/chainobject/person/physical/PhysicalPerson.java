@@ -15,8 +15,8 @@ public class PhysicalPerson extends Person {
 
     public PhysicalPerson(String name, LocalDate birthDate,
             boolean isVerified, ArrayList<Skill> skills, PublicAccount mainAccount,
-            ArrayList<PrivateAccount> privateAccounts) {
-        super(name, birthDate, isVerified, mainAccount, privateAccounts, skills);
+            ArrayList<PrivateAccount> privateAccounts, ArrayList<PublicAccount> publicAccounts) {
+        super(name, birthDate, isVerified, mainAccount, privateAccounts, publicAccounts, skills);
 
         ChainObject.generate(this);
     }
