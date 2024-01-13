@@ -3,7 +3,7 @@ package util.terminal;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import util.data.DataProp;
+import util.data.Prop;
 
 public enum Value {
     ERROR(), WARNING(), INFORMATION(), DONE(), RESET();
@@ -12,9 +12,9 @@ public enum Value {
     private String logo;
 
     private Value() {
-        Properties properties = DataProp
+        Properties properties = Prop
                 .read(Paths.get(
-                        DataProp.read(Paths.get("./resources/config/init.conf").toFile()).getProperty("LanguageConfig"))
+                        Prop.read(Paths.get("./resources/config/init.conf").toFile()).getProperty("LanguageConfig"))
                         .toFile());
         this.terminal = properties.getProperty("Terminal" + this.name().toUpperCase() + "Value");
         this.logo = properties.getProperty("logo" + this.name().toUpperCase() + "Value");

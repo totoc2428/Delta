@@ -3,7 +3,7 @@ package chainobject.person.skill;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import util.data.DataProp;
+import util.data.Prop;
 
 public enum Domain {
     AGRICULTURE, ARCHITECTURE,
@@ -23,8 +23,8 @@ public enum Domain {
     private String name;
     private String badge;
 
-    private final Properties INIT_PROPERTIES = DataProp.read(Paths.get("./resources/config/init.conf").toFile());
-    private final Properties DOMAIN_PROPERTIES = DataProp
+    private final Properties INIT_PROPERTIES = Prop.read(Paths.get("./resources/config/init.conf").toFile());
+    private final Properties DOMAIN_PROPERTIES = Prop
             .read(Paths.get(INIT_PROPERTIES.getProperty("DomainConfig")).toFile());
 
     private Domain() {

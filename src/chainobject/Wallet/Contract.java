@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 import chainobject.ChainObject;
 import chainobject.person.Person;
-import util.data.DataProp;
+import util.data.Prop;
 import util.exception.chainobject.wallet.BeneficiarySignException;
 
 public class Contract extends ChainObject {
-    protected final static String SRC_PATH = DataProp
-            .read(Paths.get(DataProp.read(Paths.get("./resources/config/init.conf").toFile())
+    protected final static String SRC_PATH = Prop
+            .read(Paths.get(Prop.read(Paths.get("./resources/config/init.conf").toFile())
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ContractChainObjectSrcFolder");
 

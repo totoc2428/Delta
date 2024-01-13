@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Properties;
 import util.exception.util.data.DataPropWriteConfigException;
 
-public class DataProp {
+public class Prop {
     public static Properties read(File fileName) {
         Properties properties = new Properties();
         try {

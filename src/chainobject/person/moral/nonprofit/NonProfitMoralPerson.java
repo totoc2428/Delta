@@ -11,11 +11,11 @@ import chainobject.account.visible.PublicAccount;
 import chainobject.person.Person;
 import chainobject.person.moral.MoralPerson;
 import chainobject.person.skill.Skill;
-import util.data.DataProp;
+import util.data.Prop;
 
 public class NonProfitMoralPerson extends MoralPerson {
-        protected static final String SRC_PATH = MoralPerson.SRC_PATH + DataProp
-                        .read(Paths.get(DataProp.read(Paths.get("./resources/config/init.conf").toFile())
+        protected static final String SRC_PATH = MoralPerson.SRC_PATH + Prop
+                        .read(Paths.get(Prop.read(Paths.get("./resources/config/init.conf").toFile())
                                         .getProperty("ChainObjectConfig")).toFile())
                         .getProperty("NonProfitMoralPersonChainObjectSrcFolder");
 

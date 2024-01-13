@@ -2,7 +2,7 @@ package util.exception.chainobject.wallet;
 
 import java.io.File;
 
-import util.data.DataProp;
+import util.data.Prop;
 import util.exception.DictionaryException;
 
 public class BeneficiarySignException extends DictionaryException {

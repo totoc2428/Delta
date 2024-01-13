@@ -10,12 +10,12 @@ import chainobject.account.Account;
 import chainobject.account.hidden.PrivateAccount;
 import chainobject.account.visible.PublicAccount;
 import chainobject.person.skill.Skill;
-import util.data.DataProp;
+import util.data.Prop;
 import util.security.Key;
 
 public abstract class Person extends ChainObject {
-    protected static final String SRC_PATH = ChainObject.SRC_PATH + DataProp
-            .read(Paths.get(DataProp.read(Paths.get("./resources/config/init.conf").toFile())
+    protected static final String SRC_PATH = ChainObject.SRC_PATH + Prop
+            .read(Paths.get(Prop.read(Paths.get("./resources/config/init.conf").toFile())
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("PersonChainObjectSrcFolder");
 

@@ -3,11 +3,11 @@ package chainobject.Wallet;
 import java.nio.file.Paths;
 
 import chainobject.ChainObject;
-import util.data.DataProp;
+import util.data.Prop;
 
 public class Transaction extends ChainObject {
-    protected static final String SRC_PATH = ChainObject.SRC_PATH + DataProp
-            .read(Paths.get(DataProp.read(Paths.get("./resources/config/init.conf").toFile())
+    protected static final String SRC_PATH = ChainObject.SRC_PATH + Prop
+            .read(Paths.get(Prop.read(Paths.get("./resources/config/init.conf").toFile())
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("TransactionChainObjectSrcFolder");
     private Wallet giver;

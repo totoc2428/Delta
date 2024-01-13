@@ -15,50 +15,50 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
-import util.data.DataProp;
+import util.data.Prop;
 import util.exception.chainobject.ChainObjectGenerateException;
 import util.security.Key;
 
 public abstract class ChainObject {
-    private final static Properties INIT_PROPERTIES = DataProp.read(Paths.get("./resources/config/init.conf").toFile());
-    private final static String SIGNATURE_ALGORITHM = DataProp
+    private final static Properties INIT_PROPERTIES = Prop.read(Paths.get("./resources/config/init.conf").toFile());
+    private final static String SIGNATURE_ALGORITHM = Prop
             .read(Paths.get(INIT_PROPERTIES
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectSignatureAlgorithm");
 
-    private final static String KEY_ALGORITHM = DataProp
+    private final static String KEY_ALGORITHM = Prop
             .read(Paths.get(INIT_PROPERTIES
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectKeyAlgorithm");
 
-    private final static String DIGEST_ALGORITHM = DataProp
+    private final static String DIGEST_ALGORITHM = Prop
             .read(Paths.get(INIT_PROPERTIES
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectDigestAlgorithm");
 
-    private final static int KEY_SIZE = Integer.parseInt(DataProp
+    private final static int KEY_SIZE = Integer.parseInt(Prop
             .read(Paths.get(INIT_PROPERTIES
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectKeySize"));
 
-    protected final static String SRC_PATH = DataProp
+    protected final static String SRC_PATH = Prop
             .read(Paths.get(INIT_PROPERTIES
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectSrcFolder");
 
-    protected final static String SAVED_LIST_SPACES = DataProp
+    protected final static String SAVED_LIST_SPACES = Prop
             .read(Paths.get(INIT_PROPERTIES
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectSavedListSpaceValue");
-    protected final static String SAVED_HASHMAP_SPACES = DataProp
+    protected final static String SAVED_HASHMAP_SPACES = Prop
             .read(Paths.get(INIT_PROPERTIES
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectSavedHashMapSpaceValue");
-    protected final static String SAVED_PRIVATE_KEY = DataProp
+    protected final static String SAVED_PRIVATE_KEY = Prop
             .read(Paths.get(INIT_PROPERTIES
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectSavedPrivateKey");
-    protected final static String SAVED_PUBLIC_KEY = DataProp
+    protected final static String SAVED_PUBLIC_KEY = Prop
             .read(Paths.get(INIT_PROPERTIES
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectSavedPublicKey");
@@ -169,7 +169,7 @@ public abstract class ChainObject {
      *                            will be saved.
      */
     protected void write(Properties propertiesParameter, String src) {
-        DataProp.writeConfig(propertiesParameter, src + ".conf");
+        Prop.writeConfig(propertiesParameter, src + ".conf");
     }
 
     /**

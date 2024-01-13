@@ -16,18 +16,18 @@ import java.util.Properties;
 
 import javax.crypto.Cipher;
 
-import util.data.DataProp;
+import util.data.Prop;
 import util.exception.util.security.KeyEncryptWithPublicKeyException;
 import util.exception.util.security.KeyInvalidKeyException;
 import util.exception.util.security.KeyNoSuchAlgorithmException;
 
 public class Key {
-    private final static Properties INIT_PROPERTIES = DataProp.read(Paths.get("./resources/config/init.conf").toFile());
-    private final static String KEY_ALGORITHM = DataProp
+    private final static Properties INIT_PROPERTIES = Prop.read(Paths.get("./resources/config/init.conf").toFile());
+    private final static String KEY_ALGORITHM = Prop
             .read(Paths.get(INIT_PROPERTIES
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectKeyAlgorithm");
-    private final static String DIGEST_ALGORITHM = DataProp
+    private final static String DIGEST_ALGORITHM = Prop
             .read(Paths.get(INIT_PROPERTIES
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ChainObjectDigestAlgorithm");
