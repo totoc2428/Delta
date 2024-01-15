@@ -1,8 +1,8 @@
 package util.exception.util.security;
 
-import util.exception.DictionaryException;
+import util.exception.DictionarySystemException;
 
-public class KeyNoSuchAlgorithmException extends DictionaryException {
+public class KeyNoSuchAlgorithmException extends DictionarySystemException {
     public KeyNoSuchAlgorithmException() {
         super("KeyNoSuchAlgorithmException");
     }

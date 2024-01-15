@@ -1,8 +1,8 @@
 package util.exception.util.security;
 
-import util.exception.DictionaryException;
+import util.exception.DictionarySystemException;
 
-public class KeyEncryptWithPublicKeyException extends DictionaryException {
+public class KeyEncryptWithPublicKeyException extends DictionarySystemException {
     public KeyEncryptWithPublicKeyException() {
         super("KeyEncryptWithPublicKeyException");
     }

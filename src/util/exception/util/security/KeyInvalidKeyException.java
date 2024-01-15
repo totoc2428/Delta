@@ -1,8 +1,8 @@
 package util.exception.util.security;
 
-import util.exception.DictionaryException;
+import util.exception.DictionarySystemException;
 
-public class KeyInvalidKeyException extends DictionaryException {
+public class KeyInvalidKeyException extends DictionarySystemException {
     public KeyInvalidKeyException() {
         super("KeyInvalidKeyException");
     }

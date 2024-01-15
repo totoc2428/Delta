@@ -1,8 +1,8 @@
 package util.exception.util.security;
 
-import util.exception.DictionaryException;
+import util.exception.DictionarySystemException;
 
-public class KeySingDataException extends DictionaryException {
+public class KeySingDataException extends DictionarySystemException {
     public KeySingDataException() {
         super("KeySingDataException");
     }

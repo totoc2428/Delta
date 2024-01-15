@@ -1,8 +1,8 @@
 package util.exception.util.data;
 
-import util.exception.DictionaryException;
+import util.exception.DictionarySystemException;
 
-public class DataPropWriteConfigException extends DictionaryException {
+public class DataPropWriteConfigException extends DictionarySystemException {
     public DataPropWriteConfigException() {
         super("DataPropWriteConfigException");
     }

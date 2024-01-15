@@ -1,8 +1,8 @@
 package util.exception.chainobject;
 
-import util.exception.DictionaryException;
+import util.exception.DictionarySystemException;
 
-public class ChainObjectVerifyException extends DictionaryException {
+public class ChainObjectVerifyException extends DictionarySystemException {
     public ChainObjectVerifyException() {
         super("ChainObjectVerifyException");
     }
