@@ -141,6 +141,8 @@ public abstract class Person extends ChainObject {
     public void addAccount(Account account) {
         if (account.getPrivateKey() != null) {
 
+        } else {
+            // TODO add exception
         }
     }
 }
