@@ -15,6 +15,10 @@ public class Contract extends ChainObject {
                     .getProperty("ChainObjectConfig")).toFile())
             .getProperty("ContractChainObjectSrcFolder");
 
+    /**
+     * The beneficiary of the contract. The beneficiary is a {@link Person} type who
+     * the contract is purposed.
+     */
     private Person beneficiary;
     private Person signatory;
     private ArrayList<Transaction> transactions;

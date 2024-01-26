@@ -15,7 +15,7 @@ public class Token extends ChainObject {
     private Currency currency;
 
     /**
-     * The number of the token. Is the number of the generated token.
+     * The number of the token. Is the asscendant order of the generated token.
      */
     private final int NUMBER;
     /*

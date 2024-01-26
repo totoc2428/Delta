@@ -203,7 +203,7 @@ public abstract class ChainObject {
      *                          and we
      *                          read the ChainObject.
      *                          [i] If the value of the atribut is null,
-     *                          {@link String#isblanck()}, {@link String#isEmpty()},
+     *                          {@link String#isBlanck()}, {@link String#isEmpty()},
      *                          it will be set at "null".
      * @param key               the name of the atribut
      * @param value             the atribut you cann pass in a parameter.
