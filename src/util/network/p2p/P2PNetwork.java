@@ -89,16 +89,12 @@ public class P2PNetwork {
     }
 
     public static String getLastMessage() {
-        String message = receivedMessages.get(receivedMessages.size());
-        receivedMessages.remove(receivedMessages.size());
+        String message = null;
+        if (!receivedMessages.isEmpty()) {
+            message = receivedMessages.get(receivedMessages.size() - 1);
+            receivedMessages.remove(receivedMessages.size() - 1);
+        }
         return message;
     }
 
-    public static void main(String[] args) {
-        initialize();
-        sendMessage("Hello, P2P!", "localhost", 9876);
-        String receivedMessage = receiveMessage();
-        System.out.println("Message reçu : " + receivedMessage);
-        close();
-    }
 }
