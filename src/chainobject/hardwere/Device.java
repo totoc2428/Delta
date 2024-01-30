@@ -33,6 +33,10 @@ public class Device extends ChainObject {
      */
     private final LocalDate BIRTHDATE;
 
+    private int port;
+    private int offset;
+    private String hostBrodcast;
+
     /* Constructor : */
 
     public Device(String name, Person owner, LocalDate BIRTHDATE) {
@@ -45,11 +49,39 @@ public class Device extends ChainObject {
         ChainObject.generate(this);
     }
 
+    /* getter : */
+
+    public String getName() {
+        return name;
+    }
+
+    public Person getOwner() {
+        return owner;
+    }
+
+    public LocalDate getBIRTHDATE() {
+        return BIRTHDATE;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public String getHostBrodcast() {
+        return hostBrodcast;
+    }
+
     /* overrided method : */
 
     @Override
     public String toString() {
-        return super.toString() + "Device [name=" + name + ", owner=" + owner + ", BIRTHDATE=" + BIRTHDATE + "]";
+        return super.toString() + "Device [name=" + name + ", owner=" + owner + ", BIRTHDATE=" + BIRTHDATE + ", port="
+                + port + ", offset="
+                + offset + ", hostBrodcast=" + hostBrodcast + "]";
     }
 
     @Override
