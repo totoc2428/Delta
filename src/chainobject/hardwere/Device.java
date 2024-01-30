@@ -31,12 +31,17 @@ public class Device extends ChainObject {
      * The birth date is the date who the device is activated for the fist time. In
      * this case a private public key pair will be define.
      */
-    private LocalDate birthDate;
+    private final LocalDate BIRTHDATE;
 
     /* Constructor : */
 
-    public Device(String name, Person owner, LocalDate birthDate) {
+    public Device(String name, Person owner, LocalDate BIRTHDATE) {
         super();
+
+        this.name = name;
+        this.owner = owner;
+        this.BIRTHDATE = BIRTHDATE;
+
         ChainObject.generate(this);
     }
 
@@ -44,7 +49,7 @@ public class Device extends ChainObject {
 
     @Override
     public String toString() {
-        return super.toString() + "Device [name=" + name + ", owner=" + owner + ", birthDate=" + birthDate + "]";
+        return super.toString() + "Device [name=" + name + ", owner=" + owner + ", BIRTHDATE=" + BIRTHDATE + "]";
     }
 
     @Override
@@ -58,7 +63,7 @@ public class Device extends ChainObject {
 
         writeInProperties(properties, "name", name, true);
         writeInProperties(properties, "owner", owner, true);
-        writeInProperties(properties, "birthDate", birthDate, true);
+        writeInProperties(properties, "BIRTHDATE", BIRTHDATE, true);
 
         return properties;
     }
