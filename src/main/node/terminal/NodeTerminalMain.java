@@ -2,6 +2,7 @@ package main.node.terminal;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import model.controleurs.node.terminal.TerminalControleur;
@@ -24,8 +25,10 @@ public abstract class NodeTerminalMain {
     private static boolean exit;
     private static String prefix;
 
-    private static Properties comandsProperties;
     private static Properties commandsList;
+
+    private static String allCommand;
+    private static String commandName;
 
     public static void main(String[] args) {
         init();
@@ -71,8 +74,20 @@ public abstract class NodeTerminalMain {
     }
 
     private static void initCommands() {
-        comandsProperties = DataManager.read(NODETERMINALMAIN_PROPERTIES.getProperty("commands"));
-        commandsList = DataManager.read(comandsProperties.getProperty("commandsList"));
+        final String COMMAND_SRC_PATH = NODETERMINALMAIN_PROPERTIES.getProperty("commands");
+        final String COMMAND_FILE_SAVED_TAG = NODETERMINALMAIN_PROPERTIES.getProperty("COMMAND_FILE_SAVED_TAG");
+
+        commandsList = new Properties();
+
+        ArrayList<String> aviableCommand = DataManager.getAllFileNames(COMMAND_SRC_PATH);
+        for (String str : aviableCommand) {
+            String strReplaced = str.replace(COMMAND_FILE_SAVED_TAG, "");
+            commandsList.setProperty(strReplaced, COMMAND_SRC_PATH + str);
+        }
+
+        allCommand = "";
+        commandName = "";
+
     }
 
     private static void initPrefix() {
@@ -99,23 +114,60 @@ public abstract class NodeTerminalMain {
     // run
     private static void run() {
         while (!exit) {
-            runCommand();
+            runAskAndCommand();
         }
         System.exit(0);
     }
 
-    private static void runCommand() {
+    private static void runAskAndCommand() {
+
         if (controleur.getIdentity() == null) {
             TerminalStyle.showWarning(warningsMessage.getProperty("notConnected"));
             TerminalStyle.showInformation(informationsMessage.getProperty("toConnect"));
             TerminalStyle.showInformation(informationsMessage.getProperty("toRegister"));
         }
-        String command = askCommand();
-        System.out.println(command);
+        allCommand = askCommand();
+        commandName = allCommand.split(" ")[0];
+        if (isKownedCommand()) {
+            runCommand();
+        } else {
+            TerminalStyle.showError(errorsMessage.getProperty("invalidCommandName"));
+        }
 
     }
 
     private static String askCommand() {
         return DataManager.getUserInput(prefix);
+    }
+
+    private static boolean isKownedCommand() {
+        final String COMMAND_PATH = commandsList.getProperty(commandName);
+        boolean kowned = false;
+        if (COMMAND_PATH != null) {
+            if (!COMMAND_PATH.isBlank() && !COMMAND_PATH.isEmpty()) {
+                if (DataManager.fileExist(commandsList.getProperty(commandName))) {
+                    Properties command = DataManager.read(commandsList.getProperty(commandName));
+                    kowned = !command.isEmpty();
+                }
+            }
+        }
+
+        return kowned;
+    }
+
+    private static void runCommand() {
+        switch (commandName) {
+            case "exit":
+                runExitCommand();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private static void runExitCommand() {
+        Properties command = DataManager.read(commandsList.getProperty(commandName));
+        TerminalStyle.showNeutral(command.getProperty("output_" + languagePreferences));
+        exit = true;
     }
 }

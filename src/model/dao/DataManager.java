@@ -3,12 +3,14 @@ package model.dao;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
 
 import io.jsonwebtoken.lang.Arrays;
+import model.controleurs.node.terminal.style.TerminalStyle;
 
 public abstract class DataManager {
 
@@ -23,11 +25,13 @@ public abstract class DataManager {
     public static Properties read(File fileName) {
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream(fileName));
+            FileInputStream fileInputStream = new FileInputStream(fileName);
+            InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
+            properties.load(reader);
         } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
+            TerminalStyle.showError(e.getMessage());
         } catch (java.io.IOException e) {
-            System.out.println(e.getMessage());
+            TerminalStyle.showError(e.getMessage());
         }
         return properties;
     }
@@ -55,13 +59,33 @@ public abstract class DataManager {
         return new ArrayList<String>(Arrays.asList(stringsTab));
     }
 
+    public static ArrayList<String> getAllFileNames(String directoryPath) {
+        ArrayList<String> fileNames = new ArrayList<>();
+
+        if (fileExist(directoryPath)) {
+            File directory = Paths.get(directoryPath).toFile();
+            if (directory.isDirectory()) {
+                File[] files = directory.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        if (file.isFile()) {
+                            fileNames.add(file.getName());
+                        }
+                    }
+                }
+            }
+        }
+
+        return fileNames;
+    }
+
     public static String getUserInput(String prefix) {
+        @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
 
         System.out.print(prefix + " ");
 
         String input = scanner.nextLine();
-        scanner.close();
 
         return input;
     }
