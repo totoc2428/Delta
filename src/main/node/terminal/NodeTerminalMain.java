@@ -2,12 +2,13 @@ package main.node.terminal;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Properties;
 
 import model.controleurs.node.terminal.TerminalControleur;
 import model.controleurs.node.terminal.style.TerminalStyle;
+import model.dao.CommandDataManager;
 import model.dao.DataManager;
+import model.dto.terminal.Command;
 
 public abstract class NodeTerminalMain {
     private static final Properties NODETERMINALMAIN_PROPERTIES = DataManager
@@ -25,11 +26,9 @@ public abstract class NodeTerminalMain {
     private static boolean exit;
     private static String prefix;
 
-    private static Properties commandsList;
-
     private static String allCommand;
     private static String commandName;
-    private static Properties command;
+    private static Command command;
 
     public static void main(String[] args) {
         init();
@@ -76,15 +75,12 @@ public abstract class NodeTerminalMain {
 
     private static void initCommands() {
         final String COMMAND_SRC_PATH = NODETERMINALMAIN_PROPERTIES.getProperty("commands");
-        final String COMMAND_FILE_SAVED_TAG = NODETERMINALMAIN_PROPERTIES.getProperty("COMMAND_FILE_SAVED_TAG");
 
-        commandsList = new Properties();
+        CommandDataManager.initCommand();
+        CommandDataManager.setCommandSrcPaths(COMMAND_SRC_PATH);
+        CommandDataManager.loadCommandFromSrcPath();
 
-        ArrayList<String> aviableCommand = DataManager.getAllFileNames(COMMAND_SRC_PATH);
-        for (String str : aviableCommand) {
-            String strReplaced = str.replace(COMMAND_FILE_SAVED_TAG, "");
-            commandsList.setProperty(strReplaced, COMMAND_SRC_PATH + str);
-        }
+        System.out.println(CommandDataManager.getAllCommands());
 
         allCommand = "";
         commandName = "";
@@ -129,9 +125,9 @@ public abstract class NodeTerminalMain {
         }
         allCommand = askCommand();
         commandName = allCommand.split(" ")[0];
-        if (isKownedCommand()) {
-            command = loadCommand(commandName);
-            if (isValidCommand(command)) {
+        if (CommandDataManager.isKownedCommand(commandName)) {
+            command = CommandDataManager.getCommandByName(commandName);
+            if (command.isValid(languagePreferences)) {
                 runCommand();
             } else {
                 TerminalStyle.showError(errorsMessage.getProperty("invalidCommandConfiguration"));
@@ -144,42 +140,6 @@ public abstract class NodeTerminalMain {
 
     private static String askCommand() {
         return DataManager.getUserInput(prefix);
-    }
-
-    private static Properties loadCommand(String commandName) {
-        return DataManager.read(commandsList.getProperty(commandName));
-    }
-
-    private static boolean isKownedCommand() {
-        return isKownedCommand(commandName);
-    }
-
-    private static boolean isKownedCommand(String paraCommand) {
-        final String COMMAND_PATH = commandsList.getProperty(paraCommand);
-        boolean kowned = false;
-
-        if (COMMAND_PATH != null) {
-            if (!COMMAND_PATH.isBlank() && !COMMAND_PATH.isEmpty()) {
-                kowned = DataManager.fileExist(commandsList.getProperty(paraCommand));
-            }
-        }
-
-        return kowned;
-    }
-
-    private static boolean isValidCommand(Properties paraCommand) {
-        boolean isValid = false;
-
-        isValid = !paraCommand.getProperty("name").toString().isBlank()
-                && !paraCommand.getProperty("name").toString().isEmpty();
-
-        isValid = isValid && !paraCommand.getProperty("description_" + languagePreferences).toString().isBlank()
-                && !paraCommand.getProperty("description_" + languagePreferences).toString().isEmpty();
-
-        isValid = isValid && !paraCommand.getProperty("mainOutput_" + languagePreferences).toString().isBlank()
-                && !paraCommand.getProperty("mainOutput_" + languagePreferences).toString().isEmpty();
-
-        return isValid;
     }
 
     private static void runCommand() {
@@ -195,29 +155,24 @@ public abstract class NodeTerminalMain {
     }
 
     private static void runExitCommand() {
-        command = DataManager.read(commandsList.getProperty(commandName));
-        TerminalStyle.showNeutral(command.getProperty("mainOutput_" + languagePreferences));
+        command = CommandDataManager.getCommandByName(commandName);
+        TerminalStyle.showNeutral(command.getMainOutput(languagePreferences));
         exit = true;
     }
 
     private static void runHelpCommand() {
-        command = DataManager.read(commandsList.getProperty(commandName));
-        TerminalStyle.showNeutral(command.getProperty("mainOutput_" + languagePreferences));
-        for (Object cmObj : commandsList.keySet()) {
-            if (cmObj instanceof String) {
-                String cmStr = (String) cmObj;
-                String showed = cmStr + " | ";
-                if (isKownedCommand(cmStr)) {
-                    Properties cm = loadCommand(cmStr);
-                    if (isValidCommand(cm)) {
-                        showed += cm.getProperty("description_" + languagePreferences);
-                    } else {
-                        showed += errorsMessage.getProperty("invalidCommandConfiguration");
-                    }
+        command = CommandDataManager.getCommandByName(commandName);
+        TerminalStyle.showNeutral(command.getMainOutput(languagePreferences));
+        for (Command c : CommandDataManager.getAllCommands().values()) {
+            String showed = c.getName() + " | ";
+            if (CommandDataManager.isKownedCommand(c.getName())) {
+                if (c.isValid(languagePreferences)) {
+                    showed += c.getDescription(languagePreferences);
+                } else {
+                    showed += errorsMessage.getProperty("invalidCommandConfiguration");
                 }
 
-                TerminalStyle.showNeutral("final result " + showed);
-
+                TerminalStyle.showNeutral(showed);
             }
 
         }
