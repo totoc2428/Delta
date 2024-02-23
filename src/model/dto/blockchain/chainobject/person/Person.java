@@ -1,10 +1,10 @@
-package blockchain.chainobject.person;
+package model.dto.blockchain.chainobject.person;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.time.LocalDate;
 
-import blockchain.chainobject.ChainObject;
+import model.dto.blockchain.chainobject.ChainObject;
 
 public class Person extends ChainObject {
     private String name;

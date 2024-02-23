@@ -1,25 +1,18 @@
-package blockchain.util;
+package model.dao.blockchain.chainobject;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
-import blockchain.chainobject.ChainObject;
-import util.DataManager;
+import model.dao.DataManager;
+import model.dto.blockchain.chainobject.ChainObject;
 
-public abstract class BlockChainDataManager extends DataManager {
+public abstract class ChainObjectDataManager extends DataManager {
 
     public static final Properties BLOCKCHAIN_PROPERTIES = DataManager
             .read(DataManager.INIT_PROPERTIES.getProperty("BLOCKCHAIN_PROPERTIES"));
 
-    public static final String BLOCKCHAIN_FOLDER = BLOCKCHAIN_PROPERTIES.getProperty("BLOCKCHAIN_FOLDER");
-
-    public static final String SAVED_LIST_SPACE = BLOCKCHAIN_PROPERTIES.getProperty("SAVED_LIST_SPACE");
-    public static final String SAVED_DIC_SPACE = BLOCKCHAIN_PROPERTIES.getProperty("SAVED_DIC_SPACE");
-
-    public static final String SAVED_LIST_TAG = BLOCKCHAIN_PROPERTIES.getProperty("SAVED_LIST_TAG");
-    public static final String SAVED_DIC_TAG = BLOCKCHAIN_PROPERTIES.getProperty("SAVED_DIC_TAG");
     public static final String SAVED_PRIVATE_KEY_TAG = BLOCKCHAIN_PROPERTIES.getProperty("SAVED_PRIVATE_KEY_TAG");
     public static final String SAVED_PUBLIC_KEY_TAG = BLOCKCHAIN_PROPERTIES.getProperty("SAVED_PUBLIC_KEY_TAG");
     public static final String SAVED_CHAINOBJECT_TAG = BLOCKCHAIN_PROPERTIES.getProperty("SAVED_CHAINOBJECT_TAG");
