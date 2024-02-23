@@ -29,6 +29,7 @@ public abstract class NodeTerminalMain {
 
     private static String allCommand;
     private static String commandName;
+    private static Properties command;
 
     public static void main(String[] args) {
         init();
@@ -129,7 +130,12 @@ public abstract class NodeTerminalMain {
         allCommand = askCommand();
         commandName = allCommand.split(" ")[0];
         if (isKownedCommand()) {
-            runCommand();
+            command = loadCommand(commandName);
+            if (isValidCommand(command)) {
+                runCommand();
+            } else {
+                TerminalStyle.showError(errorsMessage.getProperty("invalidCommandConfiguration"));
+            }
         } else {
             TerminalStyle.showError(errorsMessage.getProperty("invalidCommandName"));
         }
@@ -140,19 +146,40 @@ public abstract class NodeTerminalMain {
         return DataManager.getUserInput(prefix);
     }
 
+    private static Properties loadCommand(String commandName) {
+        return DataManager.read(commandsList.getProperty(commandName));
+    }
+
     private static boolean isKownedCommand() {
-        final String COMMAND_PATH = commandsList.getProperty(commandName);
+        return isKownedCommand(commandName);
+    }
+
+    private static boolean isKownedCommand(String paraCommand) {
+        final String COMMAND_PATH = commandsList.getProperty(paraCommand);
         boolean kowned = false;
+
         if (COMMAND_PATH != null) {
             if (!COMMAND_PATH.isBlank() && !COMMAND_PATH.isEmpty()) {
-                if (DataManager.fileExist(commandsList.getProperty(commandName))) {
-                    Properties command = DataManager.read(commandsList.getProperty(commandName));
-                    kowned = !command.isEmpty();
-                }
+                kowned = DataManager.fileExist(commandsList.getProperty(paraCommand));
             }
         }
 
         return kowned;
+    }
+
+    private static boolean isValidCommand(Properties paraCommand) {
+        boolean isValid = false;
+
+        isValid = !paraCommand.getProperty("name").toString().isBlank()
+                && !paraCommand.getProperty("name").toString().isEmpty();
+
+        isValid = isValid && !paraCommand.getProperty("description_" + languagePreferences).toString().isBlank()
+                && !paraCommand.getProperty("description_" + languagePreferences).toString().isEmpty();
+
+        isValid = isValid && !paraCommand.getProperty("mainOutput_" + languagePreferences).toString().isBlank()
+                && !paraCommand.getProperty("mainOutput_" + languagePreferences).toString().isEmpty();
+
+        return isValid;
     }
 
     private static void runCommand() {
@@ -160,14 +187,39 @@ public abstract class NodeTerminalMain {
             case "exit":
                 runExitCommand();
                 break;
+            case "help":
+                runHelpCommand();
             default:
                 break;
         }
     }
 
     private static void runExitCommand() {
-        Properties command = DataManager.read(commandsList.getProperty(commandName));
-        TerminalStyle.showNeutral(command.getProperty("output_" + languagePreferences));
+        command = DataManager.read(commandsList.getProperty(commandName));
+        TerminalStyle.showNeutral(command.getProperty("mainOutput_" + languagePreferences));
         exit = true;
+    }
+
+    private static void runHelpCommand() {
+        command = DataManager.read(commandsList.getProperty(commandName));
+        TerminalStyle.showNeutral(command.getProperty("mainOutput_" + languagePreferences));
+        for (Object cmObj : commandsList.keySet()) {
+            if (cmObj instanceof String) {
+                String cmStr = (String) cmObj;
+                String showed = cmStr + " | ";
+                if (isKownedCommand(cmStr)) {
+                    Properties cm = loadCommand(cmStr);
+                    if (isValidCommand(cm)) {
+                        showed += cm.getProperty("description_" + languagePreferences);
+                    } else {
+                        showed += errorsMessage.getProperty("invalidCommandConfiguration");
+                    }
+                }
+
+                TerminalStyle.showNeutral("final result " + showed);
+
+            }
+
+        }
     }
 }
