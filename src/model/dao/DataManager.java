@@ -22,6 +22,8 @@ public abstract class DataManager {
     public static final String SAVED_LIST_TAG = INIT_PROPERTIES.getProperty("SAVED_LIST_TAG");
     public static final String SAVED_DIC_TAG = INIT_PROPERTIES.getProperty("SAVED_DIC_TAG");
 
+    public static final String OBJECT_TYPE_KEY = INIT_PROPERTIES.getProperty("OBJECT_TYPE_KEY");
+
     public static Properties read(File fileName) {
         Properties properties = new Properties();
         try {

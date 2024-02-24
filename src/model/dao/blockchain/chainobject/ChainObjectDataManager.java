@@ -1,55 +1,46 @@
 package model.dao.blockchain.chainobject;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
-
 import model.dao.DataManager;
+import model.dao.blockchain.BlockchainDataMaganager;
 import model.dto.blockchain.chainobject.ChainObject;
 
 public abstract class ChainObjectDataManager extends DataManager {
 
-    public static final Properties BLOCKCHAIN_PROPERTIES = DataManager
-            .read(DataManager.INIT_PROPERTIES.getProperty("BLOCKCHAIN_PROPERTIES"));
+    public static final Properties CHAINOBJECT_PROPERTIES = DataManager
+            .read(DataManager.INIT_PROPERTIES.getProperty("CHAINOBJECT_PROPERTIES"));
+    public static final String SAVED_PRIVATE_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PRIVATE_KEY_TAG");
+    public static final String SAVED_PUBLIC_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PUBLIC_KEY_TAG");
+    public static final String SAVED_CHAINOBJECT_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_CHAINOBJECT_TAG");
+    public static final String CHAINOBJECT_SRCFOLDER = CHAINOBJECT_PROPERTIES.getProperty("CHAINOBJECT_SRCFOLDER");
 
-    public static final String SAVED_PRIVATE_KEY_TAG = BLOCKCHAIN_PROPERTIES.getProperty("SAVED_PRIVATE_KEY_TAG");
-    public static final String SAVED_PUBLIC_KEY_TAG = BLOCKCHAIN_PROPERTIES.getProperty("SAVED_PUBLIC_KEY_TAG");
-    public static final String SAVED_CHAINOBJECT_TAG = BLOCKCHAIN_PROPERTIES.getProperty("SAVED_CHAINOBJECT_TAG");
-
-    @SuppressWarnings("unchecked")
-    public static Properties chainObjectToProperties(Object objet) {
+    // save
+    public static Properties chainObjectToAProperties(ChainObject chainObject) {
         Properties properties = new Properties();
-        if (objet instanceof ChainObject) {
-            Class<?> classe = objet.getClass();
-            Field[] attributs = classe.getDeclaredFields();
-            for (Field attribut : attributs) {
-                attribut.setAccessible(true);
-                try {
-                    Object value = attribut.get(objet);
-                    String attributName = attribut.getName();
-                    String attributeValue = value.toString();
-                    if (value instanceof ArrayList) {
-                        attributeValue = objectArrayListToStringWithSpace((ArrayList<Object>) value);
-                        attributName += SAVED_LIST_TAG;
-                    }
-                    if (value instanceof HashMap) {
-                        attributeValue = objectHashMapToStringWithSpace((HashMap<Object, Object>) value);
-                        attributName += SAVED_DIC_TAG;
-                    }
-
-                    properties.setProperty(attributName, attributeValue);
-
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            System.out.println("Not a chain Object.");
-        }
+        properties.setProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY, SAVED_CHAINOBJECT_TAG);
+        properties.setProperty(SAVED_PRIVATE_KEY_TAG + "privateKey",
+                BlockchainDataMaganager.encryptWithPublicKey(
+                        BlockchainDataMaganager.privateKeyToString(chainObject.getPrivateKey()),
+                        chainObject.getPublicKey()));
+        properties.setProperty(SAVED_PUBLIC_KEY_TAG + "publicKey",
+                BlockchainDataMaganager.publicKeyToString(chainObject.getPublicKey()));
 
         return properties;
     }
+
+    public static ChainObject chainObjectRead() {
+        return null;
+    }
+
+    // tag manager
+
+    public static boolean isAChainObject(Properties properties) {
+        return properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_CHAINOBJECT_TAG);
+    }
+
+    // data manager
 
     public static String objectArrayListToStringWithSpace(ArrayList<Object> list) {
         StringBuilder stringBuilder = new StringBuilder();

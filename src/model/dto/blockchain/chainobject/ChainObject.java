@@ -2,9 +2,8 @@ package model.dto.blockchain.chainobject;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.Properties;
 
-import model.dao.blockchain.chainobject.ChainObjectDataManager;
+import model.dao.blockchain.BlockchainDataMaganager;
 
 public abstract class ChainObject {
     private PrivateKey privateKey;
@@ -25,15 +24,10 @@ public abstract class ChainObject {
         return publicKey;
     }
 
-    public Properties initWrite() {
-        return ChainObjectDataManager.chainObjectToProperties(this);
-    }
-
     @Override
     public String toString() {
-        return ChainObjectDataManager.SAVED_CHAINOBJECT_TAG + privateKey == null
-                ? ChainObjectDataManager.SAVED_PUBLIC_KEY_TAG + publicKey.toString()
-                : ChainObjectDataManager.SAVED_PRIVATE_KEY_TAG + privateKey.toString();
+        return "ChainObject [privateKey(encrypted)=" + BlockchainDataMaganager.encryptWithPublicKey(
+                BlockchainDataMaganager.privateKeyToString(privateKey), publicKey) + ", publicKey=" + publicKey + "]";
     }
 
 }

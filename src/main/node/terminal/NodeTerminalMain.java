@@ -80,8 +80,6 @@ public abstract class NodeTerminalMain {
         CommandDataManager.setCommandSrcPaths(COMMAND_SRC_PATH);
         CommandDataManager.loadCommandFromSrcPath();
 
-        System.out.println(CommandDataManager.getAllCommands());
-
         allCommand = "";
         commandName = "";
 
@@ -91,7 +89,7 @@ public abstract class NodeTerminalMain {
         System.setProperty("file.encoding", "UTF-8");
         prefix = neutralMessage.getProperty("notConnectedPrefix");
         if (controleur.getIdentity() != null) {
-            prefix = controleur.getIdentity().getName();
+            prefix = controleur.getIdentity().getLastName();
         }
         try {
             prefix += "@" + InetAddress.getLocalHost().getHostName();

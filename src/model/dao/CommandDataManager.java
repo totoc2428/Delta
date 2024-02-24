@@ -1,6 +1,5 @@
 package model.dao;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -59,7 +58,7 @@ public abstract class CommandDataManager extends DataManager {
         if (srcPath != null) {
             if (DataManager.fileExist(srcPath)) {
                 if (DataManager.fileIsDirectory(srcPath)) {
-                    return DataManager.fileExist(srcPath + File.separator + "command.conf");
+                    return true;
                 } else {
                     TerminalStyle.showError("fileNotDirectory");
                 }

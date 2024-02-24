@@ -11,16 +11,21 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Properties;
 
 import javax.crypto.Cipher;
 
 import io.jsonwebtoken.security.InvalidKeyException;
-import model.dao.blockchain.chainobject.ChainObjectDataManager;
+import model.dao.DataManager;
 
-public abstract class BlockchainDataMaganager {
-    private final static String KEY_ALGORITHM = ChainObjectDataManager.BLOCKCHAIN_PROPERTIES.getProperty(
-            "KEY_ALGORITHM");// TODO completer dans le fichier .conf pr1
-    private final static String DIGEST_ALGORITHM = ChainObjectDataManager.BLOCKCHAIN_PROPERTIES
+public abstract class BlockchainDataMaganager extends DataManager {
+
+    private final static Properties BLOCKCHAIN_PROPERTIES = DataManager
+            .read(INIT_PROPERTIES.getProperty("BLOCKCHAIN_PROPERTIES"));
+
+    private final static String KEY_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty(
+            "KEY_ALGORITHM");
+    private final static String DIGEST_ALGORITHM = BLOCKCHAIN_PROPERTIES
             .getProperty("DIGEST_ALGORITHM");
 
     /**
