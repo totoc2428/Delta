@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import model.controleurs.blockchain.chainobject.person.PersonControleur;
+import model.controleurs.terminal.CommandControleur;
 import model.dao.CommandDataManager;
 import model.dao.DataManager;
 import model.dto.terminal.Command;
@@ -27,10 +28,11 @@ public abstract class NodeTerminalMain {
     private static boolean exit;
     private static String prefix;
 
-    private static String allCommand;
-    private static String commandName;
+    private static String allCommand = "";
+    private static String commandName = "";
     private static Command command;
 
+    private static CommandControleur commandControleur;
     private static PersonControleur personControleur;
 
     public static void main(String[] args) {
@@ -50,7 +52,6 @@ public abstract class NodeTerminalMain {
             exit = false;
             initMessage();
             initControleur();
-            initCommands();
             initPrefix();
         } else {
             System.exit(1);
@@ -74,18 +75,7 @@ public abstract class NodeTerminalMain {
 
     private static void initControleur() {
         personControleur = new PersonControleur();
-
-    }
-
-    private static void initCommands() {
-        final String COMMAND_SRC_PATH = TERMINALMAIN_PROPERTIES.getProperty("commands");
-
-        CommandDataManager.initCommand();
-        CommandDataManager.setCommandSrcPaths(COMMAND_SRC_PATH);
-        CommandDataManager.loadCommandFromSrcPath();
-
-        allCommand = "";
-        commandName = "";
+        commandControleur = new CommandControleur(TERMINALMAIN_PROPERTIES.getProperty("commands"));
 
     }
 
@@ -128,7 +118,7 @@ public abstract class NodeTerminalMain {
         }
         allCommand = askCommand();
         commandName = allCommand.split(" ")[0];
-        if (CommandDataManager.isKownedCommand(commandName)) {
+        if (commandControleur.isKownedCommand(commandName)) {
             command = CommandDataManager.getCommandByName(commandName);
             if (command.isValid(languagePreferences)) {
                 runCommand();
@@ -166,18 +156,11 @@ public abstract class NodeTerminalMain {
     private static void runHelpCommand() {
         command = CommandDataManager.getCommandByName(commandName);
         TerminalStyle.showNeutral(command.getMainOutput(languagePreferences));
-        for (Command c : CommandDataManager.getAllCommands().values()) {
-            String showed = c.getName() + " | ";
-            if (CommandDataManager.isKownedCommand(c.getName())) {
-                if (c.isValid(languagePreferences)) {
-                    showed += c.getDescription(languagePreferences);
-                } else {
-                    showed += errorsMessage.getProperty("invalidCommandConfiguration");
-                }
+        ArrayList<String> commands = commandControleur.getAllCommandDescription(languagePreferences,
+                errorsMessage.getProperty("invalidCommandConfiguration"));
 
-                TerminalStyle.showNeutral(showed);
-            }
-
+        for (String command : commands) {
+            TerminalStyle.showNeutral(command);
         }
     }
 

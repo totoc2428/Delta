@@ -40,10 +40,6 @@ public abstract class CommandDataManager extends DataManager {
 
     }
 
-    public static boolean isKownedCommand(String commandName) {
-        return getCommandByName(commandName) != null;
-    }
-
     public static String getCommandSrcPaths() {
         return commandSrcPath;
     }
