@@ -8,10 +8,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.Scanner;
 
 import io.jsonwebtoken.lang.Arrays;
+import model.dao.blockchain.BlockchainDataMaganager;
+import model.dto.blockchain.chainobject.ChainObject;
 import util.style.TerminalStyle;
 
 public abstract class DataManager {
@@ -61,6 +65,39 @@ public abstract class DataManager {
         String[] stringsTab = strings.split(SAVED_LIST_SPACE);
 
         return new ArrayList<String>(Arrays.asList(stringsTab));
+    }
+
+    public static String objectHashMapToAString(HashMap<Object, Object> objects) {
+        String string = "";
+
+        string += objectCollectionToAString(objects.values());
+        string += SAVED_DIC_SPACE;
+        string += objectCollectionToAString(objects.keySet());
+
+        return string;
+    }
+
+    public static String objectCollectionToAString(Collection<Object> objects) {
+        String string = "";
+
+        for (Object object : objects) {
+            if (object instanceof ChainObject) {
+                ChainObject chainObject = (ChainObject) object;
+
+                if (chainObject.getPrivateKey() != null) {
+                    string += SAVED_LIST_SPACE
+                            + BlockchainDataMaganager.privateKeyToString(chainObject.getPrivateKey());
+                } else {
+                    string += SAVED_LIST_SPACE
+                            + BlockchainDataMaganager.publicKeyToString(chainObject.getPublicKey());
+
+                }
+            } else {
+                string += SAVED_LIST_SPACE + object.toString();
+            }
+        }
+
+        return string;
     }
 
     public static ArrayList<String> getAllFileNames(String directoryPath) {
