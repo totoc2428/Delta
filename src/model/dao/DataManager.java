@@ -1,8 +1,10 @@
 package model.dao;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.Properties;
 import java.util.Scanner;
 
 import io.jsonwebtoken.lang.Arrays;
-import model.controleurs.node.terminal.style.TerminalStyle;
+import util.style.TerminalStyle;
 
 public abstract class DataManager {
 
@@ -90,5 +92,25 @@ public abstract class DataManager {
         String input = scanner.nextLine();
 
         return input;
+    }
+
+    public static ArrayList<String> textFileToStringArrayList(File file) {
+        ArrayList<String> lines = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lines;
+    }
+
+    public static ArrayList<String> textFileToStringArrayList(String file) {
+        return textFileToStringArrayList(Paths.get(file).toFile());
     }
 }

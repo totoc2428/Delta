@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
-import model.controleurs.node.terminal.style.TerminalStyle;
 import model.dto.terminal.Command;
+import util.style.TerminalStyle;
 
 public abstract class CommandDataManager extends DataManager {
     private static final Properties COMMAND_PROPERTIES = DataManager

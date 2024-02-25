@@ -1,11 +1,15 @@
-package model.controleurs.node.terminal.style;
+package util.style;
 
 public enum TerminalStyle {
-    INFORMATION("\033[0;34m", "[i]"),
-    WARNING("\033[0;33m'", "/!\\"),
-    ERROR("\033[0;31m", "[x]"),
-    DONE("\033[;32m", "[v]"),
-    RESET("\033[0m", "");
+    INFORMATION(TerminalColor.BLUE
+            .getTerminalCode(), "[i]"),
+    WARNING(TerminalColor.YELLOW
+            .getTerminalCode(), "/!\\"),
+    ERROR(TerminalColor.RED
+            .getTerminalCode(), "[x]"),
+    DONE(TerminalColor.GREEN
+            .getTerminalCode(), "[v]"),
+    RESET(TerminalColor.RESET.getTerminalCode(), "");
 
     private String terminalStyle;
     private String icon;
