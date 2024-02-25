@@ -7,7 +7,7 @@ import java.util.Properties;
 
 import model.controleurs.blockchain.chainobject.person.PersonControleur;
 import model.controleurs.terminal.CommandControleur;
-import model.dao.CommandDataManager;
+import model.controleurs.terminal.TerminalMessageControleur;
 import model.dao.DataManager;
 import model.dto.terminal.Command;
 import util.style.TerminalColor;
@@ -18,12 +18,6 @@ public abstract class NodeTerminalMain {
             .read(DataManager.INIT_PROPERTIES.getProperty("TERMINALMAIN_PROPERTIES"));
 
     private static String languagePreferences;
-    private static String languageSrcPath;
-
-    private static Properties neutralMessage;
-    private static Properties informationsMessage;
-    private static Properties warningsMessage;
-    private static Properties errorsMessage;
 
     private static boolean exit;
     private static String prefix;
@@ -33,6 +27,7 @@ public abstract class NodeTerminalMain {
     private static Command command;
 
     private static CommandControleur commandControleur;
+    private static TerminalMessageControleur terminalMessageControleur;
     private static PersonControleur personControleur;
 
     public static void main(String[] args) {
@@ -50,7 +45,7 @@ public abstract class NodeTerminalMain {
     private static void init() {
         if (checkRequirement()) {
             exit = false;
-            initMessage();
+            initLanguagesPreferences();
             initControleur();
             initPrefix();
         } else {
@@ -58,37 +53,32 @@ public abstract class NodeTerminalMain {
         }
     }
 
-    private static void initMessage() {
-        languagePreferences = DataManager.INIT_PROPERTIES.getProperty("LANGUAGE_PREFERENCES");
-        languageSrcPath = TERMINALMAIN_PROPERTIES.getProperty("languages");
-
-        neutralMessage = DataManager.read(
-                languageSrcPath + languagePreferences + TERMINALMAIN_PROPERTIES.getProperty("neutralMessage"));
-
-        informationsMessage = DataManager.read(
-                languageSrcPath + languagePreferences + TERMINALMAIN_PROPERTIES.getProperty("informationsMessage"));
-        warningsMessage = DataManager.read(
-                languageSrcPath + languagePreferences + TERMINALMAIN_PROPERTIES.getProperty("warningsMessage"));
-        errorsMessage = DataManager.read(
-                languageSrcPath + languagePreferences + TERMINALMAIN_PROPERTIES.getProperty("errorsMessage"));
+    private static void initLanguagesPreferences() {
+        String languagePreferencesCheck = DataManager.INIT_PROPERTIES.getProperty("LANGUAGE_PREFERENCES");
+        if (languagePreferencesCheck != null) {
+            if (!languagePreferencesCheck.isEmpty() && !languagePreferencesCheck.isBlank()) {
+                languagePreferences = languagePreferencesCheck;
+            }
+        }
     }
 
     private static void initControleur() {
         personControleur = new PersonControleur();
         commandControleur = new CommandControleur(TERMINALMAIN_PROPERTIES.getProperty("commands"));
+        terminalMessageControleur = new TerminalMessageControleur(languagePreferences);
 
     }
 
     private static void initPrefix() {
         System.setProperty("file.encoding", "UTF-8");
-        prefix = neutralMessage.getProperty("notConnectedPrefix");
+        prefix = terminalMessageControleur.getContent("notConnectedPrefix");
         if (personControleur.getIdentity() != null) {
             prefix = personControleur.getIdentity().getLastName();
         }
         try {
             prefix += "@" + InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
-            prefix += "@" + neutralMessage.getProperty("unknownHostPrefix");
+            prefix += "@" + terminalMessageControleur.getContent("unknownHostPrefix");
         }
         prefix += "ΔNODE_DEVICE:$ ";
     }
@@ -96,9 +86,8 @@ public abstract class NodeTerminalMain {
     // start
     private static void start() {
         showLogo();
-        TerminalStyle.showNeutral(neutralMessage.getProperty("start"));
-        TerminalStyle.showNeutral(neutralMessage.getProperty("welcome"));
-
+        terminalMessageControleur.show("start");
+        terminalMessageControleur.show("welcome");
     }
 
     // run
@@ -112,21 +101,15 @@ public abstract class NodeTerminalMain {
     private static void runAskAndCommand() {
 
         if (personControleur.getIdentity() == null) {
-            TerminalStyle.showWarning(warningsMessage.getProperty("notConnected"));
-            TerminalStyle.showInformation(informationsMessage.getProperty("toConnect"));
-            TerminalStyle.showInformation(informationsMessage.getProperty("toRegister"));
+            terminalMessageControleur.show("notConnected");
+            terminalMessageControleur.show("toConnect");
+            terminalMessageControleur.show("toRegister");
         }
         allCommand = askCommand();
         commandName = allCommand.split(" ")[0];
-        if (commandControleur.isKownedCommand(commandName)) {
-            command = CommandDataManager.getCommandByName(commandName);
-            if (command.isValid(languagePreferences)) {
-                runCommand();
-            } else {
-                TerminalStyle.showError(errorsMessage.getProperty("invalidCommandConfiguration"));
-            }
-        } else {
-            TerminalStyle.showError(errorsMessage.getProperty("invalidCommandName"));
+        command = commandControleur.getCommandWithName(commandName);
+        if (command != null) {
+            runCommand();
         }
 
     }
@@ -148,16 +131,14 @@ public abstract class NodeTerminalMain {
     }
 
     private static void runExitCommand() {
-        command = CommandDataManager.getCommandByName(commandName);
         TerminalStyle.showNeutral(command.getMainOutput(languagePreferences));
         exit = true;
     }
 
     private static void runHelpCommand() {
-        command = CommandDataManager.getCommandByName(commandName);
         TerminalStyle.showNeutral(command.getMainOutput(languagePreferences));
         ArrayList<String> commands = commandControleur.getAllCommandDescription(languagePreferences,
-                errorsMessage.getProperty("invalidCommandConfiguration"));
+                terminalMessageControleur.getContent("invalidCommandConfiguration"));
 
         for (String command : commands) {
             TerminalStyle.showNeutral(command);

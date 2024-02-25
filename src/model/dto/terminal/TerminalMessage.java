@@ -20,6 +20,22 @@ public class TerminalMessage {
     }
 
     public void show() {
-
+        switch (style) {
+            case DONE:
+                TerminalStyle.showDone(content);
+                break;
+            case ERROR:
+                TerminalStyle.showError(content);
+                break;
+            case WARNING:
+                TerminalStyle.showWarning(content);
+                break;
+            case INFORMATION:
+                TerminalStyle.showInformation(content);
+                break;
+            default:
+                TerminalStyle.showNeutral(content);
+                break;
+        }
     }
 }

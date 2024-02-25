@@ -1,9 +1,10 @@
-package model.dao;
+package model.dao.terminal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
+import model.dao.DataManager;
 import model.dto.terminal.Command;
 import util.style.TerminalStyle;
 

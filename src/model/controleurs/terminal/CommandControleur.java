@@ -3,7 +3,7 @@ package model.controleurs.terminal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.dao.CommandDataManager;
+import model.dao.terminal.CommandDataManager;
 import model.dto.terminal.Command;
 
 public class CommandControleur {
@@ -43,4 +43,11 @@ public class CommandControleur {
         return descriptions;
     }
 
+    public Command getCommandWithName(String commandName) {
+        if (isKownedCommand(commandName)) {
+            return commands.get(commandName);
+        }
+
+        return null;
+    }
 }
