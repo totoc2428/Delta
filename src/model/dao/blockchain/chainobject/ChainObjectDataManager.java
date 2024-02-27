@@ -166,29 +166,17 @@ public abstract class ChainObjectDataManager extends DataManager {
      * @param privateKey the privateKey to decrypt all the privateValue.
      * @return chainObject corresponding to the file.
      */
-    public static ChainObject chainObjectReadFrom(File file, PrivateKey privateKey) {
-        Properties properties = DataManager.read(file);
+    public static ChainObject chainObjectReadFromFile(File file, PrivateKey privateKey) {
+        return chainObjectReadFromProperties(DataManager.read(file), privateKey);
+    }
+
+    public static ChainObject chainObjectReadFromProperties(Properties properties, PrivateKey privateKey) {
         ChainObject chainObject = null;
         if (properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_CHAINOBJECT_TAG)) {
             PublicKey publicKey = BlockchainDataMaganager.stringToPublicKey(
                     properties.getProperty(SAVED_PUBLIC_KEY_TAG + "publicKey"));
             chainObject = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, false, null);
 
-        }
-
-        return chainObject;
-    }
-
-    /**
-     * @param file      the file who is saved the chainObject
-     * @param publicKey WARNING ! All the privateAtribut will be set at null value.
-     * @return chainObject corresponding to the file.
-     */
-    public static ChainObject chainObjectReadFrom(File file, PublicKey publicKey) {
-        Properties properties = DataManager.read(file);
-        ChainObject chainObject = null;
-        if (properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_CHAINOBJECT_TAG)) {
-            chainObject = (ChainObject) new PhysicalPerson(null, publicKey, null, null, false, null);
         }
 
         return chainObject;
