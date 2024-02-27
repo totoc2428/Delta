@@ -30,6 +30,13 @@ public abstract class DataManager {
     public static final String OBJECT_TYPE_KEY = INIT_PROPERTIES.getProperty("OBJECT_TYPE_KEY");
 
     // read
+
+    /**
+     * Do a properties from file paramter.
+     * 
+     * @param fileName the file you want to read.
+     * @return the file in a properties format.
+     */
     public static Properties read(File fileName) {
         Properties properties = new Properties();
         try {
@@ -44,6 +51,13 @@ public abstract class DataManager {
         return properties;
     }
 
+    /**
+     * {@link DataManager#read(File)} the same method with the file name in a string
+     * format.
+     * 
+     * @param fileName the file Name in a string format.
+     * @return the file in a Properties format.
+     */
     public static Properties read(String fileName) {
         try {
             return read(Paths.get(fileName).toFile());
@@ -52,6 +66,11 @@ public abstract class DataManager {
         }
     }
 
+    /**
+     * @param file a text file.
+     * @return the text file in a array list. each index of the array list
+     *         corresponding to a line in the text file.
+     */
     public static ArrayList<String> textFileToStringArrayList(File file) {
         ArrayList<String> lines = new ArrayList<>();
 
@@ -68,39 +87,67 @@ public abstract class DataManager {
         return lines;
     }
 
+    /**
+     * @param file the file path in a string format.
+     * @return the text file in a array list. each index of the array list
+     *         corresponding to a line in the text file.
+     */
     public static ArrayList<String> textFileToStringArrayList(String file) {
-        return textFileToStringArrayList(Paths.get(file).toFile());
+        if (fileExist(file)) {
+            return textFileToStringArrayList(Paths.get(file).toFile());
+        } else {
+            return null;
+        }
     }
 
     // check
+    /**
+     * @param path the file in a string format.
+     * @return a boolean : true if the file exist.
+     */
     public static boolean fileExist(String path) {
         return Paths.get(path).toFile().exists();
     }
 
+    /**
+     * @param path the file in a string format.
+     * @return a boolean : true if the file is a directory.
+     */
     public static boolean fileIsDirectory(String path) {
         return Paths.get(path).toFile().isDirectory();
     }
 
     // convert
 
-    public static String objectHashMapToStringWithSpace(HashMap<Object, Object> dic) {
-        StringBuilder stringBuilder = new StringBuilder();
+    /**
+     * This medthod convert the dic into a string. For that it use the
+     * {@link DataManager#objectCollectionToAString(Collection)} method to save
+     * first the keyset of the hasMap separed by {@link DataManager#SAVED_DIC_SPACE}
+     * and follow by the value for each key convert with the same method.
+     * 
+     * @param dic the dic you want to convert in to a string.
+     * @return the dic in a string format.
+     */
+    public static String objectHashMapToString(HashMap<Object, Object> dic) {
+        String string = "";
 
-        for (Object o : dic.values()) {
-            stringBuilder.append(o.toString());
-            stringBuilder.append(SAVED_LIST_SPACE);
-        }
+        string += objectCollectionToAString(dic.values());
+        string += SAVED_DIC_SPACE;
+        string += objectCollectionToAString(dic.keySet());
 
-        stringBuilder.append(SAVED_DIC_SPACE);
-
-        for (Object o : dic.keySet()) {
-            stringBuilder.append(o.toString());
-            stringBuilder.append(SAVED_LIST_SPACE);
-        }
-
-        return stringBuilder.toString();
+        return string;
     }
 
+    /**
+     * This method take a string convert to a HashMap. To work split the string with
+     * the {@link DataManager#SAVED_DIC_SPACE}. The index 0 of the split is saved in
+     * the KEY of the hashMap. The index 1 is saved on the VALUE of the hashMap.
+     * To read each value and key this method use the
+     * {@link DataManager#stringToObjectArrayList(String)}.
+     * 
+     * @param string the string you want to convert to a HashMap of Object.
+     * @return an HashMap<Object,Object> corresponding to the string.
+     */
     public static HashMap<Object, Object> stringToObjectHashMap(String string) {
         HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
 
@@ -114,6 +161,14 @@ public abstract class DataManager {
         return hashMap;
     }
 
+    /**
+     * This method take a string to convert to a ArrayList of String. To work they
+     * split the string with {@link DataManager#SAVED_LIST_SPACE}. They put each
+     * value of the split in to the String ArrayList.
+     * 
+     * @param string the string you want to convert to a string ArrayList.
+     * @return the string in arrayList.
+     */
     public static ArrayList<Object> stringToObjectArrayList(String string) {
         ArrayList<Object> objects = new ArrayList<Object>();
         for (String str : string.split(SAVED_LIST_SPACE)) {
@@ -123,16 +178,14 @@ public abstract class DataManager {
         return objects;
     }
 
-    public static String objectHashMapToAString(HashMap<Object, Object> objects) {
-        String string = "";
-
-        string += objectCollectionToAString(objects.values());
-        string += SAVED_DIC_SPACE;
-        string += objectCollectionToAString(objects.keySet());
-
-        return string;
-    }
-
+    /**
+     * This method convert a collection in a string. To work they add in a string
+     * each value of the collection separed by
+     * {@link DataManager#SAVED_LIST_SPACE}.
+     * 
+     * @param objects the collection of the object you want to convert.
+     * @return the collection in a string format.
+     */
     public static String objectCollectionToAString(Collection<Object> objects) {
         String string = "";
 
@@ -157,6 +210,11 @@ public abstract class DataManager {
     }
 
     // folder
+
+    /**
+     * @param directoryPath the path of the folder.
+     * @return all the name of any file containing in the folder in a string format.
+     */
     public static ArrayList<String> getAllFileNames(String directoryPath) {
         ArrayList<String> fileNames = new ArrayList<>();
 
@@ -178,6 +236,10 @@ public abstract class DataManager {
     }
 
     // input
+    /**
+     * @param prefix the prefix showed before the input.
+     * @return the user input in a string format.
+     */
     public static String getUserInput(String prefix) {
         @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);

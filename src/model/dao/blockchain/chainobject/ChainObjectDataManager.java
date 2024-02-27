@@ -65,7 +65,7 @@ public abstract class ChainObjectDataManager extends DataManager {
         } else if (o instanceof HashMap) {
             @SuppressWarnings("unchecked")
             HashMap<Object, Object> oHashMap = (HashMap<Object, Object>) o;
-            saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties, DataManager.objectHashMapToAString(
+            saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties, DataManager.objectHashMapToString(
                     oHashMap), privateKey);
         } else if (o instanceof PrivateKey) {
             PrivateKey po = (PrivateKey) o;
