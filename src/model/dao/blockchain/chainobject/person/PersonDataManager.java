@@ -1,6 +1,7 @@
 package model.dao.blockchain.chainobject.person;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.security.PrivateKey;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,10 +23,22 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     private static final String PHYSICALPERSON_FILE_SAVED_TAG = PERSON_PROPERTIES
             .getProperty("PHYSICALPERSON_FILE_SAVED_TAG");
 
-    private static String personSrcPath;
+    private static String personSrcPath = PERSON_PROPERTIES.getProperty("personSrcPath");
 
+    // get
     public static PhysicalPerson getPhysicalPersonWithPrivateKey(PrivateKey privateKey) {
-        return null;
+        String fileName = personSrcPath + File.separator + privateKeyToString(privateKey)
+                + PHYSICALPERSON_FILE_SAVED_TAG + PERSON_FILE_SAVED_TAG
+                + SAVED_CHAINOBJECT_TAG;
+        if (fileExist(fileName)) {
+            return physicalPersonReadFromFile(Paths.get(fileName).toFile(), privateKey);
+        } else {
+            return null;
+        }
+    }
+
+    public static String getPersonSrcPath() {
+        return personSrcPath;
     }
 
     // save
@@ -105,9 +118,24 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     }
 
     // config
-    public void setSrcPath(String srcPath) {
+    public static void setSrcPath(String srcPath) {
         if (DataManager.fileExist(srcPath) && DataManager.fileIsDirectory(srcPath)) {
             personSrcPath = srcPath;
         }
     }
+
+    // check
+    private static boolean isPerson(Properties properties) {
+        return properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG);
+    }
+
+    public static boolean isPhysicalPerson(Properties properties) {
+        if (isPerson(properties)) {
+            return properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG);
+        } else {
+            return false;
+        }
+
+    }
+
 }

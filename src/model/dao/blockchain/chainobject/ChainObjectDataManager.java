@@ -17,10 +17,11 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
 
     protected static final Properties CHAINOBJECT_PROPERTIES = read(
             BLOCKCHAIN_PROPERTIES.getProperty("CHAINOBJECT_PROPERTIES"));
+
     private static final String SAVED_PRIVATE_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PRIVATE_KEY_TAG");
     private static final String SAVED_PUBLIC_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PUBLIC_KEY_TAG");
 
-    private static final String SAVED_CHAINOBJECT_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_CHAINOBJECT_TAG");
+    protected static final String SAVED_CHAINOBJECT_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_CHAINOBJECT_TAG");
 
     // save
     /**
@@ -161,7 +162,7 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
 
     public static ChainObject chainObjectReadFromProperties(Properties properties, PrivateKey privateKey) {
         ChainObject chainObject = null;
-        if (properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_CHAINOBJECT_TAG)) {
+        if (isAChainObject(properties)) {
             PublicKey publicKey = stringToPublicKey(properties.getProperty(SAVED_PUBLIC_KEY_TAG + "publicKey"));
             chainObject = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, false, null);
 

@@ -46,9 +46,9 @@ public abstract class CommandDataManager extends DataManager {
         return commandSrcPath;
     }
 
-    public static void setCommandSrcPaths(String commandSrcPathParamter) {
-        if (isCommandSrcPathValid(commandSrcPathParamter)) {
-            CommandDataManager.commandSrcPath = commandSrcPathParamter;
+    public static void setCommandSrcPaths(String commandSrcPathParameter) {
+        if (isCommandSrcPathValid(commandSrcPathParameter)) {
+            CommandDataManager.commandSrcPath = commandSrcPathParameter;
         }
     }
 
