@@ -25,9 +25,9 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
         Properties properties = ChainObjectDataManager.chainObjectToAProperties(person);
         properties.setProperty(OBJECT_TYPE_KEY, properties.getProperty(OBJECT_TYPE_KEY) + SAVED_PERSON_TAG);
 
-        saveAnObjectInAProperties("lastName", properties, person.getLastName(), person.getPrivateKey());
-        saveAnObjectInAProperties("birthDate", properties, person.getBirthDate(), person.getPrivateKey());
-        saveAnObjectInAProperties("isVerified", properties, person.isVerified(), person.getPrivateKey());
+        saveAnObjectInAProperties("lastName", properties, person.getLastName(), person.getPublicKey());
+        saveAnObjectInAProperties("birthDate", properties, person.getBirthDate(), person.getPublicKey());
+        saveAnObjectInAProperties("isVerified", properties, person.isVerified(), person.getPublicKey());
 
         return properties;
     }

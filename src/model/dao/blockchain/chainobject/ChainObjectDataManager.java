@@ -23,6 +23,13 @@ public abstract class ChainObjectDataManager extends DataManager {
     public static final String CHAINOBJECT_SRCFOLDER = CHAINOBJECT_PROPERTIES.getProperty("CHAINOBJECT_SRCFOLDER");
 
     // save
+    /**
+     * Take a ChainObject to convert in a properties format. Is prepared to save any
+     * chainObject.
+     * 
+     * @param chainObject the chainObject you want to convert in to a properties.
+     * @return the chainObject into a Properties format.
+     */
     public static Properties chainObjectToAProperties(ChainObject chainObject) {
         if (chainObject != null) {
             Properties properties = new Properties();
@@ -42,54 +49,69 @@ public abstract class ChainObjectDataManager extends DataManager {
         return null;
     }
 
-    public static void saveAnObjectInAProperties(String key, Properties properties, Object o, PrivateKey privateKey) {
-        if (o instanceof ChainObject) {
-            ChainObject co = (ChainObject) o;
+    /**
+     * @param key        the key of the parameter in properties.
+     * @param properties the propertie you want to edit
+     * @param object     the object you want to save in a properties.
+     * @param publicKey  the publicKey to encrypt the object. If you don't want to
+     *                   encrypt the object set this parmeter to null.
+     */
+    public static void saveAnObjectInAProperties(String key, Properties properties, Object object,
+            PublicKey publicKey) {
+        if (object instanceof ChainObject) {
+            ChainObject co = (ChainObject) object;
             if (co.getPrivateKey() != null) {
                 saveAnStringInAProperties(key, SAVED_CHAINOBJECT_TAG, properties,
                         BlockchainDataMaganager.privateKeyToString(co.getPrivateKey()),
-                        privateKey);
+                        publicKey);
             } else {
                 saveAnStringInAProperties(key, SAVED_CHAINOBJECT_TAG, properties,
                         BlockchainDataMaganager.publicKeyToString(co.getPublicKey()),
-                        privateKey);
+                        publicKey);
             }
-        } else if (o instanceof ArrayList) {
+        } else if (object instanceof ArrayList) {
 
             @SuppressWarnings("unchecked")
-            ArrayList<Object> oArrayList = (ArrayList<Object>) o;
+            ArrayList<Object> oArrayList = (ArrayList<Object>) object;
             saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties,
                     DataManager.objectCollectionToAString(oArrayList),
-                    privateKey);
+                    publicKey);
 
-        } else if (o instanceof HashMap) {
+        } else if (object instanceof HashMap) {
             @SuppressWarnings("unchecked")
-            HashMap<Object, Object> oHashMap = (HashMap<Object, Object>) o;
+            HashMap<Object, Object> oHashMap = (HashMap<Object, Object>) object;
             saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties, DataManager.objectHashMapToString(
-                    oHashMap), privateKey);
-        } else if (o instanceof PrivateKey) {
-            PrivateKey po = (PrivateKey) o;
+                    oHashMap), publicKey);
+        } else if (object instanceof PrivateKey) {
+            PrivateKey po = (PrivateKey) object;
             saveAnStringInAProperties(key, SAVED_PRIVATE_KEY_TAG, properties,
                     BlockchainDataMaganager.privateKeyToString(po),
-                    privateKey);
+                    publicKey);
 
-        } else if (o instanceof PublicKey) {
-            PublicKey po = (PublicKey) o;
+        } else if (object instanceof PublicKey) {
+            PublicKey po = (PublicKey) object;
             saveAnStringInAProperties(key, SAVED_PUBLIC_KEY_TAG, properties,
                     BlockchainDataMaganager.publicKeyToString(po),
-                    privateKey);
+                    publicKey);
         } else {
-            saveAnStringInAProperties(key, "", properties, o.toString(), privateKey);
+            saveAnStringInAProperties(key, "", properties, object.toString(), publicKey);
         }
     }
 
+    /**
+     * @param key        the key
+     * @param tag        the tag if this tag contain to recogise any object type.
+     * @param properties the properties you want to edit.
+     * @param string     the string you want to save in the properties.
+     * @param publicKey  the public key to encrypt the object. If you don't want to
+     *                   encrypt the object set this parmeter to null.
+     */
     private static void saveAnStringInAProperties(String key, String tag, Properties properties, String string,
-            PrivateKey privateKey) {
+            PublicKey publicKey) {
 
-        if (privateKey != null) {
+        if (publicKey != null) {
             key = SAVED_PRIVATE_KEY_TAG + tag + key;
-            string = BlockchainDataMaganager.encryptWithPublicKey(string,
-                    BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey));
+            string = BlockchainDataMaganager.encryptWithPublicKey(string, publicKey);
         } else {
             key = SAVED_PUBLIC_KEY_TAG + tag + key;
         }
@@ -98,10 +120,21 @@ public abstract class ChainObjectDataManager extends DataManager {
     }
 
     // read
+
+    /**
+     * @param key        the key you want to read.
+     * @param properties the properties where is saved the key.
+     * @param privateKey the privateKey to decrypt the value. If the value is
+     *                   encrypted and the PrivateKey is null the value will be
+     *                   null.
+     * @return the value in a string format.
+     */
     private static String readAStringSavedInProperties(String key, Properties properties, PrivateKey privateKey) {
         String value = null;
         if (properties.getProperty(key).contains(SAVED_PRIVATE_KEY_TAG)) {
-            value = BlockchainDataMaganager.decryptWithPrivateKey(properties.getProperty(key), privateKey);
+            if (privateKey != null) {
+                value = BlockchainDataMaganager.decryptWithPrivateKey(properties.getProperty(key), privateKey);
+            }
         } else if (properties.getProperty(key).contains(SAVED_PUBLIC_KEY_TAG)) {
             value = properties.getProperty(key);
         }
@@ -109,6 +142,14 @@ public abstract class ChainObjectDataManager extends DataManager {
         return value;
     }
 
+    /**
+     * @param key        the key you want to read.
+     * @param properties the properties where is saved the key.
+     * @param privateKey the privateKey to decrypt the value. If the value is
+     *                   encrypted and the PrivateKey is null the value will be
+     *                   null.
+     * @return the object value saved in the properties.
+     */
     public static Object readAObjectSavedInPropertes(String key, Properties properties, PrivateKey privateKey) {
         Object object = null;
         String strResult = readAStringSavedInProperties(key, properties, privateKey);
@@ -120,6 +161,11 @@ public abstract class ChainObjectDataManager extends DataManager {
         return object;
     }
 
+    /**
+     * @param file       the file who is saved the chainObject
+     * @param privateKey the privateKey to decrypt all the privateValue.
+     * @return chainObject corresponding to the file.
+     */
     public static ChainObject chainObjectReadFrom(File file, PrivateKey privateKey) {
         Properties properties = DataManager.read(file);
         ChainObject chainObject = null;
@@ -133,6 +179,11 @@ public abstract class ChainObjectDataManager extends DataManager {
         return chainObject;
     }
 
+    /**
+     * @param file      the file who is saved the chainObject
+     * @param publicKey WARNING ! All the privateAtribut will be set at null value.
+     * @return chainObject corresponding to the file.
+     */
     public static ChainObject chainObjectReadFrom(File file, PublicKey publicKey) {
         Properties properties = DataManager.read(file);
         ChainObject chainObject = null;
@@ -144,20 +195,13 @@ public abstract class ChainObjectDataManager extends DataManager {
     }
 
     // tag manager
-
+    /**
+     * @param properties the properties
+     * @return true if containing the
+     *         {@link ChainObjectDataManager#SAVED_CHAINOBJECT_TAG}
+     */
     public static boolean isAChainObject(Properties properties) {
         return properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_CHAINOBJECT_TAG);
-    }
-
-    // data manager
-
-    public static String objectArrayListToStringWithSpace(ArrayList<Object> list) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Object o : list) {
-            stringBuilder.append(o.toString());
-            stringBuilder.append(SAVED_LIST_SPACE);
-        }
-        return stringBuilder.toString();
     }
 
 }
