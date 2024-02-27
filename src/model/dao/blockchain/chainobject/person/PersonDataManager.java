@@ -13,48 +13,66 @@ import model.dto.blockchain.chainobject.person.Person;
 import model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
 
 public abstract class PersonDataManager extends ChainObjectDataManager {
-    public static final Properties PERSON_PROPERTIES = DataManager
-            .read(DataManager.INIT_PROPERTIES.getProperty("PERSON_PROPERTIES"));
+    protected static final Properties PERSON_PROPERTIES = read(CHAINOBJECT_PROPERTIES.getProperty("PERSON_PROPERTIES"));
 
-    public static final String SAVED_PERSON_TAG = PERSON_PROPERTIES.getProperty("SAVED_PERSON_TAG");
-    public static final String SAVED_PHYSICALPERSON_TAG = PERSON_PROPERTIES.getProperty("SAVED_PHYSICALPERSON_TAG");
+    private static final String SAVED_PERSON_TAG = PERSON_PROPERTIES.getProperty("SAVED_PERSON_TAG");
+    private static final String SAVED_PHYSICALPERSON_TAG = PERSON_PROPERTIES.getProperty("SAVED_PHYSICALPERSON_TAG");
 
-    public static ArrayList<Person> getAllPerson() {
+    private static final String PERSON_FILE_SAVED_TAG = PERSON_PROPERTIES.getProperty("PERSON_FILE_SAVED_TAG");
+    private static final String PHYSICALPERSON_FILE_SAVED_TAG = PERSON_PROPERTIES
+            .getProperty("PHYSICALPERSON_FILE_SAVED_TAG");
+
+    private static String personSrcPath;
+
+    public static PhysicalPerson getPhysicalPersonWithPrivateKey(PrivateKey privateKey) {
         return null;
     }
 
     // save
-    public static Properties personToAProperties(Person person) {
+    private static Properties personToAProperties(Person person) {
         Properties properties = ChainObjectDataManager.chainObjectToAProperties(person);
         properties.setProperty(OBJECT_TYPE_KEY, properties.getProperty(OBJECT_TYPE_KEY) + SAVED_PERSON_TAG);
 
-        saveAnObjectInAProperties("lastName", properties, person.getLastName(), person.getPublicKey());
-        saveAnObjectInAProperties("birthDate", properties, person.getBirthDate(), person.getPublicKey());
-        saveAnObjectInAProperties("isVerified", properties, person.isVerified(), person.getPublicKey());
+        saveAnObjectInAProperties("lastName", properties, person.getLastName(), null);
+        saveAnObjectInAProperties("birthDate", properties, person.getBirthDate(), null);
+        saveAnObjectInAProperties("isVerified", properties, person.isVerified(), null);
 
         return properties;
+    }
+
+    private static Properties physicalPersonToAProperties(PhysicalPerson physicalPerson) {
+        Properties properties = personToAProperties(physicalPerson);
+        properties.setProperty(OBJECT_TYPE_KEY, properties.getProperty(OBJECT_TYPE_KEY) + SAVED_PHYSICALPERSON_TAG);
+
+        saveAnObjectInAProperties("forNames", properties, properties, null);
+
+        return properties;
+    }
+
+    private static void saveAPerson(Properties personProperties, String fileName) {
+        save(personProperties, personSrcPath + fileName + PERSON_FILE_SAVED_TAG);
+    }
+
+    public void saveAPhysicalPerson(PhysicalPerson physicalPerson) {
+        saveAPerson(physicalPersonToAProperties(physicalPerson),
+                publicKeyToString(physicalPerson.getPublicKey()) + PHYSICALPERSON_FILE_SAVED_TAG);
     }
 
     // read
     // person
     private static Person personReadFromProperties(Properties properties, PrivateKey privateKey) {
         ChainObject chainObject = ChainObjectDataManager.chainObjectReadFromProperties(properties, privateKey);
+
         if (properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG) && chainObject != null) {
 
-            String lastName = null;
-            LocalDate birDate = null;
-            boolean isVerified = false;
-
-            if (privateKey != null) {
-                lastName = (String) ChainObjectDataManager.readAObjectSavedInPropertes("lastName", properties,
-                        privateKey);
-                birDate = LocalDate
-                        .parse((String) ChainObjectDataManager.readAObjectSavedInPropertes("birthDate", properties,
-                                privateKey));
-                isVerified = Boolean.parseBoolean(
-                        (String) ChainObjectDataManager.readAObjectSavedInPropertes("isVerified", properties,
-                                privateKey));
-            }
+            String lastName = (String) ChainObjectDataManager.readAObjectSavedInPropertes("lastName", properties,
+                    privateKey);
+            LocalDate birDate = LocalDate
+                    .parse((String) ChainObjectDataManager.readAObjectSavedInPropertes("birthDate", properties,
+                            privateKey));
+            boolean isVerified = Boolean.parseBoolean(
+                    (String) ChainObjectDataManager.readAObjectSavedInPropertes("isVerified", properties,
+                            privateKey));
 
             Person person = (Person) new PhysicalPerson(chainObject.getPrivateKey(), chainObject.getPublicKey(),
                     lastName, birDate,
@@ -76,8 +94,20 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
         Person person = personReadFromProperties(properties, privateKey);
         if (person != null && properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG)) {
 
+            @SuppressWarnings("unchecked")
+            ArrayList<String> forNames = (ArrayList<String>) readAObjectSavedInPropertes("forNames", properties,
+                    privateKey);
+
+            return new PhysicalPerson(person.getPrivateKey(), person.getPublicKey(), person.getLastName(),
+                    person.getBirthDate(), person.isVerified(), forNames);
         }
         return null;
     }
 
+    // config
+    public void setSrcPath(String srcPath) {
+        if (DataManager.fileExist(srcPath) && DataManager.fileIsDirectory(srcPath)) {
+            personSrcPath = srcPath;
+        }
+    }
 }

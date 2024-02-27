@@ -21,7 +21,7 @@ import util.style.TerminalStyle;
 
 public abstract class BlockchainDataMaganager extends DataManager {
 
-    private final static Properties BLOCKCHAIN_PROPERTIES = DataManager
+    protected final static Properties BLOCKCHAIN_PROPERTIES = DataManager
             .read(INIT_PROPERTIES.getProperty("BLOCKCHAIN_PROPERTIES"));
 
     private final static String KEY_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty(

@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -97,6 +99,21 @@ public abstract class DataManager {
             return textFileToStringArrayList(Paths.get(file).toFile());
         } else {
             return null;
+        }
+    }
+
+    // save
+    /**
+     * @param properties the properties you want to save
+     * @param fileName   the file where the properties will be saved.
+     */
+    public static void save(Properties properties, String fileName) {
+        if (fileExist(fileName)) {
+            try (OutputStream outputStream = new FileOutputStream(fileName)) {
+                properties.store(outputStream, "");
+            } catch (IOException e) {
+                TerminalStyle.showError(e.getMessage());
+            }
         }
     }
 

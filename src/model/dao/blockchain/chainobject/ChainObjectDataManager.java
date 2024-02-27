@@ -13,14 +13,14 @@ import model.dao.blockchain.BlockchainDataMaganager;
 import model.dto.blockchain.chainobject.ChainObject;
 import model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
 
-public abstract class ChainObjectDataManager extends DataManager {
+public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
 
-    public static final Properties CHAINOBJECT_PROPERTIES = DataManager
-            .read(DataManager.INIT_PROPERTIES.getProperty("CHAINOBJECT_PROPERTIES"));
-    public static final String SAVED_PRIVATE_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PRIVATE_KEY_TAG");
-    public static final String SAVED_PUBLIC_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PUBLIC_KEY_TAG");
-    public static final String SAVED_CHAINOBJECT_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_CHAINOBJECT_TAG");
-    public static final String CHAINOBJECT_SRCFOLDER = CHAINOBJECT_PROPERTIES.getProperty("CHAINOBJECT_SRCFOLDER");
+    protected static final Properties CHAINOBJECT_PROPERTIES = read(
+            BLOCKCHAIN_PROPERTIES.getProperty("CHAINOBJECT_PROPERTIES"));
+    private static final String SAVED_PRIVATE_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PRIVATE_KEY_TAG");
+    private static final String SAVED_PUBLIC_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PUBLIC_KEY_TAG");
+
+    private static final String SAVED_CHAINOBJECT_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_CHAINOBJECT_TAG");
 
     // save
     /**
@@ -35,13 +35,10 @@ public abstract class ChainObjectDataManager extends DataManager {
             Properties properties = new Properties();
             properties.setProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY, SAVED_CHAINOBJECT_TAG);
             if (chainObject.getPublicKey() != null) {
-                properties.setProperty(SAVED_PRIVATE_KEY_TAG + "privateKey",
-                        BlockchainDataMaganager.encryptWithPublicKey(
-                                BlockchainDataMaganager.privateKeyToString(chainObject.getPrivateKey()),
-                                chainObject.getPublicKey()));
+                properties.setProperty(SAVED_PRIVATE_KEY_TAG + "privateKey", encryptWithPublicKey(
+                        privateKeyToString(chainObject.getPrivateKey()), chainObject.getPublicKey()));
             }
-            properties.setProperty(SAVED_PUBLIC_KEY_TAG + "publicKey",
-                    BlockchainDataMaganager.publicKeyToString(chainObject.getPublicKey()));
+            properties.setProperty(SAVED_PUBLIC_KEY_TAG + "publicKey", publicKeyToString(chainObject.getPublicKey()));
 
             return properties;
         }
@@ -62,37 +59,29 @@ public abstract class ChainObjectDataManager extends DataManager {
             ChainObject co = (ChainObject) object;
             if (co.getPrivateKey() != null) {
                 saveAnStringInAProperties(key, SAVED_CHAINOBJECT_TAG, properties,
-                        BlockchainDataMaganager.privateKeyToString(co.getPrivateKey()),
-                        publicKey);
+                        privateKeyToString(co.getPrivateKey()), publicKey);
             } else {
-                saveAnStringInAProperties(key, SAVED_CHAINOBJECT_TAG, properties,
-                        BlockchainDataMaganager.publicKeyToString(co.getPublicKey()),
+                saveAnStringInAProperties(key, SAVED_CHAINOBJECT_TAG, properties, publicKeyToString(co.getPublicKey()),
                         publicKey);
             }
         } else if (object instanceof ArrayList) {
 
             @SuppressWarnings("unchecked")
             ArrayList<Object> oArrayList = (ArrayList<Object>) object;
-            saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties,
-                    DataManager.objectCollectionToAString(oArrayList),
+            saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties, objectCollectionToAString(oArrayList),
                     publicKey);
 
         } else if (object instanceof HashMap) {
             @SuppressWarnings("unchecked")
             HashMap<Object, Object> oHashMap = (HashMap<Object, Object>) object;
-            saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties, DataManager.objectHashMapToString(
-                    oHashMap), publicKey);
+            saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties, objectHashMapToString(oHashMap), publicKey);
         } else if (object instanceof PrivateKey) {
             PrivateKey po = (PrivateKey) object;
-            saveAnStringInAProperties(key, SAVED_PRIVATE_KEY_TAG, properties,
-                    BlockchainDataMaganager.privateKeyToString(po),
-                    publicKey);
+            saveAnStringInAProperties(key, SAVED_PRIVATE_KEY_TAG, properties, privateKeyToString(po), publicKey);
 
         } else if (object instanceof PublicKey) {
             PublicKey po = (PublicKey) object;
-            saveAnStringInAProperties(key, SAVED_PUBLIC_KEY_TAG, properties,
-                    BlockchainDataMaganager.publicKeyToString(po),
-                    publicKey);
+            saveAnStringInAProperties(key, "", properties, publicKeyToString(po), publicKey);
         } else {
             saveAnStringInAProperties(key, "", properties, object.toString(), publicKey);
         }
@@ -111,7 +100,7 @@ public abstract class ChainObjectDataManager extends DataManager {
 
         if (publicKey != null) {
             key = SAVED_PRIVATE_KEY_TAG + tag + key;
-            string = BlockchainDataMaganager.encryptWithPublicKey(string, publicKey);
+            string = encryptWithPublicKey(string, publicKey);
         } else {
             key = SAVED_PUBLIC_KEY_TAG + tag + key;
         }
@@ -133,7 +122,7 @@ public abstract class ChainObjectDataManager extends DataManager {
         String value = null;
         if (properties.getProperty(key).contains(SAVED_PRIVATE_KEY_TAG)) {
             if (privateKey != null) {
-                value = BlockchainDataMaganager.decryptWithPrivateKey(properties.getProperty(key), privateKey);
+                value = decryptWithPrivateKey(properties.getProperty(key), privateKey);
             }
         } else if (properties.getProperty(key).contains(SAVED_PUBLIC_KEY_TAG)) {
             value = properties.getProperty(key);
@@ -173,8 +162,7 @@ public abstract class ChainObjectDataManager extends DataManager {
     public static ChainObject chainObjectReadFromProperties(Properties properties, PrivateKey privateKey) {
         ChainObject chainObject = null;
         if (properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_CHAINOBJECT_TAG)) {
-            PublicKey publicKey = BlockchainDataMaganager.stringToPublicKey(
-                    properties.getProperty(SAVED_PUBLIC_KEY_TAG + "publicKey"));
+            PublicKey publicKey = stringToPublicKey(properties.getProperty(SAVED_PUBLIC_KEY_TAG + "publicKey"));
             chainObject = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, false, null);
 
         }
@@ -182,7 +170,7 @@ public abstract class ChainObjectDataManager extends DataManager {
         return chainObject;
     }
 
-    // tag manager
+    // check
     /**
      * @param properties the properties
      * @return true if containing the

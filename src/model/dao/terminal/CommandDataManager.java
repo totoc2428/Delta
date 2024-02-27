@@ -12,6 +12,8 @@ public abstract class CommandDataManager extends DataManager {
     private static final Properties COMMAND_PROPERTIES = DataManager
             .read(INIT_PROPERTIES.getProperty("COMMAND_PROPERTIES"));
 
+    private static final String COMMAND_FILE_SAVED_TAG = COMMAND_PROPERTIES.getProperty("COMMAND_FILE_SAVED_TAG");
+
     private static String commandSrcPath;
     private static HashMap<String, Command> commands;
 
@@ -21,7 +23,6 @@ public abstract class CommandDataManager extends DataManager {
 
     public static void loadCommandFromSrcPath() {
         if (isCommandSrcPathValid(commandSrcPath)) {
-            final String COMMAND_FILE_SAVED_TAG = COMMAND_PROPERTIES.getProperty("COMMAND_FILE_SAVED_TAG");
 
             ArrayList<String> aviableCommand = DataManager.getAllFileNames(commandSrcPath);
 
