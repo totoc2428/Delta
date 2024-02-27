@@ -17,6 +17,7 @@ import javax.crypto.Cipher;
 
 import io.jsonwebtoken.security.InvalidKeyException;
 import model.dao.DataManager;
+import util.style.TerminalStyle;
 
 public abstract class BlockchainDataMaganager extends DataManager {
 
@@ -137,6 +138,30 @@ public abstract class BlockchainDataMaganager extends DataManager {
             return Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
             // TODO make execption;
+        }
+
+        return null;
+    }
+
+    /**
+     * This medthod decrypt an encrypted message with a publickey corresponding to
+     * the privateKey.
+     * 
+     * @param encryptedString The encrypted message.
+     * @param privateKey      the private key to decrypt the message.
+     * @return the message, decrypted.
+     */
+    public static String decryptWithPrivateKey(String encryptedString, PrivateKey privateKey) {
+        byte[] encryptedBytes = Base64.getDecoder().decode(encryptedString);
+        Cipher cipher;
+        try {
+            cipher = Cipher.getInstance(privateKey.getAlgorithm());
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+
+            return new String(decryptedBytes);
+        } catch (Exception e) {
+            TerminalStyle.showError(e.getMessage());
         }
 
         return null;

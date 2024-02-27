@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.Scanner;
 
-import io.jsonwebtoken.lang.Arrays;
 import model.dao.blockchain.BlockchainDataMaganager;
 import model.dto.blockchain.chainobject.ChainObject;
 import util.style.TerminalStyle;
@@ -30,6 +29,7 @@ public abstract class DataManager {
 
     public static final String OBJECT_TYPE_KEY = INIT_PROPERTIES.getProperty("OBJECT_TYPE_KEY");
 
+    // read
     public static Properties read(File fileName) {
         Properties properties = new Properties();
         try {
@@ -52,6 +52,27 @@ public abstract class DataManager {
         }
     }
 
+    public static ArrayList<String> textFileToStringArrayList(File file) {
+        ArrayList<String> lines = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lines;
+    }
+
+    public static ArrayList<String> textFileToStringArrayList(String file) {
+        return textFileToStringArrayList(Paths.get(file).toFile());
+    }
+
+    // check
     public static boolean fileExist(String path) {
         return Paths.get(path).toFile().exists();
     }
@@ -60,11 +81,46 @@ public abstract class DataManager {
         return Paths.get(path).toFile().isDirectory();
     }
 
-    public static ArrayList<String> stringToStringArrayList(String strings) {
-        strings.replace(SAVED_LIST_TAG, "");
-        String[] stringsTab = strings.split(SAVED_LIST_SPACE);
+    // convert
 
-        return new ArrayList<String>(Arrays.asList(stringsTab));
+    public static String objectHashMapToStringWithSpace(HashMap<Object, Object> dic) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (Object o : dic.values()) {
+            stringBuilder.append(o.toString());
+            stringBuilder.append(SAVED_LIST_SPACE);
+        }
+
+        stringBuilder.append(SAVED_DIC_SPACE);
+
+        for (Object o : dic.keySet()) {
+            stringBuilder.append(o.toString());
+            stringBuilder.append(SAVED_LIST_SPACE);
+        }
+
+        return stringBuilder.toString();
+    }
+
+    public static HashMap<Object, Object> stringToObjectHashMap(String string) {
+        HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
+
+        String values = string.split(SAVED_DIC_SPACE)[0];
+        String keys = string.split(SAVED_DIC_SPACE)[1];
+
+        for (int i = 0; i < values.length(); i++) {
+            hashMap.put(keys.split(SAVED_LIST_SPACE)[i], values.split(SAVED_LIST_SPACE)[i]);
+        }
+
+        return hashMap;
+    }
+
+    public static ArrayList<Object> stringToObjectArrayList(String string) {
+        ArrayList<Object> objects = new ArrayList<Object>();
+        for (String str : string.split(SAVED_LIST_SPACE)) {
+            objects.add(str);
+        }
+
+        return objects;
     }
 
     public static String objectHashMapToAString(HashMap<Object, Object> objects) {
@@ -100,6 +156,7 @@ public abstract class DataManager {
         return string;
     }
 
+    // folder
     public static ArrayList<String> getAllFileNames(String directoryPath) {
         ArrayList<String> fileNames = new ArrayList<>();
 
@@ -120,6 +177,7 @@ public abstract class DataManager {
         return fileNames;
     }
 
+    // input
     public static String getUserInput(String prefix) {
         @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
@@ -131,23 +189,4 @@ public abstract class DataManager {
         return input;
     }
 
-    public static ArrayList<String> textFileToStringArrayList(File file) {
-        ArrayList<String> lines = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                lines.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return lines;
-    }
-
-    public static ArrayList<String> textFileToStringArrayList(String file) {
-        return textFileToStringArrayList(Paths.get(file).toFile());
-    }
 }

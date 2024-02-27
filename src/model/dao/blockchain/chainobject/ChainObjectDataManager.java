@@ -97,6 +97,29 @@ public abstract class ChainObjectDataManager extends DataManager {
         properties.setProperty(key, string);
     }
 
+    // read
+    private static String readAStringSavedInProperties(String key, Properties properties, PrivateKey privateKey) {
+        String value = null;
+        if (properties.getProperty(key).contains(SAVED_PRIVATE_KEY_TAG)) {
+            value = BlockchainDataMaganager.decryptWithPrivateKey(properties.getProperty(key), privateKey);
+        } else if (properties.getProperty(key).contains(SAVED_PUBLIC_KEY_TAG)) {
+            value = properties.getProperty(key);
+        }
+
+        return value;
+    }
+
+    public static Object readAObjectSavedInPropertes(String key, Properties properties, PrivateKey privateKey) {
+        Object object = null;
+        String strResult = readAStringSavedInProperties(key, properties, privateKey);
+        if (key.contains(SAVED_DIC_TAG)) {
+            object = stringToObjectHashMap(strResult);
+        } else if (key.contains(SAVED_LIST_TAG)) {
+            object = stringToObjectArrayList(strResult);
+        }
+        return object;
+    }
+
     public static ChainObject chainObjectReadFrom(File file, PrivateKey privateKey) {
         Properties properties = DataManager.read(file);
         ChainObject chainObject = null;
@@ -137,43 +160,4 @@ public abstract class ChainObjectDataManager extends DataManager {
         return stringBuilder.toString();
     }
 
-    public static String objectHashMapToStringWithSpace(HashMap<Object, Object> dic) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (Object o : dic.values()) {
-            stringBuilder.append(o.toString());
-            stringBuilder.append(SAVED_LIST_SPACE);
-        }
-
-        stringBuilder.append(SAVED_DIC_SPACE);
-
-        for (Object o : dic.keySet()) {
-            stringBuilder.append(o.toString());
-            stringBuilder.append(SAVED_LIST_SPACE);
-        }
-
-        return stringBuilder.toString();
-    }
-
-    public static HashMap<Object, Object> stringToObjectHashMap(String string) {
-        HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
-
-        String values = string.split(SAVED_DIC_SPACE)[0];
-        String keys = string.split(SAVED_DIC_SPACE)[1];
-
-        for (int i = 0; i < values.length(); i++) {
-            hashMap.put(keys.split(SAVED_LIST_SPACE)[i], values.split(SAVED_LIST_SPACE)[i]);
-        }
-
-        return hashMap;
-    }
-
-    public static ArrayList<Object> stringToObjectArrayList(String string) {
-        ArrayList<Object> objects = new ArrayList<Object>();
-        for (String str : string.split(SAVED_LIST_SPACE)) {
-            objects.add(str);
-        }
-
-        return objects;
-    }
 }

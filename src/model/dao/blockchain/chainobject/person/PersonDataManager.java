@@ -35,12 +35,13 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     public static Person PersonReadFrom(File file, PrivateKey privateKey) {
         Properties properties = read(file);
         ChainObject chainObject = ChainObjectDataManager.chainObjectReadFrom(file, privateKey);
-        Person person = null;
         if (properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG)) {
+            String lastName = (String) ChainObjectDataManager.readAObjectSavedInPropertes("lastName", properties,
+                    privateKey);
 
         }
 
-        return person;
+        return null;
     }
 
     public static Person PersonReadFrom(File file, PublicKey publicKey) {
