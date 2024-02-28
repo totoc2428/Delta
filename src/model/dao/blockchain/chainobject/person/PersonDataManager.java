@@ -66,7 +66,7 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
         save(personProperties, personSrcPath + fileName + PERSON_FILE_SAVED_TAG);
     }
 
-    public void saveAPhysicalPerson(PhysicalPerson physicalPerson) {
+    public static void saveAPhysicalPerson(PhysicalPerson physicalPerson) {
         saveAPerson(physicalPersonToAProperties(physicalPerson),
                 publicKeyToString(physicalPerson.getPublicKey()) + PHYSICALPERSON_FILE_SAVED_TAG);
     }

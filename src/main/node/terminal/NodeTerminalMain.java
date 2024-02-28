@@ -130,19 +130,36 @@ public abstract class NodeTerminalMain {
         }
     }
 
+    // exit command
     private static void runExitCommand() {
-        TerminalStyle.showNeutral(command.getMainOutput(languagePreferences));
+        command.show();
         exit = true;
     }
 
+    // help command
     private static void runHelpCommand() {
-        TerminalStyle.showNeutral(command.getMainOutput(languagePreferences));
+        command.show();
         ArrayList<String> commands = commandControleur.getAllCommandDescription(languagePreferences,
                 terminalMessageControleur.getContent("invalidCommandConfiguration"));
 
         for (String command : commands) {
             TerminalStyle.showNeutral(command);
         }
+    }
+
+    // log
+    private static void runLogCommand() {
+        command.show();
+        String options = allCommand.split(" ")[1];
+        switch (options) {
+            case "-p":
+                command.show("pOutput_" + languagePreferences);
+
+                break;
+            default:
+                break;
+        }
+
     }
 
     // show

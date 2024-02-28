@@ -2,6 +2,8 @@ package model.dto.terminal;
 
 import java.util.Properties;
 
+import util.style.TerminalStyle;
+
 public class Command {
     private Properties properties;
 
@@ -44,6 +46,14 @@ public class Command {
         }
 
         return isValid;
+    }
+
+    public void show() {
+        show(getMainOutput(getName()));
+    }
+
+    public void show(String key) {
+        TerminalStyle.showNeutral(properties.getProperty(key));
     }
 
     @Override
