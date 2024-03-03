@@ -125,6 +125,8 @@ public abstract class NodeTerminalMain {
                 break;
             case "help":
                 runHelpCommand();
+            case "log":
+                runLogCommand();
             default:
                 break;
         }
@@ -154,9 +156,9 @@ public abstract class NodeTerminalMain {
         switch (options) {
             case "-p":
                 command.show("pOutput_" + languagePreferences);
-
                 break;
             default:
+                command.show("dOutput_" + languagePreferences);
                 break;
         }
 
