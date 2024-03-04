@@ -14,10 +14,7 @@ public class PersonControleur {
 
     public PersonControleur(PrivateKey privateKey) {
         otherPerson = new ArrayList<Person>();
-
-        if (privateKey != null) {
-            identity = PersonDataManager.getPhysicalPersonWithPrivateKey(privateKey);
-        }
+        setIdentity(privateKey);
     }
 
     public PersonControleur() {
@@ -26,6 +23,12 @@ public class PersonControleur {
 
     public PhysicalPerson getIdentity() {
         return identity;
+    }
+
+    public void setIdentity(PrivateKey privateKey) {
+        if (privateKey != null) {
+            identity = PersonDataManager.getPhysicalPersonWithPrivateKey(privateKey);
+        }
     }
 
     public void close() {
