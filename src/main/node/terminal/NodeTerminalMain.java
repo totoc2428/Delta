@@ -2,6 +2,7 @@ package main.node.terminal;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -9,6 +10,7 @@ import model.controleurs.blockchain.chainobject.person.PersonControleur;
 import model.controleurs.terminal.CommandControleur;
 import model.controleurs.terminal.TerminalMessageControleur;
 import model.dao.DataManager;
+import model.dao.blockchain.BlockchainDataMaganager;
 import model.dto.terminal.Command;
 import util.style.TerminalColor;
 import util.style.TerminalStyle;
@@ -156,9 +158,17 @@ public abstract class NodeTerminalMain {
         switch (options) {
             case "-p":
                 command.show("pOutput_" + languagePreferences);
+                PrivateKey privateKey = BlockchainDataMaganager.stringToPrivateKey(allCommand.split(" ")[2]);
+                if (privateKey != null) {
+                    personControleur.setIdentity(privateKey);
+                } else {
+                    terminalMessageControleur.show("LogCommandWithPrivateKeyNull");
+                }
                 break;
             default:
                 command.show("dOutput_" + languagePreferences);
+                String name = DataManager
+                        .getUserInput(terminalMessageControleur.getContent("LogDefaultNameInputPrefix"));
                 break;
         }
 
