@@ -127,8 +127,10 @@ public abstract class NodeTerminalMain {
                 break;
             case "help":
                 runHelpCommand();
+                break;
             case "log":
                 runLogCommand();
+                break;
             default:
                 break;
         }
@@ -136,13 +138,13 @@ public abstract class NodeTerminalMain {
 
     // exit command
     private static void runExitCommand() {
-        command.show();
+        command.show(languagePreferences);
         exit = true;
     }
 
     // help command
     private static void runHelpCommand() {
-        command.show();
+        command.show(languagePreferences);
         ArrayList<String> commands = commandControleur.getAllCommandDescription(languagePreferences,
                 terminalMessageControleur.getContent("invalidCommandConfiguration"));
 
@@ -153,25 +155,44 @@ public abstract class NodeTerminalMain {
 
     // log
     private static void runLogCommand() {
-        command.show();
-        String options = allCommand.split(" ")[1];
-        switch (options) {
-            case "-p":
-                command.show("pOutput_" + languagePreferences);
-                PrivateKey privateKey = BlockchainDataMaganager.stringToPrivateKey(allCommand.split(" ")[2]);
-                if (privateKey != null) {
-                    personControleur.setIdentity(privateKey);
-                } else {
-                    terminalMessageControleur.show("LogCommandWithPrivateKeyNull");
-                }
-                break;
-            default:
-                command.show("dOutput_" + languagePreferences);
-                String name = DataManager
-                        .getUserInput(terminalMessageControleur.getContent("LogDefaultNameInputPrefix"));
-                break;
+        command.show(languagePreferences);
+        if (allCommand.split(" ").length > 1) {
+            String options = allCommand.split(" ")[1];
+            switch (options) {
+                case "-p":
+                    runLogCommandPoption();
+                    break;
+                default:
+                    runLogCommandDoption();
+                    break;
+            }
+        } else {
+            runLogCommandDoption();
         }
 
+    }
+
+    private static void runLogCommandPoption() {
+        command.show(languagePreferences, "pOutput_");
+        PrivateKey privateKey = BlockchainDataMaganager.stringToPrivateKey(allCommand.split(" ")[2]);
+        if (privateKey != null) {
+            personControleur.setIdentity(privateKey);
+        } else {
+            terminalMessageControleur.show("LogCommandWithPrivateKeyNull");
+        }
+    }
+
+    private static void runLogCommandDoption() {
+        command.show(languagePreferences, "dOutput_");
+        String name = DataManager
+                .getUserInput(terminalMessageControleur.getContent("LogDefaultNameInputPrefix"));
+        String forName = DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultForNameInputPrefix"));
+        String birthDate = DataManager
+                .getUserInput(terminalMessageControleur.getContent("LogDefaultBirthDateInputPrefix"));
+        String passSentance = DataManager
+                .getUserSecretInput(terminalMessageControleur.getContent("LogDefaultPassPhraseInputPrefix"));
+
+        personControleur.setIdentity(name, forName, birthDate, passSentance);
     }
 
     // show

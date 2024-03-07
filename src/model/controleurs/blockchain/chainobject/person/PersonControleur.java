@@ -1,8 +1,10 @@
 package model.controleurs.blockchain.chainobject.person;
 
 import java.security.PrivateKey;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
+import model.dao.blockchain.BlockchainDataMaganager;
 import model.dao.blockchain.chainobject.person.PersonDataManager;
 import model.dto.blockchain.chainobject.person.Person;
 import model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
@@ -25,10 +27,25 @@ public class PersonControleur {
         return identity;
     }
 
-    public void setIdentity(PrivateKey privateKey) {
+    public boolean setIdentity(PrivateKey privateKey) {
         if (privateKey != null) {
             identity = PersonDataManager.getPhysicalPersonWithPrivateKey(privateKey);
+
+            return true;
         }
+
+        return false;
+    }
+
+    public boolean setIdentity(String name, String forNames, String localDate, String passPhrase) {
+        String[] localDateTab = (localDate.replace('/', '-')).split("-");
+        localDate = localDateTab[2] + "-" + localDateTab[1] + "-" + localDateTab[0];
+        localDate = LocalDate.parse(localDate).toString();
+        String stringKey = name + forNames + localDate + passPhrase;
+
+        PrivateKey privateKey = BlockchainDataMaganager.generatePrivateKeyFromString(stringKey);
+
+        return setIdentity(privateKey);
     }
 
     public void close() {

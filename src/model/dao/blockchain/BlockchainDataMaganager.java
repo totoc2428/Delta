@@ -2,9 +2,12 @@ package model.dao.blockchain;
 
 import java.security.Key;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
@@ -28,6 +31,8 @@ public abstract class BlockchainDataMaganager extends DataManager {
             "KEY_ALGORITHM");
     private final static String DIGEST_ALGORITHM = BLOCKCHAIN_PROPERTIES
             .getProperty("DIGEST_ALGORITHM");
+
+    private final static int KEY_SIZE = Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("KEY_SIZE"));
 
     /**
      * This method retrieve the publicKey of a privateKey.
@@ -207,8 +212,30 @@ public abstract class BlockchainDataMaganager extends DataManager {
             return Base64.getEncoder().encodeToString(signatureBytes);
         } catch (NoSuchAlgorithmException | InvalidKeyException | java.security.InvalidKeyException
                 | SignatureException e) {
-            System.out.println(e.getMessage());
+            TerminalStyle.showError(e.getMessage());
             return null;
         }
+    }
+
+    /**
+     * @param input the string you want to transform in to privateKey
+     * @return the privateKey correponding to string
+     */
+    public static PrivateKey generatePrivateKeyFromString(String input) {
+        try {
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+            secureRandom.setSeed(input.getBytes());
+
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KEY_ALGORITHM);
+            keyPairGenerator.initialize(KEY_SIZE, secureRandom);
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+            return keyPair.getPrivate();
+
+        } catch (NoSuchAlgorithmException e) {
+            TerminalStyle.showError(e.getMessage());
+        }
+
+        return null;
     }
 }

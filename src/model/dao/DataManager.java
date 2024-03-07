@@ -1,6 +1,7 @@
 package model.dao;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -268,4 +269,14 @@ public abstract class DataManager {
         return input;
     }
 
+    public static String getUserSecretInput(String prefix) {
+        Console console = System.console();
+        if (console == null) {
+            System.exit(1);
+        }
+
+        char[] consoleArray = console.readPassword(prefix + " ");
+
+        return new String(consoleArray);
+    }
 }

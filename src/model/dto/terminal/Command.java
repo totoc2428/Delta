@@ -48,12 +48,12 @@ public class Command {
         return isValid;
     }
 
-    public void show() {
-        show(getMainOutput(getName()));
+    public void show(String languagePreference, String key) {
+        TerminalStyle.showNeutral(properties.getProperty(key + languagePreference));
     }
 
-    public void show(String key) {
-        TerminalStyle.showNeutral(properties.getProperty(key));
+    public void show(String languagePreference) {
+        show(languagePreference, "mainOutput_");
     }
 
     @Override
