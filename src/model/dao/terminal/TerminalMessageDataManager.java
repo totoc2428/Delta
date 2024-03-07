@@ -17,6 +17,7 @@ public abstract class TerminalMessageDataManager extends DataManager {
     private static String informationsNameFile;
     private static String warningsNameFile;
     private static String neutralsNameFile;
+    private static String donesNameFile;
     private static String languagePreferences;
 
     public static HashMap<String, TerminalMessage> getAllErrorMessages() {
@@ -29,6 +30,10 @@ public abstract class TerminalMessageDataManager extends DataManager {
 
     public static HashMap<String, TerminalMessage> getAllWarningsMessages() {
         return getAll(TerminalStyle.WARNING, warningsNameFile);
+    }
+
+    public static HashMap<String, TerminalMessage> getAllDonesMessages() {
+        return getAll(TerminalStyle.DONE, donesNameFile);
     }
 
     public static HashMap<String, TerminalMessage> getAllNeutralsMessages() {
@@ -72,6 +77,10 @@ public abstract class TerminalMessageDataManager extends DataManager {
 
     public static void setNeutralsNameFile(String neutralsNameFile) {
         TerminalMessageDataManager.neutralsNameFile = neutralsNameFile;
+    }
+
+    public static void setDonesNameFile(String donesNameFile) {
+        TerminalMessageDataManager.donesNameFile = donesNameFile;
     }
 
     public static void setLanguagePreferences(String languagePreferences) {

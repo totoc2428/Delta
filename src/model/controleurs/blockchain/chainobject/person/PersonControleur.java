@@ -37,15 +37,20 @@ public class PersonControleur {
         return false;
     }
 
-    public boolean setIdentity(String name, String forNames, String localDate, String passPhrase) {
+    public PrivateKey createAPersonPrivateKeyWithAtribute(String name, String forNames, String localDate,
+            String passPhrase) {
+
         String[] localDateTab = (localDate.replace('/', '-')).split("-");
         localDate = localDateTab[2] + "-" + localDateTab[1] + "-" + localDateTab[0];
         localDate = LocalDate.parse(localDate).toString();
-        String stringKey = name + forNames + localDate + passPhrase;
+        String stringKey = name.toLowerCase().replace(' ', '_')
+                + forNames.toLowerCase().replace(' ', '_')
+                + localDate
+                + passPhrase;
 
         PrivateKey privateKey = BlockchainDataMaganager.generatePrivateKeyFromString(stringKey);
 
-        return setIdentity(privateKey);
+        return privateKey;
     }
 
     public void close() {

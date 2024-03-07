@@ -9,6 +9,7 @@ public class TerminalMessageControleur {
     HashMap<String, TerminalMessage> errorMessages;
     HashMap<String, TerminalMessage> warningMessages;
     HashMap<String, TerminalMessage> informationMessages;
+    HashMap<String, TerminalMessage> donesMessages;
     HashMap<String, TerminalMessage> neutralMessages;
 
     public TerminalMessageControleur(String languagePreferences) {
@@ -18,6 +19,7 @@ public class TerminalMessageControleur {
         warningMessages = TerminalMessageDataManager.getAllWarningsMessages();
         informationMessages = TerminalMessageDataManager.getAllInformationMessages();
         neutralMessages = TerminalMessageDataManager.getAllNeutralsMessages();
+        donesMessages = TerminalMessageDataManager.getAllDonesMessages();
 
     }
 
@@ -39,19 +41,18 @@ public class TerminalMessageControleur {
                 TerminalMessageDataManager.TERMINALMESSAGE_PROPERTIES.getProperty("errorsMessage"));
         TerminalMessageDataManager.setNeutralsNameFile(
                 TerminalMessageDataManager.TERMINALMESSAGE_PROPERTIES.getProperty("neutralMessage"));
+        TerminalMessageDataManager.setDonesNameFile(
+                TerminalMessageDataManager.TERMINALMESSAGE_PROPERTIES.getProperty("donesMessage"));
     }
 
     public TerminalMessage get(String key) {
         TerminalMessage terminalMessage = neutralMessages.get(key) != null ? neutralMessages.get(key)
                 : warningMessages.get(key) != null ? warningMessages.get(key)
                         : informationMessages.get(key) != null ? informationMessages.get(key)
-                                : errorMessages.get(key) != null ? errorMessages.get(key) : null;
+                                : errorMessages.get(key) != null ? errorMessages.get(key)
+                                        : donesMessages.get(key) != null ? donesMessages.get(key) : null;
 
-        if (terminalMessage != null) {
-            return terminalMessage;
-        }
-
-        return null;
+        return terminalMessage;
     }
 
     public String getContent(String key) {

@@ -61,6 +61,8 @@ public abstract class NodeTerminalMain {
             if (!languagePreferencesCheck.isEmpty() && !languagePreferencesCheck.isBlank()) {
                 languagePreferences = languagePreferencesCheck;
             }
+        } else {
+            languagePreferences = "fr";
         }
     }
 
@@ -192,7 +194,21 @@ public abstract class NodeTerminalMain {
         String passSentance = DataManager
                 .getUserSecretInput(terminalMessageControleur.getContent("LogDefaultPassPhraseInputPrefix"));
 
-        personControleur.setIdentity(name, forName, birthDate, passSentance);
+        PrivateKey privateKey = personControleur.createAPersonPrivateKeyWithAtribute(name, forName, birthDate,
+                passSentance);
+        if (privateKey != null) {
+            personControleur.setIdentity(privateKey);
+            terminalMessageControleur.get("LogBuiltDone").show();
+            personControleur.setIdentity(privateKey);
+            if (personControleur.getIdentity() != null) {
+                initPrefix();
+                terminalMessageControleur.get("LogBuiltDone").show();
+            } else {
+                terminalMessageControleur.get("LogCommandWithPrivateKeyNull").show();
+            }
+        } else {
+            terminalMessageControleur.get("LogBuiltPrivateKeyError").show();
+        }
     }
 
     // show

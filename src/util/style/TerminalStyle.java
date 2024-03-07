@@ -36,7 +36,8 @@ public enum TerminalStyle {
     }
 
     private static void show(TerminalStyle terminalStyle, String message) {
-        System.out.println(terminalStyle.terminalStyle + terminalStyle.icon + " " + message + getResetValue());
+        System.out.println(
+                terminalStyle.terminalStyle + terminalStyle.icon + " " + message.replace("\"", "") + getResetValue());
     }
 
     public static void showInformation(String message) {

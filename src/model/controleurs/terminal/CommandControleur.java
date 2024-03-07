@@ -28,7 +28,7 @@ public class CommandControleur {
     public ArrayList<String> getAllCommandDescription(String languagePreferences, String errorsMessage) {
         ArrayList<String> descriptions = new ArrayList<String>();
         for (Command c : commands.values()) {
-            String showed = c.getName() + " | ";
+            String showed = c.getName() + "\t|\t";
             if (isKownedCommand(c.getName())) {
                 if (c.isValid(languagePreferences)) {
                     showed += c.getDescription(languagePreferences);
