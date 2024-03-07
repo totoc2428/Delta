@@ -46,6 +46,13 @@ public abstract class DataManager {
             FileInputStream fileInputStream = new FileInputStream(fileName);
             InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
             properties.load(reader);
+            for (String key : properties.stringPropertyNames()) {
+                String value = properties.getProperty(key);
+                if (value != null && value.length() >= 2 && value.startsWith("\"") && value.endsWith("\"")) {
+                    value = value.substring(1, value.length() - 1);
+                    properties.setProperty(key, value);
+                }
+            }
         } catch (FileNotFoundException e) {
             TerminalStyle.showError(e.getMessage());
         } catch (java.io.IOException e) {
