@@ -227,15 +227,24 @@ public abstract class NodeTerminalMain {
             String option = allCommand.split(" ")[1];
             switch (option) {
                 case "-l":
+                    if (allCommand.split(" ").length > 3) {
+                        String[] options = allCommand.split(" ");
+                        String passPhrase = DataManager.getUserSecretInput(
+                                terminalMessageControleur.getContent("LogDefaultPassPhraseInputPrefix"));
+                        PrivateKey privateKey = personControleur.createAPersonPrivateKeyWithAtribute(options[2],
+                                options[3], options[4], passPhrase);
+                    }
                     break;
                 default:
+                    PrivateKey privateKey = askRegisterCommand();
 
                     break;
             }
+
         }
     }
 
-    private static ArrayList<String> AskRegisterCommand() {
+    private static PrivateKey askRegisterCommand() {
         String name = DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultNameInputPrefix"));
         String forName = DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultForNameInputPrefix"));
         String localDate = DataManager
@@ -249,7 +258,7 @@ public abstract class NodeTerminalMain {
                     .getUserSecretInput(terminalMessageControleur.getContent("LogDefaultPassPhraseInputPrefix"));
         }
 
-        return null;
+        return personControleur.createAPersonPrivateKeyWithAtribute(name, forName, localDate, passPhrase);
 
     }
 
