@@ -25,8 +25,8 @@ public abstract class NodeTerminalMain {
     private static boolean exit;
     private static String prefix;
 
-    private static String allCommand = "";
-    private static String commandName = "";
+    private static String[] allCommand;
+    private static String commandName;
     private static Command command;
 
     private static CommandControleur commandControleur;
@@ -48,6 +48,9 @@ public abstract class NodeTerminalMain {
     private static void init() {
         if (checkRequirement()) {
             exit = false;
+            allCommand = new String[] {};
+            commandName = "";
+
             initLanguagesPreferences();
             initControleur();
             initPrefix();
@@ -110,8 +113,8 @@ public abstract class NodeTerminalMain {
             terminalMessageControleur.show("toConnectInformation");
             terminalMessageControleur.show("toRegisterInformation");
         }
-        allCommand = askCommand();
-        commandName = allCommand.split(" ")[0];
+        allCommand = askCommand().split(" ");
+        commandName = allCommand[0];
         command = commandControleur.getCommandWithName(commandName);
         runCommand();
 
@@ -166,8 +169,8 @@ public abstract class NodeTerminalMain {
     // log
     private static void runLogCommand() {
         command.show(languagePreferences);
-        if (allCommand.split(" ").length > 1) {
-            String options = allCommand.split(" ")[1];
+        if (allCommand.length > 1) {
+            String options = allCommand[1];
             switch (options) {
                 case "-p":
                     runLogCommandPoption();
@@ -184,7 +187,7 @@ public abstract class NodeTerminalMain {
 
     private static void runLogCommandPoption() {
         command.show(languagePreferences, "pOutput_");
-        PrivateKey privateKey = BlockchainDataMaganager.stringToPrivateKey(allCommand.split(" ")[2]);
+        PrivateKey privateKey = BlockchainDataMaganager.stringToPrivateKey(allCommand[2]);
         if (privateKey != null) {
             personControleur.setIdentity(privateKey);
         } else {
@@ -223,16 +226,16 @@ public abstract class NodeTerminalMain {
     private static void runRegisterCommand() {
         command.show(languagePreferences);
         terminalMessageControleur.show("registerTrueDataWarning");
-        if (allCommand.split(" ").length > 1) {
-            String option = allCommand.split(" ")[1];
+        if (allCommand.length > 1) {
+            String option = allCommand[1];
             switch (option) {
                 case "-l":
-                    if (allCommand.split(" ").length > 3) {
-                        String[] options = allCommand.split(" ");
+                    if (allCommand.length > 3) {
                         String passPhrase = DataManager.getUserSecretInput(
                                 terminalMessageControleur.getContent("LogDefaultPassPhraseInputPrefix"));
-                        PrivateKey privateKey = personControleur.createAPersonPrivateKeyWithAtribute(options[2],
-                                options[3], options[4], passPhrase);
+                        PrivateKey privateKey = personControleur.createAPersonPrivateKeyWithAtribute(
+                                allCommand[2],
+                                allCommand[3], allCommand[4], passPhrase);
                     }
                     break;
                 default:
@@ -245,23 +248,21 @@ public abstract class NodeTerminalMain {
     }
 
     private static PrivateKey askRegisterCommand() {
-        String name = DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultNameInputPrefix"));
-        String forName = DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultForNameInputPrefix"));
-        String localDate = DataManager
-                .getUserInput(terminalMessageControleur.getContent("LogDefaultBirthDateInputPrefix"));
+        String name = askForName();
+        String forName = askForForNames();
+        String birthDate = askForBirthDate();
+        String passPhrase = askForPassPrase();
 
-        String passPhrase = DataManager
-                .getUserSecretInput(terminalMessageControleur.getContent("LogDefaultPassPhraseInputPrefix"));
         while (personControleur.passPhraseIsInCorectFormat(passPhrase)) {
-            terminalMessageControleur.show("");
-            passPhrase = DataManager
-                    .getUserSecretInput(terminalMessageControleur.getContent("LogDefaultPassPhraseInputPrefix"));
+            terminalMessageControleur.show("passPhraseIncorectFormatError");
+            passPhrase = askForPassPrase();
         }
 
-        return personControleur.createAPersonPrivateKeyWithAtribute(name, forName, localDate, passPhrase);
+        return personControleur.createAPersonPrivateKeyWithAtribute(name, forName, birthDate, passPhrase);
 
     }
 
+    // util
     // LOGO
     // show
     private static void showLogo() {
@@ -290,5 +291,25 @@ public abstract class NodeTerminalMain {
             }
             System.out.print("\n");
         }
+    }
+
+    // ask
+
+    private static String askForName() {
+        return DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultNameInputPrefix"));
+    }
+
+    private static String askForForNames() {
+        terminalMessageControleur.get("LogDefaultForNameInputOrderWarning");
+        return DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultForNameInputPrefix"));
+    }
+
+    private static String askForBirthDate() {
+        terminalMessageControleur.get("LogDefaultBirthDateInputWarning");
+        return DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultBirthDateInputPrefix"));
+    }
+
+    private static String askForPassPrase() {
+        return DataManager.getUserSecretInput(terminalMessageControleur.getContent("LogDefaultPassPhraseInputPrefix"));
     }
 }
