@@ -276,6 +276,10 @@ public abstract class DataManager {
         return input;
     }
 
+    /**
+     * @param prefix get the user inpput with hiden input
+     * @return the input do by the user.
+     */
     public static String getUserSecretInput(String prefix) {
         Console console = System.console();
         if (console == null) {
@@ -285,5 +289,35 @@ public abstract class DataManager {
         char[] consoleArray = console.readPassword(prefix + " ");
 
         return new String(consoleArray);
+    }
+
+    public static boolean wordContainUpperCase(String word) {
+        boolean contain = false;
+
+        for (int i = 0; i < word.length(); i++) {
+            if (Character.isUpperCase(word.charAt(i))) {
+                contain = true;
+                break;
+            }
+        }
+
+        return contain;
+    }
+
+    public static boolean wordContainSpecialChar(String word) {
+        boolean contain = false;
+        String[] specialChars = INIT_PROPERTIES.getProperty("specialChar").split(SAVED_LIST_SPACE);
+
+        for (int i = 0; i < word.length(); i++) {
+            for (String specialChar : specialChars) {
+                if (word.charAt(i) == specialChar.charAt(0)) {
+                    contain = true;
+                    break;
+                }
+            }
+        }
+
+        return contain;
+
     }
 }

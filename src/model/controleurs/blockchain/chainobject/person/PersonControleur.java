@@ -4,6 +4,7 @@ import java.security.PrivateKey;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import model.dao.DataManager;
 import model.dao.blockchain.BlockchainDataMaganager;
 import model.dao.blockchain.chainobject.person.PersonDataManager;
 import model.dto.blockchain.chainobject.person.Person;
@@ -51,6 +52,20 @@ public class PersonControleur {
         PrivateKey privateKey = BlockchainDataMaganager.generatePrivateKeyFromString(stringKey);
 
         return privateKey;
+    }
+
+    public boolean passPhraseIsInCorectFormat(String passPhrase) {
+        boolean isCorrect = false;
+        if (passPhrase != null) {
+            if (passPhrase.length() >= 8) {
+                if (!passPhrase.contains(" ") && DataManager.wordContainUpperCase(passPhrase)
+                        && DataManager.wordContainSpecialChar(passPhrase)) {
+                    isCorrect = true;
+                }
+            }
+        }
+
+        return isCorrect;
     }
 
     public void close() {
