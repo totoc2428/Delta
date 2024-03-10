@@ -176,11 +176,11 @@ public abstract class NodeTerminalMain {
                     runLogCommandPoption();
                     break;
                 default:
-                    runLogCommandDoption();
+                    runLogCommandDOption();
                     break;
             }
         } else {
-            runLogCommandDoption();
+            runLogCommandDOption();
         }
 
     }
@@ -195,18 +195,10 @@ public abstract class NodeTerminalMain {
         }
     }
 
-    private static void runLogCommandDoption() {
+    private static void runLogCommandDOption() {
         command.show(languagePreferences, "dOutput_");
-        String name = DataManager
-                .getUserInput(terminalMessageControleur.getContent("LogDefaultNameInputPrefix"));
-        String forName = DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultForNameInputPrefix"));
-        String birthDate = DataManager
-                .getUserInput(terminalMessageControleur.getContent("LogDefaultBirthDateInputPrefix"));
-        String passSentance = DataManager
-                .getUserSecretInput(terminalMessageControleur.getContent("LogDefaultPassPhraseInputPrefix"));
 
-        PrivateKey privateKey = personControleur.createAPersonPrivateKeyWithAtribute(name, forName, birthDate,
-                passSentance);
+        PrivateKey privateKey = askForPersonCommand();
         if (privateKey != null) {
             personControleur.setIdentity(privateKey);
             terminalMessageControleur.get("LogBuiltDone").show();
@@ -239,7 +231,7 @@ public abstract class NodeTerminalMain {
                     }
                     break;
                 default:
-                    PrivateKey privateKey = askRegisterCommand();
+                    PrivateKey privateKey = askForPersonCommand();
 
                     break;
             }
@@ -247,7 +239,7 @@ public abstract class NodeTerminalMain {
         }
     }
 
-    private static PrivateKey askRegisterCommand() {
+    private static PrivateKey askForPersonCommand() {
         String name = askForName();
         String forName = askForForNames();
         String birthDate = askForBirthDate();
