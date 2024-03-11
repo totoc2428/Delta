@@ -1,8 +1,8 @@
 package model.controleurs.blockchain.chainobject.person;
 
 import java.security.PrivateKey;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import model.dao.DataManager;
 import model.dao.blockchain.BlockchainDataMaganager;
@@ -41,31 +41,35 @@ public class PersonControleur {
     public PrivateKey createAPersonPrivateKeyWithAtribute(String name, String forNames, String localDate,
             String passPhrase) {
 
-        String[] localDateTab = (localDate.replace('/', '-')).split("-");
-        localDate = localDateTab[2] + "-" + localDateTab[1] + "-" + localDateTab[0];
-        localDate = LocalDate.parse(localDate).toString();
-        String stringKey = name.toLowerCase().replace(' ', '_')
-                + forNames.toLowerCase().replace(' ', '_')
-                + localDate
-                + passPhrase;
+        PrivateKey privateKey = null;
 
-        PrivateKey privateKey = BlockchainDataMaganager.generatePrivateKeyFromString(stringKey);
+        if (DataManager.passPhraseIsInCorectFormat(passPhrase)) {
+            String stringKey = name.toLowerCase().replace(" ", DataManager.SAVED_LIST_SPACE)
+                    + forNames.toLowerCase().replace(" ", DataManager.SAVED_LIST_SPACE)
+                    + DataManager.parseDate(localDate).toString()
+                    + passPhrase;
+
+            privateKey = BlockchainDataMaganager.generatePrivateKeyFromString(stringKey);
+        }
 
         return privateKey;
     }
 
-    public boolean passPhraseIsInCorectFormat(String passPhrase) {
-        boolean isCorrect = false;
-        if (passPhrase != null) {
-            if (passPhrase.length() >= 8) {
-                if (!passPhrase.contains(" ") && DataManager.wordContainUpperCase(passPhrase)
-                        && DataManager.wordContainSpecialChar(passPhrase)) {
-                    isCorrect = true;
-                }
-            }
+    public boolean setIdentityAsCreatedIdentity(String name, String forNames, String localDate, String passPhrase,
+            String nationality) {
+        boolean created = false;
+        if (DataManager.passPhraseIsInCorectFormat(passPhrase)) {
+            PrivateKey privateKey = createAPersonPrivateKeyWithAtribute(name, forNames, localDate, passPhrase);
+            PhysicalPerson physicalPerson = new PhysicalPerson(privateKey,
+                    BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey), name,
+                    DataManager.parseDate(localDate), false, new ArrayList<>(Arrays.asList(forNames.split(" "))),
+                    nationality);
+
+            PersonDataManager.saveAPhysicalPerson(physicalPerson);
+            this.identity = physicalPerson;
         }
 
-        return isCorrect;
+        return created;
     }
 
     public void close() {

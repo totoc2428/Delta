@@ -6,7 +6,6 @@ import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import io.jsonwebtoken.lang.Arrays;
 import model.controleurs.blockchain.chainobject.person.PersonControleur;
 import model.controleurs.terminal.CommandControleur;
 import model.controleurs.terminal.TerminalMessageControleur;
@@ -146,7 +145,7 @@ public abstract class NodeTerminalMain {
 
     // not found
     private static void runCommandNotFound() {
-        terminalMessageControleur.show("CommandNotFoundError");
+        terminalMessageControleur.show("commandNotFoundError");
     }
 
     // exit
@@ -191,7 +190,7 @@ public abstract class NodeTerminalMain {
         if (privateKey != null) {
             personControleur.setIdentity(privateKey);
         } else {
-            terminalMessageControleur.show("LogCommandWithPrivateKeyNull");
+            terminalMessageControleur.show("logCommandWithPrivateKeyNull");
         }
     }
 
@@ -201,16 +200,16 @@ public abstract class NodeTerminalMain {
         PrivateKey privateKey = askForPersonCommand();
         if (privateKey != null) {
             personControleur.setIdentity(privateKey);
-            terminalMessageControleur.get("LogBuiltDone").show();
+            terminalMessageControleur.get("logBuiltDone").show();
             personControleur.setIdentity(privateKey);
             if (personControleur.getIdentity() != null) {
                 initPrefix();
-                terminalMessageControleur.get("LogBuiltDone").show();
+                terminalMessageControleur.get("logBuiltDone").show();
             } else {
-                terminalMessageControleur.get("LogCommandWithPrivateKeyNull").show();
+                terminalMessageControleur.get("logCommandWithPrivateKeyNull").show();
             }
         } else {
-            terminalMessageControleur.get("LogBuiltPrivateKeyError").show();
+            terminalMessageControleur.get("logBuiltPrivateKeyError").show();
         }
     }
 
@@ -223,19 +222,34 @@ public abstract class NodeTerminalMain {
             switch (option) {
                 case "-l":
                     if (allCommand.length > 3) {
-                        String passPhrase = DataManager.getUserSecretInput(
-                                terminalMessageControleur.getContent("LogDefaultPassPhraseInputPrefix"));
+                        String passPhrase = askForPassPrase();
                         PrivateKey privateKey = personControleur.createAPersonPrivateKeyWithAtribute(
                                 allCommand[2],
                                 allCommand[3], allCommand[4], passPhrase);
+
+                        String nationality = askForNationality();
                     }
                     break;
                 default:
                     PrivateKey privateKey = askForPersonCommand();
-
+                    String nationality = askForNationality();
                     break;
             }
 
+        } else {
+            String name = askForName();
+            String forName = askForForNames();
+            String birthDate = askForBirthDate();
+            String passPhrase = askForPassPrase();
+            String nationality = askForNationality();
+
+            if (personControleur.setIdentityAsCreatedIdentity(name, forName, birthDate, passPhrase, nationality)) {
+                terminalMessageControleur.get("identityCreated").show();
+                terminalMessageControleur.get("logDone").show();
+            } else {
+                terminalMessageControleur.get("identityCreationError");
+            }
+            ;
         }
     }
 
@@ -245,7 +259,7 @@ public abstract class NodeTerminalMain {
         String birthDate = askForBirthDate();
         String passPhrase = askForPassPrase();
 
-        while (personControleur.passPhraseIsInCorectFormat(passPhrase)) {
+        while (DataManager.passPhraseIsInCorectFormat(passPhrase)) {
             terminalMessageControleur.show("passPhraseIncorectFormatError");
             passPhrase = askForPassPrase();
         }
@@ -288,20 +302,24 @@ public abstract class NodeTerminalMain {
     // ask
 
     private static String askForName() {
-        return DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultNameInputPrefix"));
+        return DataManager.getUserInput(terminalMessageControleur.getContent("logDefaultNameInputPrefix"));
     }
 
     private static String askForForNames() {
-        terminalMessageControleur.get("LogDefaultForNameInputOrderWarning");
-        return DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultForNameInputPrefix"));
+        terminalMessageControleur.get("logDefaultForNameInputOrderWarning").show();
+        return DataManager.getUserInput(terminalMessageControleur.getContent("logDefaultForNameInputPrefix"));
     }
 
     private static String askForBirthDate() {
-        terminalMessageControleur.get("LogDefaultBirthDateInputWarning");
-        return DataManager.getUserInput(terminalMessageControleur.getContent("LogDefaultBirthDateInputPrefix"));
+        terminalMessageControleur.get("logDefaultBirthDateInputWarning").show();
+        return DataManager.getUserInput(terminalMessageControleur.getContent("logDefaultBirthDateInputPrefix"));
+    }
+
+    private static String askForNationality() {
+        return DataManager.getUserInput(terminalMessageControleur.getContent("registerDefaultNationalityInputPrexif"));
     }
 
     private static String askForPassPrase() {
-        return DataManager.getUserSecretInput(terminalMessageControleur.getContent("LogDefaultPassPhraseInputPrefix"));
+        return DataManager.getUserSecretInput(terminalMessageControleur.getContent("logDefaultPassPhraseInputPrefix"));
     }
 }

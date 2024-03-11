@@ -11,8 +11,8 @@ public class PhysicalPerson extends Person {
     private ArrayList<String> forNames;
 
     public PhysicalPerson(PrivateKey privateKey, PublicKey publicKey, String lastName, LocalDate birthData,
-            boolean isVerified, ArrayList<String> forNames) {
-        super(privateKey, publicKey, lastName, birthData, isVerified);
+            boolean isVerified, ArrayList<String> forNames, String nationality) {
+        super(privateKey, publicKey, lastName, birthData, isVerified, nationality);
 
         this.forNames = forNames;
     }

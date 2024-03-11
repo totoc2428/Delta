@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -319,5 +320,26 @@ public abstract class DataManager {
 
         return contain;
 
+    }
+
+    public static boolean passPhraseIsInCorectFormat(String passPhrase) {
+        boolean isCorrect = false;
+        if (passPhrase != null) {
+            if (passPhrase.length() >= 8) {
+                if (!passPhrase.contains(" ") && DataManager.wordContainUpperCase(passPhrase)
+                        && DataManager.wordContainSpecialChar(passPhrase)) {
+                    isCorrect = true;
+                }
+            }
+        }
+
+        return isCorrect;
+    }
+
+    public static LocalDate parseDate(String localDate) {
+        String[] localDateTab = (localDate.replace('/', '-')).split("-");
+        localDate = localDateTab[2] + "-" + localDateTab[1] + "-" + localDateTab[0];
+
+        return LocalDate.parse(localDate);
     }
 }

@@ -86,10 +86,12 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
             boolean isVerified = Boolean.parseBoolean(
                     (String) ChainObjectDataManager.readAObjectSavedInPropertes("isVerified", properties,
                             privateKey));
+            String nationality = (String) ChainObjectDataManager.readAObjectSavedInPropertes("nationality", properties,
+                    privateKey);
 
             Person person = (Person) new PhysicalPerson(chainObject.getPrivateKey(), chainObject.getPublicKey(),
                     lastName, birDate,
-                    isVerified, null);
+                    isVerified, null, nationality);
 
             return person;
         }
@@ -112,7 +114,7 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
                     privateKey);
 
             return new PhysicalPerson(person.getPrivateKey(), person.getPublicKey(), person.getLastName(),
-                    person.getBirthDate(), person.isVerified(), forNames);
+                    person.getBirthDate(), person.isVerified(), forNames, person.getNationality());
         }
         return null;
     }
