@@ -316,7 +316,7 @@ public abstract class NodeTerminalMain {
     }
 
     private static String askForNationality() {
-        return DataManager.getUserInput(terminalMessageControleur.getContent("registerDefaultNationalityInputPrexif"));
+        return DataManager.getUserInput(terminalMessageControleur.getContent("registerDefaultNationalityInputPrefix"));
     }
 
     private static String askForPassPrase() {

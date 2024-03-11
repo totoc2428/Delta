@@ -44,7 +44,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     // save
     private static Properties personToAProperties(Person person) {
         Properties properties = ChainObjectDataManager.chainObjectToAProperties(person);
-        properties.setProperty(OBJECT_TYPE_KEY, properties.getProperty(OBJECT_TYPE_KEY) + SAVED_PERSON_TAG);
+        properties.setProperty(OBJECT_TYPE_KEY, properties.getProperty(
+                SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY) + SAVED_PERSON_TAG);
 
         saveAnObjectInAProperties("lastName", properties, person.getLastName(), null);
         saveAnObjectInAProperties("birthDate", properties, person.getBirthDate(), null);
@@ -55,7 +56,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
 
     private static Properties physicalPersonToAProperties(PhysicalPerson physicalPerson) {
         Properties properties = personToAProperties(physicalPerson);
-        properties.setProperty(OBJECT_TYPE_KEY, properties.getProperty(OBJECT_TYPE_KEY) + SAVED_PHYSICALPERSON_TAG);
+        properties.setProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY, properties.getProperty(
+                SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY) + SAVED_PHYSICALPERSON_TAG);
 
         saveAnObjectInAProperties("forNames", properties, properties, null);
 
@@ -76,7 +78,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     private static Person personReadFromProperties(Properties properties, PrivateKey privateKey) {
         ChainObject chainObject = ChainObjectDataManager.chainObjectReadFromProperties(properties, privateKey);
 
-        if (properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG) && chainObject != null) {
+        if (properties.getProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG)
+                && chainObject != null) {
 
             String lastName = (String) ChainObjectDataManager.readAObjectSavedInPropertes("lastName", properties,
                     privateKey);
@@ -107,7 +110,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
 
     public static PhysicalPerson physicalPersonReadFromProperties(Properties properties, PrivateKey privateKey) {
         Person person = personReadFromProperties(properties, privateKey);
-        if (person != null && properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG)) {
+        if (person != null && properties.getProperty(
+                SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG)) {
 
             @SuppressWarnings("unchecked")
             ArrayList<String> forNames = (ArrayList<String>) readAObjectSavedInPropertes("forNames", properties,
@@ -128,12 +132,12 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
 
     // check
     private static boolean isPerson(Properties properties) {
-        return properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG);
+        return properties.getProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG);
     }
 
     public static boolean isPhysicalPerson(Properties properties) {
         if (isPerson(properties)) {
-            return properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG);
+            return properties.getProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG);
         } else {
             return false;
         }

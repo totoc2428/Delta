@@ -67,6 +67,8 @@ public class PersonControleur {
 
             PersonDataManager.saveAPhysicalPerson(physicalPerson);
             this.identity = physicalPerson;
+
+            created = true;
         }
 
         return created;

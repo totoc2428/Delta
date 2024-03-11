@@ -311,7 +311,7 @@ public abstract class DataManager {
 
         for (int i = 0; i < word.length(); i++) {
             for (String specialChar : specialChars) {
-                if (word.charAt(i) == specialChar.charAt(0)) {
+                if (specialChar.equals(word.charAt(i) + "")) {
                     contain = true;
                     break;
                 }

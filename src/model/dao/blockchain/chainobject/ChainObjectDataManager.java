@@ -18,8 +18,8 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
     protected static final Properties CHAINOBJECT_PROPERTIES = read(
             BLOCKCHAIN_PROPERTIES.getProperty("CHAINOBJECT_PROPERTIES"));
 
-    private static final String SAVED_PRIVATE_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PRIVATE_KEY_TAG");
-    private static final String SAVED_PUBLIC_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PUBLIC_KEY_TAG");
+    protected static final String SAVED_PRIVATE_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PRIVATE_KEY_TAG");
+    protected static final String SAVED_PUBLIC_KEY_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PUBLIC_KEY_TAG");
 
     protected static final String SAVED_CHAINOBJECT_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_CHAINOBJECT_TAG");
 
