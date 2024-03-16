@@ -7,11 +7,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import io.jsonwebtoken.lang.Arrays;
 import model.dao.DataManager;
 import model.dao.blockchain.chainobject.ChainObjectDataManager;
 import model.dto.blockchain.chainobject.ChainObject;
 import model.dto.blockchain.chainobject.person.Person;
 import model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
+import util.style.TerminalStyle;
 
 public abstract class PersonDataManager extends ChainObjectDataManager {
     protected static final Properties PERSON_PROPERTIES = read(CHAINOBJECT_PROPERTIES.getProperty("PERSON_PROPERTIES"));
@@ -44,8 +46,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     // save
     private static Properties personToAProperties(Person person) {
         Properties properties = ChainObjectDataManager.chainObjectToAProperties(person);
-        properties.setProperty(OBJECT_TYPE_KEY, properties.getProperty(
-                SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY) + SAVED_PERSON_TAG);
+        saveAnObjectInAProperties(OBJECT_TYPE_KEY, properties,
+                properties.getProperty(OBJECT_TYPE_KEY) + SAVED_PERSON_TAG, null);
 
         saveAnObjectInAProperties("lastName", properties, person.getLastName(), null);
         saveAnObjectInAProperties("birthDate", properties, person.getBirthDate(), null);
@@ -56,8 +58,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
 
     private static Properties physicalPersonToAProperties(PhysicalPerson physicalPerson) {
         Properties properties = personToAProperties(physicalPerson);
-        properties.setProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY, properties.getProperty(
-                SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY) + SAVED_PHYSICALPERSON_TAG);
+        saveAnObjectInAProperties(OBJECT_TYPE_KEY, properties,
+                properties.getProperty(OBJECT_TYPE_KEY) + SAVED_PHYSICALPERSON_TAG, null);
 
         saveAnObjectInAProperties("forNames", properties, properties, null);
 
@@ -135,13 +137,28 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
         return properties.getProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG);
     }
 
-    public static boolean isPhysicalPerson(Properties properties) {
+    private static boolean isPhysicalPerson(Properties properties) {
         if (isPerson(properties)) {
             return properties.getProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG);
         } else {
             return false;
         }
 
+    }
+
+    public static void main(String[] args) {
+        TerminalStyle.showInformation("démarage");
+        PrivateKey privateKey = PersonDataManager.generatePrivateKeyFromString("test");
+        TerminalStyle.showDone("clé privé créer : " + privateKey);
+        PhysicalPerson physicalPerson = new PhysicalPerson(privateKey, getPublicKeyFromPrivateKey(privateKey), "test",
+                LocalDate.now(), false, new ArrayList<String>(Arrays.asList(new String[] { "test", "truc" })), "fr");
+        TerminalStyle.showDone("identité créer");
+        System.out.println(physicalPerson.getPrivateKey());
+        System.out.println(physicalPerson.getPublicKey());
+
+        TerminalStyle.showDone("start save :");
+
+        saveAPhysicalPerson(physicalPerson);
     }
 
 }

@@ -1,9 +1,11 @@
 package model.dao.blockchain;
 
+import java.math.BigInteger;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -11,12 +13,21 @@ import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPrivateCrtKeySpec;
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Properties;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import io.jsonwebtoken.security.InvalidKeyException;
 import model.dao.DataManager;
@@ -44,12 +55,22 @@ public abstract class BlockchainDataMaganager extends DataManager {
      */
     public static PublicKey getPublicKeyFromPrivateKey(PrivateKey privateKey) {
         try {
-            return KeyFactory.getInstance(KEY_ALGORITHM)
-                    .generatePublic(new X509EncodedKeySpec(privateKey.getEncoded()));
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            RSAPrivateKeySpec privateKeySpec = keyFactory.getKeySpec(privateKey, RSAPrivateKeySpec.class);
+
+            // Créer une spécification de clé publique RSA à partir du module (n) et de
+            // l'exposant public (e)
+            RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(privateKeySpec.getModulus(),
+                    BigInteger.valueOf(65537)); // Exposant public standard
+
+            // Générer et retourner la clé publique
+            return keyFactory.generatePublic(publicKeySpec);
         } catch (InvalidKeySpecException e) {
-            // TODO make execption;
+            e.printStackTrace();
+            TerminalStyle.showError(e.getMessage());
         } catch (NoSuchAlgorithmException e) {
-            // TODO make execption;
+            e.printStackTrace();
+            TerminalStyle.showError(e.getMessage());
         }
         return null;
     }
@@ -223,16 +244,27 @@ public abstract class BlockchainDataMaganager extends DataManager {
      */
     public static PrivateKey generatePrivateKeyFromString(String input) {
         try {
-            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            secureRandom.setSeed(input.getBytes());
+            MessageDigest digest = MessageDigest.getInstance("SHA-512");
 
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KEY_ALGORITHM);
-            keyPairGenerator.initialize(KEY_SIZE, secureRandom);
-            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+            // Hachage du message
+            byte[] hash = digest.digest(input.getBytes());
 
-            return keyPair.getPrivate();
+            // Utilisation des 64 premiers octets du hash pour générer la clé privée
+            byte[] truncatedHash = new byte[64];
+            System.arraycopy(hash, 0, truncatedHash, 0, 64);
 
-        } catch (NoSuchAlgorithmException e) {
+            // Conversion du tableau d'octets en un grand entier positif
+            BigInteger bigInt = new BigInteger(1, truncatedHash);
+
+            // Création d'une spécification de clé privée RSA
+            RSAPrivateKeySpec spec = new RSAPrivateKeySpec(bigInt, BigInteger.valueOf(65537)); // Exposant public
+                                                                                               // standard
+
+            // Génération et retour de la clé privée
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            return keyFactory.generatePrivate(spec);
+
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             TerminalStyle.showError(e.getMessage());
         }
 

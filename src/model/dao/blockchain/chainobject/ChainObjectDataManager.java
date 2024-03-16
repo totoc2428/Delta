@@ -101,17 +101,27 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
     private static void saveAnStringInAProperties(String key, String tag, Properties properties, String string,
             PublicKey publicKey) {
 
-        if (publicKey != null) {
-            key = SAVED_PRIVATE_KEY_TAG + tag + key;
-            string = encryptWithPublicKey(string, publicKey);
-        } else {
-            key = SAVED_PUBLIC_KEY_TAG + tag + key;
+        System.out.println("key " + key);
+        System.out.println("string " + string);
+        if (string == null) {
+            string = "null";
         }
+        if (tag == null) {
+            tag = "";
+        }
+        if (key != null) {
+            if (publicKey == null) {
+                key = SAVED_PUBLIC_KEY_TAG + tag + key;
+            } else {
+                key = SAVED_PRIVATE_KEY_TAG + tag + key;
+                string = encryptWithPublicKey(string, publicKey);
+            }
 
-        if (properties.getProperty(key) != null) {
-            properties.put(key, string);
-        } else {
-            properties.setProperty(key, string);
+            if (properties.getProperty(key) != null) {
+                properties.put(key, string);
+            } else {
+                properties.setProperty(key, string);
+            }
         }
     }
 
