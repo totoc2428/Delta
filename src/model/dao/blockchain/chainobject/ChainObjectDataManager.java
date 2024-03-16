@@ -34,12 +34,14 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
     public static Properties chainObjectToAProperties(ChainObject chainObject) {
         if (chainObject != null) {
             Properties properties = new Properties();
-            properties.setProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY, SAVED_CHAINOBJECT_TAG);
+
+            saveAnStringInAProperties(OBJECT_TYPE_KEY, "", properties, SAVED_CHAINOBJECT_TAG, null);
             if (chainObject.getPublicKey() != null) {
-                properties.setProperty(SAVED_PRIVATE_KEY_TAG + "privateKey", encryptWithPublicKey(
-                        privateKeyToString(chainObject.getPrivateKey()), chainObject.getPublicKey()));
+                saveAnStringInAProperties("privateKey", "", properties, privateKeyToString(chainObject
+                        .getPrivateKey()),
+                        chainObject.getPublicKey());
             }
-            properties.setProperty(SAVED_PUBLIC_KEY_TAG + "publicKey", publicKeyToString(chainObject.getPublicKey()));
+            saveAnStringInAProperties("publicKey", "", properties, publicKeyToString(chainObject.getPublicKey()), null);
 
             return properties;
         }
@@ -106,7 +108,11 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
             key = SAVED_PUBLIC_KEY_TAG + tag + key;
         }
 
-        properties.setProperty(key, string);
+        if (properties.getProperty(key) != null) {
+            properties.put(key, string);
+        } else {
+            properties.setProperty(key, string);
+        }
     }
 
     // read
