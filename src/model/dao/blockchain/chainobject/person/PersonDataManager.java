@@ -80,7 +80,7 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     private static Person personReadFromProperties(Properties properties, PrivateKey privateKey) {
         ChainObject chainObject = ChainObjectDataManager.chainObjectReadFromProperties(properties, privateKey);
 
-        if (properties.getProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG)
+        if (properties.getProperty(SAVED_PUBLIC_VALUE_TAG + OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG)
                 && chainObject != null) {
 
             String lastName = (String) ChainObjectDataManager.readAObjectSavedInPropertes("lastName", properties,
@@ -113,7 +113,7 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     public static PhysicalPerson physicalPersonReadFromProperties(Properties properties, PrivateKey privateKey) {
         Person person = personReadFromProperties(properties, privateKey);
         if (person != null && properties.getProperty(
-                SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG)) {
+                SAVED_PUBLIC_VALUE_TAG + OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG)) {
 
             @SuppressWarnings("unchecked")
             ArrayList<String> forNames = (ArrayList<String>) readAObjectSavedInPropertes("forNames", properties,
@@ -134,12 +134,12 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
 
     // check
     private static boolean isPerson(Properties properties) {
-        return properties.getProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG);
+        return properties.getProperty(SAVED_PUBLIC_VALUE_TAG + OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG);
     }
 
     private static boolean isPhysicalPerson(Properties properties) {
         if (isPerson(properties)) {
-            return properties.getProperty(SAVED_PUBLIC_KEY_TAG + OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG);
+            return properties.getProperty(SAVED_PUBLIC_VALUE_TAG + OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG);
         } else {
             return false;
         }
@@ -156,6 +156,11 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
         System.out.println(physicalPerson.getPrivateKey());
         System.out.println(physicalPerson.getPublicKey());
 
+        TerminalStyle.showInformation("la on test la clé privé en str");
+        String pk = privateKeyToString(privateKey);
+        System.out.println(pk);
+        System.out.println(encryptWithPublicKey(pk, physicalPerson.getPublicKey()));// TODO vérifier la méthode
+                                                                                    // d'encryption
         TerminalStyle.showDone("start save :");
 
         saveAPhysicalPerson(physicalPerson);
