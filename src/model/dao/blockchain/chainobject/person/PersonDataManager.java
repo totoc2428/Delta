@@ -94,9 +94,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
             String nationality = (String) ChainObjectDataManager.readAObjectSavedInPropertes("nationality", properties,
                     privateKey);
 
-            Person person = (Person) new PhysicalPerson(chainObject.getPrivateKey(), chainObject.getPublicKey(),
-                    lastName, birDate,
-                    isVerified, null, nationality);
+            Person person = (Person) new PhysicalPerson(chainObject.getPrivateKey(), chainObject.getPublicKey(), null,
+                    lastName, birDate, isVerified, null, nationality);
 
             return person;
         }
@@ -119,7 +118,7 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
             ArrayList<String> forNames = (ArrayList<String>) readAObjectSavedInPropertes("forNames", properties,
                     privateKey);
 
-            return new PhysicalPerson(person.getPrivateKey(), person.getPublicKey(), person.getLastName(),
+            return new PhysicalPerson(person.getPrivateKey(), person.getPublicKey(), null, person.getLastName(),
                     person.getBirthDate(), person.isVerified(), forNames, person.getNationality());
         }
         return null;
@@ -150,7 +149,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
         TerminalStyle.showInformation("démarage");
         PrivateKey privateKey = PersonDataManager.generatePrivateKeyFromString("test");
         TerminalStyle.showDone("clé privé créer : " + privateKey);
-        PhysicalPerson physicalPerson = new PhysicalPerson(privateKey, getPublicKeyFromPrivateKey(privateKey), "test",
+        PhysicalPerson physicalPerson = new PhysicalPerson(privateKey, getPublicKeyFromPrivateKey(privateKey), null,
+                "test",
                 LocalDate.now(), false, new ArrayList<String>(Arrays.asList(new String[] { "test", "truc" })), "fr");
         TerminalStyle.showDone("identité créer");
         System.out.println(physicalPerson.getPrivateKey());

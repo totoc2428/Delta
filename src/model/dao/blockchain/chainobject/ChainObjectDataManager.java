@@ -180,7 +180,7 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
         ChainObject chainObject = null;
         if (isAChainObject(properties)) {
             PublicKey publicKey = stringToPublicKey(properties.getProperty(SAVED_PUBLIC_VALUE_TAG + "publicKey"));
-            chainObject = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, false, null, null);
+            chainObject = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, null, false, null, null);
 
         }
 

@@ -57,21 +57,21 @@ public class PersonControleur {
 
     public boolean setIdentityAsCreatedIdentity(String name, String forNames, String localDate, String passPhrase,
             String nationality) {
-        boolean created = false;
+        boolean seted = false;
         if (DataManager.passPhraseIsInCorectFormat(passPhrase)) {
             PrivateKey privateKey = createAPersonPrivateKeyWithAtribute(name, forNames, localDate, passPhrase);
             PhysicalPerson physicalPerson = new PhysicalPerson(privateKey,
-                    BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey), name,
+                    BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey), null, name,
                     DataManager.parseDate(localDate), false, new ArrayList<>(Arrays.asList(forNames.split(" "))),
                     nationality);
 
             PersonDataManager.saveAPhysicalPerson(physicalPerson);
             this.identity = physicalPerson;
 
-            created = true;
+            seted = true;
         }
 
-        return created;
+        return seted;
     }
 
     public void close() {

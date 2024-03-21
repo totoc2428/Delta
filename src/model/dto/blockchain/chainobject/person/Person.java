@@ -1,5 +1,6 @@
 package model.dto.blockchain.chainobject.person;
 
+import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.time.LocalDate;
@@ -15,9 +16,10 @@ public abstract class Person extends ChainObject {
     private boolean isVerified;
 
     /* constructor */
-    public Person(PrivateKey privateKey, PublicKey publicKey, String lastName, LocalDate birthData, boolean isVerified,
+    public Person(PrivateKey privateKey, PublicKey publicKey, KeyPair encryptor, String lastName, LocalDate birthData,
+            boolean isVerified,
             String nationality) {
-        super(privateKey, publicKey);
+        super(privateKey, publicKey, encryptor);
 
         this.lastName = lastName;
         this.birthDate = birthData;

@@ -3,31 +3,21 @@ package model.dao.blockchain;
 import java.math.BigInteger;
 import java.security.Key;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.RSAPrivateCrtKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Properties;
 
 import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import io.jsonwebtoken.security.InvalidKeyException;
 import model.dao.DataManager;
@@ -92,12 +82,9 @@ public abstract class BlockchainDataMaganager extends DataManager {
         try {
             keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
             return keyFactory.generatePrivate(keySpec);
-        } catch (InvalidKeySpecException e) {
-            // TODO make execption;
-        } catch (NoSuchAlgorithmException e) {
-            // TODO make execption;
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            TerminalStyle.showError(e.getMessage());
         }
-
         return null;
     }
 
@@ -116,9 +103,10 @@ public abstract class BlockchainDataMaganager extends DataManager {
             keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
             return keyFactory.generatePublic(keySpec);
         } catch (InvalidKeySpecException e) {
-            // TODO make execption;
+            TerminalStyle.showError(e.getMessage());
         } catch (NoSuchAlgorithmException e) {
             // TODO make execption;
+            TerminalStyle.showError(e.getMessage());
         }
 
         return null;
@@ -158,12 +146,13 @@ public abstract class BlockchainDataMaganager extends DataManager {
      */
     public static String encryptWithPublicKey(String plaintext, PublicKey publicKey) {
         try {
-            Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
+            Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);// TODO vérifier l'algorithme diff entre AES et RSA.
+                                                              // Stoker la clé AES dans le fichier chainObject.
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             byte[] encryptedBytes = cipher.doFinal(plaintext.getBytes());
             return Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
-            // TODO make execption;
+            TerminalStyle.showError(e.getMessage());
         }
 
         return null;
@@ -212,6 +201,7 @@ public abstract class BlockchainDataMaganager extends DataManager {
             return sig.verify(signatureBytes);
         } catch (NoSuchAlgorithmException | InvalidKeyException | java.security.InvalidKeyException
                 | SignatureException e) {
+            TerminalStyle.showError(e.getMessage());
             return false;
         }
     }
