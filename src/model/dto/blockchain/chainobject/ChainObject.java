@@ -1,6 +1,5 @@
 package model.dto.blockchain.chainobject;
 
-import java.security.Key;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;

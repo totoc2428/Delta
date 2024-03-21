@@ -3,6 +3,8 @@ package model.dao.blockchain;
 import java.math.BigInteger;
 import java.security.Key;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -33,7 +35,11 @@ public abstract class BlockchainDataMaganager extends DataManager {
     private final static String DIGEST_ALGORITHM = BLOCKCHAIN_PROPERTIES
             .getProperty("DIGEST_ALGORITHM");
 
-    private final static int KEY_SIZE = Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("KEY_SIZE"));
+    // private final static int KEY_SIZE =
+    // Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("KEY_SIZE"));
+
+    private final static String ENCRYPTOR_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty("ENCRYPTOR_ALGORITHM");
+    private final static int AES_KEY_SIZE = Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("AES_KEY_SIZE"));
 
     /**
      * This method retrieve the publicKey of a privateKey.
@@ -259,5 +265,20 @@ public abstract class BlockchainDataMaganager extends DataManager {
         }
 
         return null;
+    }
+
+    /**
+     * @return the generated keyPair generator with the algorithme defined in con
+     *         file.
+     */
+    public KeyPair generateEncyptor() {
+        try {
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ENCRYPTOR_ALGORITHM);
+            keyGen.initialize(AES_KEY_SIZE);
+            return keyGen.generateKeyPair();
+        } catch (Exception e) {
+            TerminalStyle.showError(e.getMessage());
+            return null;
+        }
     }
 }
