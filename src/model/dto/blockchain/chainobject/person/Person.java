@@ -5,6 +5,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.time.LocalDate;
 
+import model.dto.blockchain.chainObject.ChainObjectException;
 import model.dto.blockchain.chainobject.ChainObject;
 
 public abstract class Person extends ChainObject {
@@ -18,7 +19,7 @@ public abstract class Person extends ChainObject {
     /* constructor */
     public Person(PrivateKey privateKey, PublicKey publicKey, KeyPair encryptor, String lastName, LocalDate birthData,
             boolean isVerified,
-            String nationality) {
+            String nationality) throws ChainObjectException {
         super(privateKey, publicKey, encryptor);
 
         this.lastName = lastName;

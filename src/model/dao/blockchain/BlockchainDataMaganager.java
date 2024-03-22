@@ -11,6 +11,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
@@ -281,4 +283,40 @@ public abstract class BlockchainDataMaganager extends DataManager {
             return null;
         }
     }
+
+    //// AES
+
+    public static boolean isAESKey(PrivateKey privateKey) {
+        if (privateKey instanceof RSAPrivateKey) {
+            int keyLength = ((RSAPrivateKey) privateKey).getModulus().bitLength();
+            if (keyLength == AES_KEY_SIZE) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isAESKey(PublicKey publicKey) {
+        if (publicKey instanceof RSAPrivateKey) {
+            int keyLength = ((RSAPrivateKey) publicKey).getModulus().bitLength();
+            if (keyLength == AES_KEY_SIZE) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //// RSA
+    public static boolean isRSAKey(PrivateKey privateKey) {
+        return (privateKey instanceof RSAPrivateKey);
+    }
+
+    public static boolean isRSAKey(PublicKey publicKey) {
+        return (publicKey instanceof RSAPublicKey);
+    }
+
 }

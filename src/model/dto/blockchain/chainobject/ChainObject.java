@@ -5,6 +5,9 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 
 import model.dao.blockchain.BlockchainDataMaganager;
+import model.dto.blockchain.chainObject.ChainObjectException;
+import model.dto.blockchain.chainObject.encyptor.ChainObjectEncyptorIsNotAESException;
+import model.dto.blockchain.chainObject.publickey.ChainObjectPublicKeyIsNull;
 
 public abstract class ChainObject {
     private PrivateKey privateKey;
@@ -13,11 +16,23 @@ public abstract class ChainObject {
     private KeyPair encryptor;
 
     /* constructor */
-    public ChainObject(PrivateKey privateKey, PublicKey publicKey, KeyPair encryptor) {
+    public ChainObject(PrivateKey privateKey, PublicKey publicKey, KeyPair encryptor)
+            throws ChainObjectException {
         this.privateKey = privateKey;
-        this.publicKey = publicKey;
 
-        this.encryptor = encryptor;
+        if (publicKey != null) {
+            this.publicKey = publicKey;
+        } else {
+            new ChainObjectPublicKeyIsNull();
+        }
+        if (encryptor != null) {
+            if (BlockchainDataMaganager.isAESKey(encryptor.getPublic())
+                    && BlockchainDataMaganager.isAESKey(encryptor.getPrivate())) {
+                this.encryptor = encryptor;
+            } else {
+                new ChainObjectEncyptorIsNotAESException();
+            }
+        }
     }
 
     /* getter */
