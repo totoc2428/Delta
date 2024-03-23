@@ -13,6 +13,7 @@ import main.model.dao.DataManager;
 import main.model.dao.blockchain.BlockchainDataMaganager;
 import main.model.dto.blockchain.chainobject.ChainObject;
 import main.model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
+import main.util.style.TerminalStyle;
 
 public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
 
@@ -182,10 +183,10 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
         if (isAChainObject(properties)) {
             PublicKey publicKey = stringToPublicKey(properties.getProperty(SAVED_PUBLIC_VALUE_TAG + "publicKey"));
             try {
-                chainObject = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, null, false, null,
-                        null);
+                chainObject = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, false, null, null);
             } catch (ChainObjectException e) {
                 // TODO: handle exception
+                TerminalStyle.showError(e.getMessage());
             }
 
         }

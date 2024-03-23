@@ -1,6 +1,5 @@
 package main.model.dto.blockchain.chainobject.person.physical;
 
-import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.time.LocalDate;
@@ -13,10 +12,10 @@ import exception.model.dto.blockchain.chainObject.ChainObjectException;
 public class PhysicalPerson extends Person {
     private ArrayList<String> forNames;
 
-    public PhysicalPerson(PrivateKey privateKey, PublicKey publicKey, KeyPair keyPair, String lastName,
+    public PhysicalPerson(PrivateKey privateKey, PublicKey publicKey, String lastName,
             LocalDate birthData,
             boolean isVerified, ArrayList<String> forNames, String nationality) throws ChainObjectException {
-        super(privateKey, publicKey, keyPair, lastName, birthData, isVerified, nationality);
+        super(privateKey, publicKey, lastName, birthData, isVerified, nationality);
 
         this.forNames = forNames;
     }

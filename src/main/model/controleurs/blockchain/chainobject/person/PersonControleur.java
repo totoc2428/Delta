@@ -63,7 +63,7 @@ public class PersonControleur {
             PrivateKey privateKey = createAPersonPrivateKeyWithAtribute(name, forNames, localDate, passPhrase);
             try {
                 PhysicalPerson physicalPerson = new PhysicalPerson(privateKey,
-                        BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey), null, name,
+                        BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey), name,
                         DataManager.parseDate(localDate), false, new ArrayList<>(Arrays.asList(forNames.split(" "))),
                         nationality);
                 PersonDataManager.saveAPhysicalPerson(physicalPerson);

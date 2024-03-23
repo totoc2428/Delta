@@ -98,7 +98,6 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
 
             try {
                 Person person = (Person) new PhysicalPerson(chainObject.getPrivateKey(), chainObject.getPublicKey(),
-                        null,
                         lastName, birDate, isVerified, null, nationality);
                 return person;
             } catch (ChainObjectException e) {
@@ -126,7 +125,7 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
                     privateKey);
 
             try {
-                return new PhysicalPerson(person.getPrivateKey(), person.getPublicKey(), null, person.getLastName(),
+                return new PhysicalPerson(person.getPrivateKey(), person.getPublicKey(), person.getLastName(),
                         person.getBirthDate(), person.isVerified(), forNames, person.getNationality());
             } catch (Exception e) {
                 // TODO: handle exception
@@ -161,7 +160,7 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
         PrivateKey privateKey = PersonDataManager.generatePrivateKeyFromString("test");
         TerminalStyle.showDone("clé privé créer : " + privateKey);
         try {
-            PhysicalPerson physicalPerson = new PhysicalPerson(privateKey, getPublicKeyFromPrivateKey(privateKey), null,
+            PhysicalPerson physicalPerson = new PhysicalPerson(privateKey, getPublicKeyFromPrivateKey(privateKey),
                     "test",
                     LocalDate.now(), false, new ArrayList<String>(Arrays.asList(new String[] { "test", "truc" })),
                     "fr");

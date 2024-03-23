@@ -22,6 +22,8 @@ import java.util.Base64;
 import java.util.Properties;
 
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 import io.jsonwebtoken.security.InvalidKeyException;
 import main.model.dao.DataManager;
@@ -273,11 +275,11 @@ public abstract class BlockchainDataMaganager extends DataManager {
      * @return the generated keyPair generator with the algorithme defined in con
      *         file.
      */
-    public KeyPair generateEncyptor() {
+    public static Key generateEncyptor() {
         try {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ENCRYPTOR_ALGORITHM);
-            keyGen.initialize(AES_KEY_SIZE);
-            return keyGen.generateKeyPair();
+            KeyGenerator keyGen = KeyGenerator.getInstance(ENCRYPTOR_ALGORITHM);
+            keyGen.init(AES_KEY_SIZE);
+            return keyGen.generateKey();
         } catch (Exception e) {
             TerminalStyle.showError(e.getMessage());
             return null;
