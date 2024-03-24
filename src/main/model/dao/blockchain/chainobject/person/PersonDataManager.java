@@ -9,14 +9,12 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
-import io.jsonwebtoken.lang.Arrays;
 import main.model.dao.DataManager;
 import main.model.dao.blockchain.BlockchainDataMaganager;
 import main.model.dao.blockchain.chainobject.ChainObjectDataManager;
 import main.model.dto.blockchain.chainobject.ChainObject;
 import main.model.dto.blockchain.chainobject.person.Person;
 import main.model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
-import main.util.style.TerminalStyle;
 
 public abstract class PersonDataManager extends ChainObjectDataManager {
     protected static final Properties PERSON_PROPERTIES = read(CHAINOBJECT_PROPERTIES.getProperty("PERSON_PROPERTIES"));
@@ -30,9 +28,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
 
     private static String personSrcPath = PERSON_PROPERTIES.getProperty("personSrcPath");
 
-    ////
-    // get
-    public static PhysicalPerson getPhysicalPersonWithPrivateKey(PrivateKey privateKey) {
+    /////////// GET
+    public static PhysicalPerson getPhysicalPersonWithPrivateKey(PrivateKey privateKey) throws ChainObjectException {
         String fileName = personSrcPath + File.separator + privateKeyToString(privateKey)
                 + PHYSICALPERSON_FILE_SAVED_TAG + PERSON_FILE_SAVED_TAG
                 + SAVED_CHAINOBJECT_TAG;
@@ -47,7 +44,7 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
         return personSrcPath;
     }
 
-    // save
+    /////////// SAVE
     private static Properties personToAProperties(Person person, Key encryptor, String savedTypeTag) {
         Properties properties = ChainObjectDataManager.chainObjectToAProperties(person, encryptor,
                 savedTypeTag + SAVED_PERSON_TAG);
@@ -81,7 +78,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
 
     /////////// READ
     // person
-    private static Person personReadFromProperties(Properties properties, PrivateKey privateKey) {
+    private static Person personReadFromProperties(Properties properties, PrivateKey privateKey)
+            throws ChainObjectException {
         ChainObject chainObject = ChainObjectDataManager.chainObjectReadFromProperties(properties, privateKey);
 
         if (properties.getProperty(SAVED_PUBLIC_VALUE_TAG + OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG)
@@ -98,13 +96,10 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
             String nationality = (String) ChainObjectDataManager.readAObjectSavedInPropertes("nationality", properties,
                     privateKey);
 
-            try {
-                Person person = (Person) new PhysicalPerson(chainObject.getPrivateKey(), chainObject.getPublicKey(),
-                        lastName, birDate, isVerified, null, nationality);
-                return person;
-            } catch (ChainObjectException e) {
-                // TODO: handle exception
-            }
+            Person person = (Person) new PhysicalPerson(chainObject.getPrivateKey(), chainObject.getPublicKey(),
+                    lastName, birDate, isVerified, null, nationality);
+
+            return person;
 
         }
 
@@ -112,12 +107,14 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     }
 
     // physicalPerson
-    public static PhysicalPerson physicalPersonReadFromFile(File file, PrivateKey privateKey) {
+    public static PhysicalPerson physicalPersonReadFromFile(File file, PrivateKey privateKey)
+            throws ChainObjectException {
         return physicalPersonReadFromProperties(DataManager.read(file), privateKey);
 
     }
 
-    public static PhysicalPerson physicalPersonReadFromProperties(Properties properties, PrivateKey privateKey) {
+    public static PhysicalPerson physicalPersonReadFromProperties(Properties properties, PrivateKey privateKey)
+            throws ChainObjectException {
         Person person = personReadFromProperties(properties, privateKey);
         if (person != null && properties.getProperty(
                 SAVED_PUBLIC_VALUE_TAG + OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG)) {
@@ -136,14 +133,14 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
         return null;
     }
 
-    // config
+    /////////// CONFIG
     public static void setSrcPath(String srcPath) {
         if (DataManager.fileExist(srcPath) && DataManager.fileIsDirectory(srcPath)) {
             personSrcPath = srcPath;
         }
     }
 
-    // check
+    /////////// CHECK
     private static boolean isPerson(Properties properties) {
         return properties.getProperty(SAVED_PUBLIC_VALUE_TAG + OBJECT_TYPE_KEY).contains(SAVED_PERSON_TAG);
     }
@@ -153,34 +150,6 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
             return properties.getProperty(SAVED_PUBLIC_VALUE_TAG + OBJECT_TYPE_KEY).contains(SAVED_PHYSICALPERSON_TAG);
         } else {
             return false;
-        }
-
-    }
-
-    public static void main(String[] args) {
-
-        TerminalStyle.showInformation("démarage");
-        PrivateKey privateKey = PersonDataManager.generatePrivateKeyFromString("test");
-        TerminalStyle.showDone("clé privé créer : " + privateKey);
-        try {
-            PhysicalPerson physicalPerson = new PhysicalPerson(privateKey,
-                    getPublicKeyFromPrivateKey(privateKey),
-                    "test",
-                    LocalDate.now(), false, new ArrayList<String>(Arrays.asList(new String[] {
-                            "test", "truc" })),
-                    "fr");
-            TerminalStyle.showDone("identité créer");
-            System.out.println(physicalPerson.getPrivateKey());
-            System.out.println(physicalPerson.getPublicKey());
-
-            TerminalStyle.showInformation("la on test la clé privé en str");
-            String pk = privateKeyToString(privateKey);
-            System.out.println(pk);
-            TerminalStyle.showDone("start save :");
-
-            saveAPhysicalPerson(physicalPerson);
-        } catch (ChainObjectException e) {
-            TerminalStyle.showError(e.getMessage());
         }
 
     }

@@ -6,6 +6,7 @@ import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import main.model.controleurs.blockchain.chainobject.person.PersonControleur;
 import main.model.controleurs.terminal.CommandControleur;
 import main.model.controleurs.terminal.TerminalMessageControleur;
@@ -70,7 +71,11 @@ public abstract class NodeTerminalMain {
     }
 
     private static void initControleur() {
-        personControleur = new PersonControleur();
+        try {
+            personControleur = new PersonControleur();
+        } catch (ChainObjectException e) {
+            terminalMessageControleur.get(e.getCode());
+        }
         commandControleur = new CommandControleur(TERMINALMAIN_PROPERTIES.getProperty("commands"));
         terminalMessageControleur = new TerminalMessageControleur(languagePreferences);
 
@@ -187,10 +192,10 @@ public abstract class NodeTerminalMain {
     private static void runLogCommandPoption() {
         command.show(languagePreferences, "pOutput_");
         PrivateKey privateKey = BlockchainDataMaganager.stringToPrivateKey(allCommand[2]);
-        if (privateKey != null) {
+        try {
             personControleur.setIdentity(privateKey);
-        } else {
-            terminalMessageControleur.show("logCommandWithPrivateKeyNull");
+        } catch (ChainObjectException e) {
+            terminalMessageControleur.show(e.getCode());
         }
     }
 
@@ -199,9 +204,12 @@ public abstract class NodeTerminalMain {
 
         PrivateKey privateKey = askForPersonCommand();
         if (privateKey != null) {
-            personControleur.setIdentity(privateKey);
+            try {
+                personControleur.setIdentity(privateKey);
+            } catch (ChainObjectException e) {
+                terminalMessageControleur.show(e.getCode());
+            }
             terminalMessageControleur.get("logBuiltDone").show();
-            personControleur.setIdentity(privateKey);
             if (personControleur.getIdentity() != null) {
                 initPrefix();
                 terminalMessageControleur.get("logBuiltDone").show();

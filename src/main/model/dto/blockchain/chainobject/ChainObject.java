@@ -6,7 +6,7 @@ import java.security.PublicKey;
 import main.model.dao.blockchain.BlockchainDataMaganager;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 
-import exception.model.dto.blockchain.chainObject.publickey.ChainObjectPublicKeyIsNull;
+import exception.model.dto.blockchain.chainObject.publickey.ChainObjectPublicKeyIsNullException;
 
 public abstract class ChainObject {
     private PrivateKey privateKey;
@@ -20,7 +20,7 @@ public abstract class ChainObject {
         if (publicKey != null) {
             this.publicKey = publicKey;
         } else {
-            throw new ChainObjectPublicKeyIsNull();
+            throw new ChainObjectPublicKeyIsNullException();
         }
     }
 

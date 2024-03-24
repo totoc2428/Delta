@@ -33,6 +33,7 @@ public abstract class DataManager {
 
     public static final String OBJECT_TYPE_KEY = INIT_PROPERTIES.getProperty("OBJECT_TYPE_KEY");
 
+    public static String srcPath = INIT_PROPERTIES.getProperty("srcPath");
     // read
 
     /**
@@ -117,6 +118,7 @@ public abstract class DataManager {
      * @param fileName   the file where the properties will be saved.
      */
     public static void save(Properties properties, String fileName) {
+        fileName = srcPath + fileName;
         if (!fileExist(fileName)) {
             File file = new File(fileName);
             try {

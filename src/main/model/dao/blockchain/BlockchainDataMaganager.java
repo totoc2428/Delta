@@ -45,6 +45,8 @@ public abstract class BlockchainDataMaganager extends DataManager {
     private final static String ENCRYPTOR_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty("ENCRYPTOR_ALGORITHM");
     private final static int AES_KEY_SIZE = Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("AES_KEY_SIZE"));
 
+    private static String srcPath = BLOCKCHAIN_PROPERTIES.getProperty("srcPath");
+
     /**
      * This method retrieve the publicKey of a privateKey.
      * 
@@ -394,4 +396,7 @@ public abstract class BlockchainDataMaganager extends DataManager {
         }
     }
 
+    public static void save(Properties properties, String fileName) {
+        DataManager.save(properties, srcPath + fileName);
+    }
 }

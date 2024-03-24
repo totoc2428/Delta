@@ -16,12 +16,12 @@ public class PersonControleur {
 
     PhysicalPerson identity;
 
-    public PersonControleur(PrivateKey privateKey) {
+    public PersonControleur(PrivateKey privateKey) throws ChainObjectException {
         otherPerson = new ArrayList<Person>();
         setIdentity(privateKey);
     }
 
-    public PersonControleur() {
+    public PersonControleur() throws ChainObjectException {
         this(null);
     }
 
@@ -29,10 +29,9 @@ public class PersonControleur {
         return identity;
     }
 
-    public boolean setIdentity(PrivateKey privateKey) {
+    public boolean setIdentity(PrivateKey privateKey) throws ChainObjectException {
         if (privateKey != null) {
             identity = PersonDataManager.getPhysicalPersonWithPrivateKey(privateKey);
-
             return true;
         }
 
