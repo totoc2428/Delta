@@ -121,15 +121,14 @@ public abstract class DataManager {
             File file = new File(fileName);
             try {
                 file.createNewFile();
-
-                try (OutputStream outputStream = new FileOutputStream(fileName)) {
-                    properties.store(outputStream, "");
-                } catch (IOException e) {
-                    TerminalStyle.showError(e.getMessage());
-                }
             } catch (IOException e) {
                 TerminalStyle.showError(e.getMessage());
             }
+        }
+        try (OutputStream outputStream = new FileOutputStream(fileName)) {
+            properties.store(outputStream, "");
+        } catch (IOException e) {
+            TerminalStyle.showError(e.getMessage());
         }
 
     }
