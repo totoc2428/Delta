@@ -29,6 +29,11 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
 
     protected static final String SAVED_ENCRYPTOR_KEY = CHAINOBJECT_PROPERTIES.getProperty("SAVED_ENCRYPTOR_KEY");
 
+    protected static final String CHAINOBJECT_FILE_SAVED_TAG = CHAINOBJECT_PROPERTIES
+            .getProperty("CHAINOBJECT_FILE_SAVED_TAG");
+
+    protected static String chainObjectSrcPath = CHAINOBJECT_PROPERTIES.getProperty("chainObjectSrcPath");
+
     // save
     /**
      * Take a ChainObject to convert in a properties format. Is prepared to save any
@@ -215,4 +220,8 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
         return properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_CHAINOBJECT_TAG);
     }
 
+    public static void saveChainObject(Properties personProperties, String fileName) {
+        save(personProperties,
+                chainObjectSrcPath + fileName + CHAINOBJECT_FILE_SAVED_TAG);
+    }
 }

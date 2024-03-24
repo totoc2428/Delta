@@ -70,7 +70,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     }
 
     private static void saveAPerson(Properties personProperties, String fileName) {
-        save(personProperties, personSrcPath + BlockchainDataMaganager.sha256Hash(fileName) + PERSON_FILE_SAVED_TAG);
+        saveChainObject(personProperties,
+                personSrcPath + BlockchainDataMaganager.sha256Hash(fileName) + PERSON_FILE_SAVED_TAG);
     }
 
     public static void saveAPhysicalPerson(PhysicalPerson physicalPerson) {
