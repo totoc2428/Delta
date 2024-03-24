@@ -3,8 +3,6 @@ package main.model.dao.blockchain;
 import java.math.BigInteger;
 import java.security.Key;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -21,9 +19,11 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Properties;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.NoSuchPaddingException;
 
 import io.jsonwebtoken.security.InvalidKeyException;
 import main.model.dao.DataManager;
@@ -147,17 +147,58 @@ public abstract class BlockchainDataMaganager extends DataManager {
     }
 
     /**
+     * This method encrypt a message whith a encryptor.
+     * /!\ To decrypt the message you need to have the privateKey.
+     * 
+     * @param plaintext the message that you want encrypt.
+     * @param encryptor the encryptor that you want to use to encrypt the message.
+     * @return the encrypted message in a {@link String} format.
+     */
+    public static String encryptWithEncryptor(String plaintext, Key encryptor) {
+        // Chiffrer le message
+        try {
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, encryptor);
+            byte[] encryptedBytes;
+
+            encryptedBytes = cipher.doFinal(plaintext.getBytes());
+            String encryptedMessage = Base64.getEncoder().encodeToString(encryptedBytes);
+
+            System.out.println("on est là");
+            return encryptedMessage;
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (java.security.InvalidKeyException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return "";
+        // Encoder le message chiffré en base64 pour obtenir une représentation de
+        // chaîne de caractères
+
+    }
+
+    /**
      * This method encrypt a message whith a publicKey.
      * /!\ To decrypt the message you need to have the privateKey.
      * 
      * @param plaintext the message that you want encrypt.
-     * @param publicKey the publicKey that you want to use to encrypt the message.
+     * @param publicKey the encryptor that you want to use to encrypt the message.
      * @return the encrypted message in a {@link String} format.
      */
     public static String encryptWithPublicKey(String plaintext, PublicKey publicKey) {
         try {
-            Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);// TODO vérifier l'algorithme diff entre AES et RSA.
-                                                              // Stoker la clé AES dans le fichier chainObject.
+            Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             byte[] encryptedBytes = cipher.doFinal(plaintext.getBytes());
             return Base64.getEncoder().encodeToString(encryptedBytes);
@@ -288,7 +329,7 @@ public abstract class BlockchainDataMaganager extends DataManager {
 
     //// AES
 
-    public static boolean isAESKey(PrivateKey privateKey) {
+    public static boolean isAESKey(Key privateKey) {
         if (privateKey instanceof RSAPrivateKey) {
             int keyLength = ((RSAPrivateKey) privateKey).getModulus().bitLength();
             if (keyLength == AES_KEY_SIZE) {
@@ -312,6 +353,17 @@ public abstract class BlockchainDataMaganager extends DataManager {
         return false;
     }
 
+    public static String convertKeyToString(Key key) {
+        // Récupérer la représentation binaire de la clé
+        byte[] keyBytes = key.getEncoded();
+
+        // Encoder la clé en base64 pour obtenir une représentation de chaîne de
+        // caractères
+        String encodedKey = Base64.getEncoder().encodeToString(keyBytes);
+
+        return encodedKey;
+    }
+
     //// RSA
     public static boolean isRSAKey(PrivateKey privateKey) {
         return (privateKey instanceof RSAPrivateKey);
@@ -319,6 +371,27 @@ public abstract class BlockchainDataMaganager extends DataManager {
 
     public static boolean isRSAKey(PublicKey publicKey) {
         return (publicKey instanceof RSAPublicKey);
+    }
+
+    // SHA
+    public static String sha256Hash(String input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(input.getBytes());
+
+            StringBuilder hexString = new StringBuilder();
+            for (byte hashByte : hashBytes) {
+                String hex = Integer.toHexString(0xff & hashByte);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

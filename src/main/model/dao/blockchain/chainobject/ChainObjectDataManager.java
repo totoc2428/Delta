@@ -1,6 +1,7 @@
 package main.model.dao.blockchain.chainobject;
 
 import java.io.File;
+import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
 
     protected static final String SAVED_CHAINOBJECT_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_CHAINOBJECT_TAG");
 
+    protected static final String SAVED_ENCRYPTOR_KEY = CHAINOBJECT_PROPERTIES.getProperty("SAVED_ENCRYPTOR_KEY");
+
     // save
     /**
      * Take a ChainObject to convert in a properties format. Is prepared to save any
@@ -34,14 +37,24 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
      * @param chainObject the chainObject you want to convert in to a properties.
      * @return the chainObject into a Properties format.
      */
-    public static Properties chainObjectToAProperties(ChainObject chainObject) {
+    public static Properties chainObjectToAProperties(ChainObject chainObject, Key encryptor, String savedTypeTag) {
         if (chainObject != null) {
             Properties properties = new Properties();
 
-            saveAnStringInAProperties(OBJECT_TYPE_KEY, "", properties, SAVED_CHAINOBJECT_TAG, null);
-            saveAnStringInAProperties("publicKey", "", properties, publicKeyToString(chainObject.getPublicKey()), null);
-            saveAnStringInAProperties("privateKey", "", properties, privateKeyToString(chainObject.getPrivateKey()),
-                    chainObject.getPublicKey());
+            saveAnStringInAProperties(OBJECT_TYPE_KEY, "", properties, SAVED_CHAINOBJECT_TAG + savedTypeTag, null);
+
+            String strEncryptor = convertKeyToString(encryptor);
+            System.out.println(strEncryptor);
+            saveAnStringInAProperties(SAVED_ENCRYPTOR_KEY, "", properties,
+                    strEncryptor, chainObject.getPrivateKey());
+
+            String strPublicKey = publicKeyToString(chainObject.getPublicKey());
+            System.out.println(strPublicKey);
+            saveAnStringInAProperties("publicKey", "", properties, strPublicKey, null);
+
+            String strPrivateKey = privateKeyToString(chainObject.getPrivateKey());
+            System.out.println(strPrivateKey);
+            saveAnStringInAProperties("privateKey", "", properties, strPrivateKey, encryptor);
 
             return properties;
         }
@@ -57,36 +70,36 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
      *                   encrypt the object set this parmeter to null.
      */
     public static void saveAnObjectInAProperties(String key, Properties properties, Object object,
-            PublicKey publicKey) {
+            Key encryptor) {
         if (object instanceof ChainObject) {
             ChainObject co = (ChainObject) object;
             if (co.getPrivateKey() != null) {
                 saveAnStringInAProperties(key, SAVED_CHAINOBJECT_TAG, properties,
-                        privateKeyToString(co.getPrivateKey()), publicKey);
+                        privateKeyToString(co.getPrivateKey()), encryptor);
             } else {
                 saveAnStringInAProperties(key, SAVED_CHAINOBJECT_TAG, properties, publicKeyToString(co.getPublicKey()),
-                        publicKey);
+                        encryptor);
             }
         } else if (object instanceof ArrayList) {
 
             @SuppressWarnings("unchecked")
             ArrayList<Object> oArrayList = (ArrayList<Object>) object;
             saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties, objectCollectionToAString(oArrayList),
-                    publicKey);
+                    encryptor);
 
         } else if (object instanceof HashMap) {
             @SuppressWarnings("unchecked")
             HashMap<Object, Object> oHashMap = (HashMap<Object, Object>) object;
-            saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties, objectHashMapToString(oHashMap), publicKey);
+            saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties, objectHashMapToString(oHashMap), encryptor);
         } else if (object instanceof PrivateKey) {
             PrivateKey po = (PrivateKey) object;
-            saveAnStringInAProperties(key, SAVED_PRIVATE_VALUE_TAG, properties, privateKeyToString(po), publicKey);
+            saveAnStringInAProperties(key, SAVED_PRIVATE_VALUE_TAG, properties, privateKeyToString(po), encryptor);
 
         } else if (object instanceof PublicKey) {
             PublicKey po = (PublicKey) object;
-            saveAnStringInAProperties(key, "", properties, publicKeyToString(po), publicKey);
+            saveAnStringInAProperties(key, "", properties, publicKeyToString(po), encryptor);
         } else {
-            saveAnStringInAProperties(key, "", properties, object.toString(), publicKey);
+            saveAnStringInAProperties(key, "", properties, object.toString(), encryptor);
         }
     }
 
@@ -95,33 +108,31 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
      * @param tag        the tag if this tag contain to recogise any object type.
      * @param properties the properties you want to edit.
      * @param string     the string you want to save in the properties.
-     * @param publicKey  the public key to encrypt the object. If you don't want to
+     * @param encryptor  the public key to encrypt the object. If you don't want to
      *                   encrypt the object set this parmeter to null.
      */
     private static void saveAnStringInAProperties(String key, String tag, Properties properties, String string,
-            PublicKey publicKey) {
+            Key encryptor) {
 
         System.out.println("key " + key);
         System.out.println("string " + string);
         if (string == null) {
             string = "null";
-            System.out.println("la valeur c'est : " + string);
         }
         if (tag == null) {
             tag = "";
         }
         if (key != null) {
-            if (publicKey == null) {
+            if (encryptor == null) {
                 key = SAVED_PUBLIC_VALUE_TAG + tag + key;
             } else {
                 key = SAVED_PRIVATE_VALUE_TAG + tag + key;
-                string = encryptWithPublicKey(string, publicKey);
+                string = encryptWithEncryptor(string, encryptor);
+                TerminalStyle.showWarning(encryptor.toString());
             }
-
             if (properties.getProperty(key) != null) {
                 properties.setProperty(key, string);
             } else {
-                System.out.println(key + "    __lalalal___ " + string);
                 properties.put(key, string);
             }
         }

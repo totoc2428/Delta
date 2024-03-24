@@ -2,6 +2,7 @@ package main.model.dao.blockchain.chainobject.person;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.security.Key;
 import java.security.PrivateKey;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Properties;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import io.jsonwebtoken.lang.Arrays;
 import main.model.dao.DataManager;
+import main.model.dao.blockchain.BlockchainDataMaganager;
 import main.model.dao.blockchain.chainobject.ChainObjectDataManager;
 import main.model.dto.blockchain.chainobject.ChainObject;
 import main.model.dto.blockchain.chainobject.person.Person;
@@ -46,10 +48,9 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     }
 
     // save
-    private static Properties personToAProperties(Person person) {
-        Properties properties = ChainObjectDataManager.chainObjectToAProperties(person);
-        saveAnObjectInAProperties(OBJECT_TYPE_KEY, properties,
-                properties.getProperty(OBJECT_TYPE_KEY) + SAVED_PERSON_TAG, null);
+    private static Properties personToAProperties(Person person, Key encryptor, String savedTypeTag) {
+        Properties properties = ChainObjectDataManager.chainObjectToAProperties(person, encryptor,
+                savedTypeTag + SAVED_PERSON_TAG);
 
         saveAnObjectInAProperties("lastName", properties, person.getLastName(), null);
         saveAnObjectInAProperties("birthDate", properties, person.getBirthDate(), null);
@@ -58,22 +59,22 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
         return properties;
     }
 
-    private static Properties physicalPersonToAProperties(PhysicalPerson physicalPerson) {
-        Properties properties = personToAProperties(physicalPerson);
-        saveAnObjectInAProperties(OBJECT_TYPE_KEY, properties,
-                properties.getProperty(OBJECT_TYPE_KEY) + SAVED_PHYSICALPERSON_TAG, null);
+    private static Properties physicalPersonToAProperties(PhysicalPerson physicalPerson, Key encryptor,
+            String savedTypeTage) {
+        Properties properties = personToAProperties(physicalPerson, encryptor,
+                SAVED_PHYSICALPERSON_TAG + savedTypeTage);
 
-        saveAnObjectInAProperties("forNames", properties, properties, null);
+        saveAnObjectInAProperties("forNames", properties, physicalPerson.getForNames(), null);
 
         return properties;
     }
 
     private static void saveAPerson(Properties personProperties, String fileName) {
-        save(personProperties, personSrcPath + fileName + PERSON_FILE_SAVED_TAG);
+        save(personProperties, personSrcPath + BlockchainDataMaganager.sha256Hash(fileName) + PERSON_FILE_SAVED_TAG);
     }
 
     public static void saveAPhysicalPerson(PhysicalPerson physicalPerson) {
-        saveAPerson(physicalPersonToAProperties(physicalPerson),
+        saveAPerson(physicalPersonToAProperties(physicalPerson, generateEncyptor(), ""),
                 publicKeyToString(physicalPerson.getPublicKey()) + PHYSICALPERSON_FILE_SAVED_TAG);
     }
 
@@ -156,13 +157,16 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     }
 
     public static void main(String[] args) {
+
         TerminalStyle.showInformation("démarage");
         PrivateKey privateKey = PersonDataManager.generatePrivateKeyFromString("test");
         TerminalStyle.showDone("clé privé créer : " + privateKey);
         try {
-            PhysicalPerson physicalPerson = new PhysicalPerson(privateKey, getPublicKeyFromPrivateKey(privateKey),
+            PhysicalPerson physicalPerson = new PhysicalPerson(privateKey,
+                    getPublicKeyFromPrivateKey(privateKey),
                     "test",
-                    LocalDate.now(), false, new ArrayList<String>(Arrays.asList(new String[] { "test", "truc" })),
+                    LocalDate.now(), false, new ArrayList<String>(Arrays.asList(new String[] {
+                            "test", "truc" })),
                     "fr");
             TerminalStyle.showDone("identité créer");
             System.out.println(physicalPerson.getPrivateKey());
@@ -171,8 +175,6 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
             TerminalStyle.showInformation("la on test la clé privé en str");
             String pk = privateKeyToString(privateKey);
             System.out.println(pk);
-            System.out.println(encryptWithPublicKey(pk, physicalPerson.getPublicKey()));// TODO vérifier la méthode
-                                                                                        // d'encryption
             TerminalStyle.showDone("start save :");
 
             saveAPhysicalPerson(physicalPerson);

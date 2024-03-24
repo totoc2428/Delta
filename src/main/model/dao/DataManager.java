@@ -117,13 +117,21 @@ public abstract class DataManager {
      * @param fileName   the file where the properties will be saved.
      */
     public static void save(Properties properties, String fileName) {
-        if (fileExist(fileName)) {
-            try (OutputStream outputStream = new FileOutputStream(fileName)) {
-                properties.store(outputStream, "");
+        if (!fileExist(fileName)) {
+            File file = new File(fileName);
+            try {
+                file.createNewFile();
+
+                try (OutputStream outputStream = new FileOutputStream(fileName)) {
+                    properties.store(outputStream, "");
+                } catch (IOException e) {
+                    TerminalStyle.showError(e.getMessage());
+                }
             } catch (IOException e) {
                 TerminalStyle.showError(e.getMessage());
             }
         }
+
     }
 
     // check
