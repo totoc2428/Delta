@@ -9,6 +9,12 @@ import main.model.dao.blockchain.BlockchainDataMaganager;
 import main.model.dao.blockchain.chainobject.person.PersonDataManager;
 import main.model.dto.blockchain.chainobject.person.Person;
 import main.model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
+import exception.model.controleurs.blockchain.main.BlockchainDataMaganagerException;
+import exception.model.controleurs.blockchain.main.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyDateIsNullException;
+import exception.model.controleurs.blockchain.main.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyException;
+import exception.model.controleurs.blockchain.main.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyForNamesIsNullException;
+import exception.model.controleurs.blockchain.main.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyNameIsNullException;
+import exception.model.controleurs.blockchain.main.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyPassPhraseIsNullException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 
 public class PersonControleur {
@@ -39,9 +45,22 @@ public class PersonControleur {
     }
 
     public PrivateKey createAPersonPrivateKeyWithAtribute(String name, String forNames, String localDate,
-            String passPhrase) {
+            String passPhrase) throws BlockchainDataMaganagerCreatePrivateKeyException {
 
         PrivateKey privateKey = null;
+
+        if (name == null) {
+            throw new BlockchainDataMaganagerCreatePrivateKeyNameIsNullException();
+        }
+        if (forNames == null) {
+            throw new BlockchainDataMaganagerCreatePrivateKeyForNamesIsNullException();
+        }
+        if (localDate == null) {
+            throw new BlockchainDataMaganagerCreatePrivateKeyDateIsNullException();
+        }
+        if (passPhrase == null) {
+            throw new BlockchainDataMaganagerCreatePrivateKeyPassPhraseIsNullException()
+        }
 
         if (DataManager.passPhraseIsInCorectFormat(passPhrase)) {
             String stringKey = name.toLowerCase().replace(" ", DataManager.SAVED_LIST_SPACE)

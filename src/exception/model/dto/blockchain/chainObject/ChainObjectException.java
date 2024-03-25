@@ -1,14 +1,9 @@
 package exception.model.dto.blockchain.chainObject;
 
-public abstract class ChainObjectException extends Exception {
-    private String code;
+import exception.SystemException;
 
+public abstract class ChainObjectException extends SystemException {
     public ChainObjectException(String message, String code) {
-        super(message);
-        this.code = code;
-    }
-
-    public String getCode() {
-        return code;
+        super(message, code);
     }
 }

@@ -206,10 +206,10 @@ public abstract class NodeTerminalMain {
         if (privateKey != null) {
             try {
                 personControleur.setIdentity(privateKey);
+                terminalMessageControleur.get("logBuiltDone").show();
             } catch (ChainObjectException e) {
                 terminalMessageControleur.show(e.getCode());
             }
-            terminalMessageControleur.get("logBuiltDone").show();
             if (personControleur.getIdentity() != null) {
                 initPrefix();
                 terminalMessageControleur.get("logBuiltDone").show();
