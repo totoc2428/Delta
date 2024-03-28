@@ -1,8 +1,8 @@
 package test.model.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Properties;
@@ -66,4 +66,10 @@ public class DataManagerTest {
 
     }
 
+    @Test
+    public void testReadAFile() {
+        Properties properties = DataManager.read("./ressources/init/init.conf");
+
+        assertFalse(properties.isEmpty());
+    }
 }
