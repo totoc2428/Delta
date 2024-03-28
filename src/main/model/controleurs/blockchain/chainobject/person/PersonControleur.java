@@ -9,12 +9,11 @@ import main.model.dao.blockchain.BlockchainDataMaganager;
 import main.model.dao.blockchain.chainobject.person.PersonDataManager;
 import main.model.dto.blockchain.chainobject.person.Person;
 import main.model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
-import exception.model.controleurs.blockchain.main.BlockchainDataMaganagerException;
-import exception.model.controleurs.blockchain.main.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyDateIsNullException;
-import exception.model.controleurs.blockchain.main.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyException;
-import exception.model.controleurs.blockchain.main.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyForNamesIsNullException;
-import exception.model.controleurs.blockchain.main.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyNameIsNullException;
-import exception.model.controleurs.blockchain.main.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyPassPhraseIsNullException;
+import exception.model.dao.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyDateIsNullException;
+import exception.model.dao.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyException;
+import exception.model.dao.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyForNamesIsNullException;
+import exception.model.dao.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyNameIsNullException;
+import exception.model.dao.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyPassPhraseIsNullException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 
 public class PersonControleur {
@@ -59,7 +58,7 @@ public class PersonControleur {
             throw new BlockchainDataMaganagerCreatePrivateKeyDateIsNullException();
         }
         if (passPhrase == null) {
-            throw new BlockchainDataMaganagerCreatePrivateKeyPassPhraseIsNullException()
+            throw new BlockchainDataMaganagerCreatePrivateKeyPassPhraseIsNullException();
         }
 
         if (DataManager.passPhraseIsInCorectFormat(passPhrase)) {
@@ -75,22 +74,18 @@ public class PersonControleur {
     }
 
     public boolean setIdentityAsCreatedIdentity(String name, String forNames, String localDate, String passPhrase,
-            String nationality) {
+            String nationality) throws ChainObjectException, BlockchainDataMaganagerCreatePrivateKeyException {
         boolean seted = false;
         if (DataManager.passPhraseIsInCorectFormat(passPhrase)) {
-            PrivateKey privateKey = createAPersonPrivateKeyWithAtribute(name, forNames, localDate, passPhrase);
-            try {
-                PhysicalPerson physicalPerson = new PhysicalPerson(privateKey,
-                        BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey), name,
-                        DataManager.parseDate(localDate), false, new ArrayList<>(Arrays.asList(forNames.split(" "))),
-                        nationality);
-                PersonDataManager.saveAPhysicalPerson(physicalPerson);
-                this.identity = physicalPerson;
-                seted = true;
-            } catch (ChainObjectException e) {
-                // TODO: do exception
-            }
-
+            PrivateKey privateKey;
+            privateKey = createAPersonPrivateKeyWithAtribute(name, forNames, localDate, passPhrase);
+            PhysicalPerson physicalPerson = new PhysicalPerson(privateKey,
+                    BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey), name,
+                    DataManager.parseDate(localDate), false, new ArrayList<>(Arrays.asList(forNames.split(" "))),
+                    nationality);
+            PersonDataManager.saveAPhysicalPerson(physicalPerson);
+            this.identity = physicalPerson;
+            seted = true;
         }
 
         return seted;

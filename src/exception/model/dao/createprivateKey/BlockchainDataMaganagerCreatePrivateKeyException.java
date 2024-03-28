@@ -1,6 +1,6 @@
-package exception.model.controleurs.blockchain.main.createprivateKey;
+package exception.model.dao.createprivateKey;
 
-import exception.model.controleurs.blockchain.main.BlockchainDataMaganagerException;
+import exception.model.dao.BlockchainDataMaganagerException;
 
 public abstract class BlockchainDataMaganagerCreatePrivateKeyException extends BlockchainDataMaganagerException {
     public BlockchainDataMaganagerCreatePrivateKeyException(String message, String code) {

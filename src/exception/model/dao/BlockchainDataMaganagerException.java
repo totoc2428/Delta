@@ -1,4 +1,4 @@
-package exception.model.controleurs.blockchain.main;
+package exception.model.dao;
 
 import exception.SystemException;
 

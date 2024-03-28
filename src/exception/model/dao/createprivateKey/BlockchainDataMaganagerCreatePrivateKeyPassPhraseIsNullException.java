@@ -1,4 +1,4 @@
-package exception.model.controleurs.blockchain.main.createprivateKey;
+package exception.model.dao.createprivateKey;
 
 public class BlockchainDataMaganagerCreatePrivateKeyPassPhraseIsNullException
         extends BlockchainDataMaganagerCreatePrivateKeyException {

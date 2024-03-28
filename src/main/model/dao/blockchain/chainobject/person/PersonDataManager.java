@@ -122,13 +122,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
             @SuppressWarnings("unchecked")
             ArrayList<String> forNames = (ArrayList<String>) readAObjectSavedInPropertes("forNames", properties,
                     privateKey);
-
-            try {
-                return new PhysicalPerson(person.getPrivateKey(), person.getPublicKey(), person.getLastName(),
-                        person.getBirthDate(), person.isVerified(), forNames, person.getNationality());
-            } catch (Exception e) {
-                // TODO: handle exception
-            }
+            return new PhysicalPerson(person.getPrivateKey(), person.getPublicKey(), person.getLastName(),
+                    person.getBirthDate(), person.isVerified(), forNames, person.getNationality());
         }
         return null;
     }
