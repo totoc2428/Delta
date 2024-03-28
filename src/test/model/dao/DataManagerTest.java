@@ -57,7 +57,7 @@ public class DataManagerTest {
     }
 
     /////////// READ
-
+    ////// PROPERTIES
     @Test
     public void testReadANullFile() {
         Properties nullProperties = DataManager.read("");
@@ -71,5 +71,11 @@ public class DataManagerTest {
         Properties properties = DataManager.read("./ressources/init/init.conf");
 
         assertFalse(properties.isEmpty());
+    }
+
+    ////// TEXT FILE
+    @Test
+    public void testTextFileToStringArrayList() {
+
     }
 }
