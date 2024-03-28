@@ -276,12 +276,17 @@ public abstract class DataManager {
      * @return the user input in a string format.
      */
     public static String getUserInput(String prefix) {
-        @SuppressWarnings("resource")
-        Scanner scanner = new Scanner(System.in);
+        String input = null;
+        Console console = System.console();
+        if (console != null) {
+            input = console.readLine(prefix);
+        } else {
+            @SuppressWarnings("resource")
+            Scanner scanner = new Scanner(System.in);
 
-        System.out.print(prefix + " ");
-
-        String input = scanner.nextLine();
+            System.out.print(prefix + " ");
+            scanner.nextLine();
+        }
 
         return input;
     }

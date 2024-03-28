@@ -226,44 +226,18 @@ public abstract class NodeTerminalMain {
     private static void runRegisterCommand() {
         command.show(languagePreferences);
         terminalMessageControleur.show("registerTrueDataWarning");
-        if (allCommand.length > 1) {
-            String option = allCommand[1];
-            switch (option) {
-                case "-l":
-                    if (allCommand.length > 3) {
-                        String passPhrase = askForPassPrase();
-                        try {
-                            PrivateKey privateKey = personControleur.createAPersonPrivateKeyWithAtribute(
-                                    allCommand[2],
-                                    allCommand[3], allCommand[4], passPhrase);
-                        } catch (BlockchainDataMaganagerCreatePrivateKeyException e) {
-                            terminalMessageControleur.show(e.getCode());
-                        }
-
-                        String nationality = askForNationality();
-                    }
-                    break;
-                default:
-                    PrivateKey privateKey = askForPersonCommand();
-                    String nationality = askForNationality();
-                    break;
-            }
-
-        } else {
-            String name = askForName();
-            String forName = askForForNames();
-            String birthDate = askForBirthDate();
-            String passPhrase = askForPassPrase();
-            String nationality = askForNationality();
-
-            try {
-                personControleur.setIdentityAsCreatedIdentity(name, forName, birthDate, passPhrase, nationality);
-                terminalMessageControleur.show("identityCreated");
-                terminalMessageControleur.show("logDone");
-            } catch (ChainObjectException | BlockchainDataMaganagerCreatePrivateKeyException e) {
-                terminalMessageControleur.show(e.getCode());
-                terminalMessageControleur.show("identityCreationError");
-            }
+        String name = askForName();
+        String forName = askForForNames();
+        String birthDate = askForBirthDate();
+        String passPhrase = askForPassPrase();
+        String nationality = askForNationality();
+        try {
+            personControleur.setIdentityAsCreatedIdentity(name, forName, birthDate, passPhrase, nationality);
+            terminalMessageControleur.show("identityCreated");
+            terminalMessageControleur.show("logDone");
+        } catch (ChainObjectException | BlockchainDataMaganagerCreatePrivateKeyException e) {
+            terminalMessageControleur.show(e.getCode());
+            terminalMessageControleur.show("identityCreationError");
         }
     }
 
