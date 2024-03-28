@@ -2,6 +2,8 @@ package test.model.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Properties;
 
@@ -11,6 +13,7 @@ import main.model.dao.DataManager;
 
 public class DataManagerTest {
 
+    /////////// INIT
     @Test
     public void testInitPropertiesNotNull() {
 
@@ -52,4 +55,15 @@ public class DataManagerTest {
         assertEquals(srcPath, DataManager.srcPath);
 
     }
+
+    /////////// READ
+
+    @Test
+    public void testReadANullFile() {
+        Properties nullProperties = DataManager.read("");
+
+        assertTrue(nullProperties.isEmpty());
+
+    }
+
 }
