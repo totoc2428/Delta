@@ -34,18 +34,19 @@ public abstract class NodeTerminalMain {
     private static TerminalMessageControleur terminalMessageControleur;
     private static PersonControleur personControleur;
 
+    //////////////// MAIN
     public static void main(String[] args) {
         init();
         start();
         run();
     }
 
-    // check
+    //////////////// CHECK
     private static boolean checkRequirement() {
         return true;// TODO
     }
 
-    // init
+    //////////////// INIT
     private static void init() {
         if (checkRequirement()) {
             exit = false;
@@ -96,14 +97,14 @@ public abstract class NodeTerminalMain {
         prefix += "ΔNODE_DEVICE:$ ";
     }
 
-    // start
+    //////////////// START
     private static void start() {
         showLogo();
         terminalMessageControleur.show("start");
         terminalMessageControleur.show("welcome");
     }
 
-    // run
+    //////////////// RUN
     private static void run() {
         while (!exit) {
             runAskAndCommand();
@@ -149,18 +150,18 @@ public abstract class NodeTerminalMain {
         }
     }
 
-    // not found
+    //////////////// NOT_FOUND
     private static void runCommandNotFound() {
         terminalMessageControleur.show("commandNotFoundError");
     }
 
-    // exit
+    //////////////// EXIT
     private static void runExitCommand() {
         command.show(languagePreferences);
         exit = true;
     }
 
-    // help
+    //////////////// HELP
     private static void runHelpCommand() {
         command.show(languagePreferences);
         ArrayList<String> commands = commandControleur.getAllCommandDescription(languagePreferences,
@@ -171,7 +172,7 @@ public abstract class NodeTerminalMain {
         }
     }
 
-    // log
+    //////////////// LOG
     private static void runLogCommand() {
         command.show(languagePreferences);
         if (allCommand.length > 1) {
@@ -222,7 +223,7 @@ public abstract class NodeTerminalMain {
         }
     }
 
-    // register
+    //////////////// REGISTER
     private static void runRegisterCommand() {
         command.show(languagePreferences);
         terminalMessageControleur.show("registerTrueDataWarning");
@@ -261,9 +262,9 @@ public abstract class NodeTerminalMain {
 
     }
 
-    // util
-    // LOGO
-    // show
+    //////////////// UTIL
+    /////////// LOGO
+    //////// SHOW
     private static void showLogo() {
         ArrayList<String> logo = DataManager.textFileToStringArrayList(
                 TERMINALMAIN_PROPERTIES.getProperty("textimage") + TERMINALMAIN_PROPERTIES.getProperty("logo"));
@@ -292,7 +293,7 @@ public abstract class NodeTerminalMain {
         }
     }
 
-    // ask
+    /////////// ASK
 
     private static String askForName() {
         return DataManager.getUserInput(terminalMessageControleur.getContent("logDefaultNameInputPrefix"));
