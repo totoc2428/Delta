@@ -49,16 +49,13 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
             saveAnStringInAProperties(OBJECT_TYPE_KEY, "", properties, SAVED_CHAINOBJECT_TAG + savedTypeTag, null);
 
             String strEncryptor = convertKeyToString(encryptor);
-            System.out.println(strEncryptor);
             saveAnStringInAProperties(SAVED_ENCRYPTOR_KEY, "", properties,
                     strEncryptor, chainObject.getPrivateKey());
 
             String strPublicKey = publicKeyToString(chainObject.getPublicKey());
-            System.out.println(strPublicKey);
             saveAnStringInAProperties("publicKey", "", properties, strPublicKey, null);
 
             String strPrivateKey = privateKeyToString(chainObject.getPrivateKey());
-            System.out.println(strPrivateKey);
             saveAnStringInAProperties("privateKey", "", properties, strPrivateKey, encryptor);
 
             return properties;
@@ -118,9 +115,6 @@ public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
      */
     private static void saveAnStringInAProperties(String key, String tag, Properties properties, String string,
             Key encryptor) {
-
-        System.out.println("key " + key);
-        System.out.println("string " + string);
         if (string == null) {
             string = "null";
         }

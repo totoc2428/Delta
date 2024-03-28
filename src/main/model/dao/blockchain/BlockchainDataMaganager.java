@@ -356,14 +356,9 @@ public abstract class BlockchainDataMaganager extends DataManager {
     }
 
     public static String convertKeyToString(Key key) {
-        // Récupérer la représentation binaire de la clé
-        byte[] keyBytes = key.getEncoded();
-
-        // Encoder la clé en base64 pour obtenir une représentation de chaîne de
-        // caractères
-        String encodedKey = Base64.getEncoder().encodeToString(keyBytes);
-
-        return encodedKey;
+        byte[] bytesCle = key.getEncoded();
+        String basekey64 = Base64.getEncoder().encodeToString(bytesCle);
+        return basekey64;
     }
 
     //// RSA
