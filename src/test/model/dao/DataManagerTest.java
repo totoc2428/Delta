@@ -177,4 +177,20 @@ public class DataManagerTest {
 
         assertEquals(savedResult, DataManager.objectHashMapToString(dic));
     }
+
+    @Test
+    public void testStringToObjectArrayList() {
+        ArrayList<Object> checks = new ArrayList<>();
+
+        String separedListSpace = DataManager.SAVED_LIST_SPACE;
+
+        checks.add("obj1");
+        checks.add("obj2");
+        checks.add("obj3");
+
+        String list = "obj1" + separedListSpace + "obj2" + separedListSpace + "obj3";
+
+        assertEquals(checks, DataManager.stringToObjectArrayList(list));
+
+    }
 }
