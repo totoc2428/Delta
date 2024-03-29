@@ -189,7 +189,7 @@ public abstract class DataManager {
         String values = string.split(SAVED_DIC_SPACE)[0];
         String keys = string.split(SAVED_DIC_SPACE)[1];
 
-        for (int i = 0; i < values.length(); i++) {
+        for (int i = 0; i < values.length() - 1; i++) {
             hashMap.put(keys.split(SAVED_LIST_SPACE)[i], values.split(SAVED_LIST_SPACE)[i]);
         }
 

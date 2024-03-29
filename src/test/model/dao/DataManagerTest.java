@@ -193,4 +193,22 @@ public class DataManagerTest {
         assertEquals(checks, DataManager.stringToObjectArrayList(list));
 
     }
+
+    @Test
+    public void stringToObjectHashMap() {
+        HashMap<Object, Object> cheks = new HashMap<>();
+
+        cheks.put("tag1", "key1");
+        cheks.put("tag2", "key2");
+        cheks.put("tag3", "key3");
+
+        String separedListSpace = DataManager.SAVED_LIST_SPACE;
+        String separedDicSpace = DataManager.SAVED_DIC_SPACE;
+
+        String dic = "key1" + separedListSpace + "key2" + separedListSpace + "key3" + separedDicSpace + separedListSpace
+                + "tag1" + separedListSpace + "tag2" + separedListSpace + "tag3";
+
+        assertEquals(cheks, DataManager.stringToObjectHashMap(dic));
+
+    }
 }
