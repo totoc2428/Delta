@@ -235,4 +235,17 @@ public class DataManagerTest {
         assertEquals(result, DataManager.stringToObjectHashMap(strResult));
 
     }
+
+    @Test
+    public void testGetAllFileNames() {
+        ArrayList<String> checks = new ArrayList<>();
+
+        checks.add("test.conf");
+        checks.add("test.txt");
+        checks.add("test2.txt");
+
+        String srcPath = "./ressources/test/test_get_all_file_names";
+        assertEquals(checks, DataManager.getAllFileNames(srcPath));
+
+    }
 }
