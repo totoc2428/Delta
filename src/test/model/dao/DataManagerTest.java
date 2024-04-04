@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.net.Socket;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -205,8 +204,8 @@ public class DataManagerTest {
         String separedListSpace = DataManager.SAVED_LIST_SPACE;
         String separedDicSpace = DataManager.SAVED_DIC_SPACE;
 
-        String dic = "key1" + separedListSpace + "key2" + separedListSpace + "key3" + separedDicSpace + separedListSpace
-                + "tag1" + separedListSpace + "tag2" + separedListSpace + "tag3";
+        String dic = separedListSpace + "key1" + separedListSpace + "key2" + separedListSpace + "key3" + separedDicSpace
+                + separedListSpace + "tag1" + separedListSpace + "tag2" + separedListSpace + "tag3";
 
         assertEquals(cheks, DataManager.stringToObjectHashMap(dic));
 

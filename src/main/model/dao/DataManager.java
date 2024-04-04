@@ -186,11 +186,18 @@ public abstract class DataManager {
     public static HashMap<Object, Object> stringToObjectHashMap(String string) {
         HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
 
-        String values = string.split(SAVED_DIC_SPACE)[0];
-        String keys = string.split(SAVED_DIC_SPACE)[1];
+        String[] values = string.split(SAVED_DIC_SPACE)[0].split(SAVED_LIST_SPACE);
+        String[] keys = string.split(SAVED_DIC_SPACE)[1].split(SAVED_LIST_SPACE);
 
-        for (int i = 0; i < values.length() - 1; i++) {
-            hashMap.put(keys.split(SAVED_LIST_SPACE)[i], values.split(SAVED_LIST_SPACE)[i]);
+        System.out.println(values[3]);
+
+        for (int i = 0; i < values.length; i++) {
+            String key = keys[i];
+            String value = values[i];
+
+            if (!key.isEmpty() && !value.isEmpty() && !key.isBlank() && !value.isBlank()) {
+                hashMap.put(key, value);
+            }
         }
 
         return hashMap;
