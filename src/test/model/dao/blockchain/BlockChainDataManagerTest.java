@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.Properties;
 
 import org.junit.Test;
@@ -65,6 +66,24 @@ public class BlockchainDataManagerTest {
         assertThrows( BlockchainDataManagerPrivateKeyBuildException.class,() -> {
             BlockchainDataMaganager.generatePrivateKeyFromString(null);
         });
+    }
+
+    @Test
+    public void testGetPublicKeyFromPrivateKey(){
+        String inputForPrivateKey = "test_input_for_private_key";
+
+        assertDoesNotThrow(() -> {
+            PrivateKey privateKey = BlockchainDataMaganager.generatePrivateKeyFromString(inputForPrivateKey);
+
+            PublicKey publicKey = BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey);
+            PublicKey publicKey2 = BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey);
+
+            assertNotNull(publicKey);
+            assertEquals(publicKey, publicKey2);
+
+        });
+
+        
     }
 
 
