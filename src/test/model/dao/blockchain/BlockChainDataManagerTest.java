@@ -157,5 +157,16 @@ public class BlockchainDataManagerTest {
             assertEquals(privateKey, privateKey2);
         });
 
+        assertThrows(Exception.class, () -> {
+            PrivateKey privateKey = BlockchainDataMaganager.generatePrivateKeyFromString(inputForPrivateKey);
+            String strPrivateKey = BlockchainDataMaganager.privateKeyToString(privateKey);
+
+            BlockchainDataMaganager.stringToPrivateKey(null);
+            BlockchainDataMaganager.stringToPrivateKey(inputForPrivateKey);
+
+            BlockchainDataMaganager.stringToPrivateKey(strPrivateKey.replace("A", "b"));
+
+        });
+
     }
 }
