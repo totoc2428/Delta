@@ -11,7 +11,7 @@ import org.junit.Test;
 import main.model.dao.DataManager;
 import main.model.dao.blockchain.BlockchainDataMaganager;
 
-public class BlockChainDataManagerTest {
+public class BlockchainDataManagerTest {
     
     @Test
     public void testBlockChainPropertiesIsNotNull(){
