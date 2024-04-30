@@ -285,8 +285,9 @@ public abstract class BlockchainDataMaganager extends DataManager {
     /**
      * @param input the string you want to transform in to privateKey
      * @return the privateKey correponding to string
+     * @throws BlockchainDataManagerPrivateKeyBuildException 
      */
-    public static PrivateKey generatePrivateKeyFromString(String input){
+    public static PrivateKey generatePrivateKeyFromString(String input) throws BlockchainDataManagerPrivateKeyBuildException{
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-512");
 
@@ -308,10 +309,8 @@ public abstract class BlockchainDataMaganager extends DataManager {
             
             return keyFactory.generatePrivate(spec);
 
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            new BlockchainDataManagerPrivateKeyBuildException();
-            
-            return null;
+        } catch (Exception e) {
+            throw new BlockchainDataManagerPrivateKeyBuildException();
         }
 
     }
