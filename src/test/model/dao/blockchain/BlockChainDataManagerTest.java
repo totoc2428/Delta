@@ -114,4 +114,28 @@ public class BlockchainDataManagerTest {
 
     }
 
+    @Test
+    public void testPublicKeyToString() {
+        String inputForPrivateKey = "test_input_for_private_key";
+
+        assertDoesNotThrow(() -> {
+            PrivateKey privateKey = BlockchainDataMaganager.generatePrivateKeyFromString(inputForPrivateKey);
+            PublicKey publicKey = BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey);
+
+            String strPublicKey = BlockchainDataMaganager.publicKeyToString(publicKey);
+            String strPublicKey2 = BlockchainDataMaganager.publicKeyToString(publicKey);
+
+            assertNotNull(strPublicKey);
+            assertNotNull(strPublicKey2);
+
+            assertEquals(strPublicKey, strPublicKey2);
+        });
+
+        assertThrows(Exception.class, () -> {
+
+            BlockchainDataMaganager.publicKeyToString(null);
+        });
+
+    }
+
 }
