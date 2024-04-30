@@ -16,25 +16,26 @@ import main.model.dao.DataManager;
 import main.model.dao.blockchain.BlockchainDataMaganager;
 
 public class BlockchainDataManagerTest {
-    
+
     @Test
-    public void testBlockChainPropertiesIsNotNull(){
+    public void testBlockChainPropertiesIsNotNull() {
         assertNotNull(BlockchainDataMaganager.BLOCKCHAIN_PROPERTIES);
-        
+
         assertNotNull(BlockchainDataMaganager.KEY_ALGORITHM);
         assertNotNull(BlockchainDataMaganager.DIGEST_ALGORITHM);
 
         assertNotNull(BlockchainDataMaganager.ENCRYPTOR_ALGORITHM);
         assertNotNull(BlockchainDataMaganager.AES_KEY_SIZE);
-        
+
         assertNotNull(BlockchainDataMaganager.getSrcPath());
     }
 
     @Test
-    public void testInitPropertiesValue(){
-        
-        Properties blockchainProperties = DataManager.read(DataManager.INIT_PROPERTIES.getProperty("BLOCKCHAIN_PROPERTIES"));
-        
+    public void testInitPropertiesValue() {
+
+        Properties blockchainProperties = DataManager
+                .read(DataManager.INIT_PROPERTIES.getProperty("BLOCKCHAIN_PROPERTIES"));
+
         String keyAlgorithm = blockchainProperties.getProperty("KEY_ALGORITHM");
         String digestAlgorithm = blockchainProperties.getProperty("DIGEST_ALGORITHM");
 
@@ -45,7 +46,7 @@ public class BlockchainDataManagerTest {
 
         assertEquals(keyAlgorithm, BlockchainDataMaganager.KEY_ALGORITHM);
         assertEquals(digestAlgorithm, BlockchainDataMaganager.DIGEST_ALGORITHM);
-        
+
         assertEquals(encryptorAlgorithm, BlockchainDataMaganager.ENCRYPTOR_ALGORITHM);
         assertEquals(aesKeySize, BlockchainDataMaganager.AES_KEY_SIZE);
 
@@ -53,23 +54,23 @@ public class BlockchainDataManagerTest {
     }
 
     @Test
-    public void testGeneratePrivateKeyFromString(){
+    public void testGeneratePrivateKeyFromString() {
         String inputForPrivateKey = "test_input_for_private_key";
 
-        assertDoesNotThrow( () ->{
+        assertDoesNotThrow(() -> {
             PrivateKey privateKey = BlockchainDataMaganager.generatePrivateKeyFromString(inputForPrivateKey);
             PrivateKey privateKey2 = BlockchainDataMaganager.generatePrivateKeyFromString(inputForPrivateKey);
-            
+
             assertEquals(privateKey, privateKey2);
         });
 
-        assertThrows( BlockchainDataManagerPrivateKeyBuildException.class,() -> {
+        assertThrows(BlockchainDataManagerPrivateKeyBuildException.class, () -> {
             BlockchainDataMaganager.generatePrivateKeyFromString(null);
         });
     }
 
     @Test
-    public void testGetPublicKeyFromPrivateKey(){
+    public void testGetPublicKeyFromPrivateKey() {
         String inputForPrivateKey = "test_input_for_private_key";
 
         assertDoesNotThrow(() -> {
@@ -83,7 +84,5 @@ public class BlockchainDataManagerTest {
 
         });
     }
-    
-
 
 }

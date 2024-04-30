@@ -285,9 +285,10 @@ public abstract class BlockchainDataMaganager extends DataManager {
     /**
      * @param input the string you want to transform in to privateKey
      * @return the privateKey correponding to string
-     * @throws BlockchainDataManagerPrivateKeyBuildException 
+     * @throws BlockchainDataManagerPrivateKeyBuildException
      */
-    public static PrivateKey generatePrivateKeyFromString(String input) throws BlockchainDataManagerPrivateKeyBuildException{
+    public static PrivateKey generatePrivateKeyFromString(String input)
+            throws BlockchainDataManagerPrivateKeyBuildException {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-512");
 
@@ -302,11 +303,11 @@ public abstract class BlockchainDataMaganager extends DataManager {
             BigInteger bigInt = new BigInteger(1, truncatedHash);
 
             // Création d'une spécification de clé privée RSA
-            RSAPrivateKeySpec spec = new RSAPrivateKeySpec(bigInt, BigInteger.valueOf(65537)); 
+            RSAPrivateKeySpec spec = new RSAPrivateKeySpec(bigInt, BigInteger.valueOf(65537));
 
             // Génération et retour de la clé privée
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            
+
             return keyFactory.generatePrivate(spec);
 
         } catch (Exception e) {
