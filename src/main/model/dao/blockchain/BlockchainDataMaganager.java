@@ -25,25 +25,26 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 
+import exception.model.dao.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
 import io.jsonwebtoken.security.InvalidKeyException;
 import main.model.dao.DataManager;
 import main.util.style.TerminalStyle;
 
 public abstract class BlockchainDataMaganager extends DataManager {
 
-    protected final static Properties BLOCKCHAIN_PROPERTIES = DataManager
+    public final static Properties BLOCKCHAIN_PROPERTIES = DataManager
             .read(INIT_PROPERTIES.getProperty("BLOCKCHAIN_PROPERTIES"));
 
-    private final static String KEY_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty(
+    public final static String KEY_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty(
             "KEY_ALGORITHM");
-    private final static String DIGEST_ALGORITHM = BLOCKCHAIN_PROPERTIES
+    public final static String DIGEST_ALGORITHM = BLOCKCHAIN_PROPERTIES
             .getProperty("DIGEST_ALGORITHM");
 
     // private final static int KEY_SIZE =
     // Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("KEY_SIZE"));
 
-    private final static String ENCRYPTOR_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty("ENCRYPTOR_ALGORITHM");
-    private final static int AES_KEY_SIZE = Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("AES_KEY_SIZE"));
+    public final static String ENCRYPTOR_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty("ENCRYPTOR_ALGORITHM");
+    public final static int AES_KEY_SIZE = Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("AES_KEY_SIZE"));
 
     private static String srcPath = BLOCKCHAIN_PROPERTIES.getProperty("srcPath");
 
@@ -285,7 +286,7 @@ public abstract class BlockchainDataMaganager extends DataManager {
      * @param input the string you want to transform in to privateKey
      * @return the privateKey correponding to string
      */
-    public static PrivateKey generatePrivateKeyFromString(String input) {
+    public static PrivateKey generatePrivateKeyFromString(String input){
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-512");
 
@@ -300,18 +301,19 @@ public abstract class BlockchainDataMaganager extends DataManager {
             BigInteger bigInt = new BigInteger(1, truncatedHash);
 
             // Création d'une spécification de clé privée RSA
-            RSAPrivateKeySpec spec = new RSAPrivateKeySpec(bigInt, BigInteger.valueOf(65537)); // Exposant public
-                                                                                               // standard
+            RSAPrivateKeySpec spec = new RSAPrivateKeySpec(bigInt, BigInteger.valueOf(65537)); 
 
             // Génération et retour de la clé privée
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            
             return keyFactory.generatePrivate(spec);
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            TerminalStyle.showError(e.getMessage());
+            new BlockchainDataManagerPrivateKeyBuildException();
+            
+            return null;
         }
 
-        return null;
     }
 
     /**
@@ -393,5 +395,9 @@ public abstract class BlockchainDataMaganager extends DataManager {
 
     public static void save(Properties properties, String fileName) {
         DataManager.save(properties, srcPath + fileName);
+    }
+
+    public static String getSrcPath() {
+        return srcPath;
     }
 }
