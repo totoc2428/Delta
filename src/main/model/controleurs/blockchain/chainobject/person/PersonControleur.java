@@ -14,6 +14,7 @@ import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCrea
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCreatePrivateKeyForNamesIsNullException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCreatePrivateKeyNameIsNullException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCreatePrivateKeyPassPhraseIsNullException;
+import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 
 public class PersonControleur {
@@ -74,7 +75,8 @@ public class PersonControleur {
     }
 
     public boolean setIdentityAsCreatedIdentity(String name, String forNames, String localDate, String passPhrase,
-            String nationality) throws ChainObjectException, BlockchainDataManagerCreatePrivateKeyException {
+            String nationality) throws ChainObjectException, BlockchainDataManagerCreatePrivateKeyException,
+            GetFromPrivatePublicKeyBlockchainDataManagerException {
         boolean seted = false;
         if (DataManager.passPhraseIsInCorectFormat(passPhrase)) {
             PrivateKey privateKey;

@@ -26,6 +26,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
+import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import io.jsonwebtoken.security.InvalidKeyException;
 import main.model.dao.DataManager;
 import main.util.style.TerminalStyle;
@@ -55,8 +56,10 @@ public abstract class BlockchainDataMaganager extends DataManager {
      * 
      * @param privateKey
      * @return a {@link PublicKey} deducted with the privateKey.
+     * @throws GetFromPrivatePublicKeyBlockchainDataManagerException
      */
-    public static PublicKey getPublicKeyFromPrivateKey(PrivateKey privateKey) {
+    public static PublicKey getPublicKeyFromPrivateKey(PrivateKey privateKey)
+            throws GetFromPrivatePublicKeyBlockchainDataManagerException {
         try {
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             RSAPrivateKeySpec privateKeySpec = keyFactory.getKeySpec(privateKey, RSAPrivateKeySpec.class);
@@ -68,14 +71,9 @@ public abstract class BlockchainDataMaganager extends DataManager {
 
             // Générer et retourner la clé publique
             return keyFactory.generatePublic(publicKeySpec);
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-            TerminalStyle.showError(e.getMessage());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            TerminalStyle.showError(e.getMessage());
+        } catch (Exception e) {
+            throw new GetFromPrivatePublicKeyBlockchainDataManagerException();
         }
-        return null;
     }
 
     /**
