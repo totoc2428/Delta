@@ -11,7 +11,7 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import exception.model.dao.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
+import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
 import main.model.dao.DataManager;
 import main.model.dao.blockchain.BlockchainDataMaganager;
 
@@ -82,9 +82,8 @@ public class BlockchainDataManagerTest {
             assertEquals(publicKey, publicKey2);
 
         });
-
-        
     }
+    
 
 
 }

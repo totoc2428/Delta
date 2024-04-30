@@ -1,4 +1,4 @@
-package exception.model.dao;
+package exception.model.dao.blockchain;
 
 import exception.SystemException;
 

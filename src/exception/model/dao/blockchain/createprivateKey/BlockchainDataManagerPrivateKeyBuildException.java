@@ -1,4 +1,4 @@
-package exception.model.dao.createprivateKey;
+package exception.model.dao.blockchain.createprivateKey;
 
 public class BlockchainDataManagerPrivateKeyBuildException extends BlockchainDataManagerCreatePrivateKeyException{
 

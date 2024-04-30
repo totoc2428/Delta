@@ -6,7 +6,7 @@ import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import exception.model.dao.createprivateKey.BlockchainDataManagerCreatePrivateKeyException;
+import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCreatePrivateKeyException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import main.model.controleurs.blockchain.chainobject.person.PersonControleur;
 import main.model.controleurs.terminal.CommandControleur;

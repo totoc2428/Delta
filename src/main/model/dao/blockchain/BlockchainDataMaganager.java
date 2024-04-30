@@ -25,7 +25,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 
-import exception.model.dao.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
+import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
 import io.jsonwebtoken.security.InvalidKeyException;
 import main.model.dao.DataManager;
 import main.util.style.TerminalStyle;
