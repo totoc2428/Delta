@@ -9,11 +9,11 @@ import main.model.dao.blockchain.BlockchainDataMaganager;
 import main.model.dao.blockchain.chainobject.person.PersonDataManager;
 import main.model.dto.blockchain.chainobject.person.Person;
 import main.model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
-import exception.model.dao.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyDateIsNullException;
-import exception.model.dao.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyException;
-import exception.model.dao.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyForNamesIsNullException;
-import exception.model.dao.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyNameIsNullException;
-import exception.model.dao.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyPassPhraseIsNullException;
+import exception.model.dao.createprivateKey.BlockchainDataManagerCreatePrivateKeyDateIsNullException;
+import exception.model.dao.createprivateKey.BlockchainDataManagerCreatePrivateKeyException;
+import exception.model.dao.createprivateKey.BlockchainDataManagerCreatePrivateKeyForNamesIsNullException;
+import exception.model.dao.createprivateKey.BlockchainDataManagerCreatePrivateKeyNameIsNullException;
+import exception.model.dao.createprivateKey.BlockchainDataManagerCreatePrivateKeyPassPhraseIsNullException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 
 public class PersonControleur {
@@ -44,21 +44,21 @@ public class PersonControleur {
     }
 
     public PrivateKey createAPersonPrivateKeyWithAtribute(String name, String forNames, String localDate,
-            String passPhrase) throws BlockchainDataMaganagerCreatePrivateKeyException {
+            String passPhrase) throws BlockchainDataManagerCreatePrivateKeyException {
 
         PrivateKey privateKey = null;
 
         if (name == null) {
-            throw new BlockchainDataMaganagerCreatePrivateKeyNameIsNullException();
+            throw new BlockchainDataManagerCreatePrivateKeyNameIsNullException();
         }
         if (forNames == null) {
-            throw new BlockchainDataMaganagerCreatePrivateKeyForNamesIsNullException();
+            throw new BlockchainDataManagerCreatePrivateKeyForNamesIsNullException();
         }
         if (localDate == null) {
-            throw new BlockchainDataMaganagerCreatePrivateKeyDateIsNullException();
+            throw new BlockchainDataManagerCreatePrivateKeyDateIsNullException();
         }
         if (passPhrase == null) {
-            throw new BlockchainDataMaganagerCreatePrivateKeyPassPhraseIsNullException();
+            throw new BlockchainDataManagerCreatePrivateKeyPassPhraseIsNullException();
         }
 
         if (DataManager.passPhraseIsInCorectFormat(passPhrase)) {
@@ -74,7 +74,7 @@ public class PersonControleur {
     }
 
     public boolean setIdentityAsCreatedIdentity(String name, String forNames, String localDate, String passPhrase,
-            String nationality) throws ChainObjectException, BlockchainDataMaganagerCreatePrivateKeyException {
+            String nationality) throws ChainObjectException, BlockchainDataManagerCreatePrivateKeyException {
         boolean seted = false;
         if (DataManager.passPhraseIsInCorectFormat(passPhrase)) {
             PrivateKey privateKey;

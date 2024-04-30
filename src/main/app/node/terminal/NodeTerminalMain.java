@@ -6,7 +6,7 @@ import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import exception.model.dao.createprivateKey.BlockchainDataMaganagerCreatePrivateKeyException;
+import exception.model.dao.createprivateKey.BlockchainDataManagerCreatePrivateKeyException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import main.model.controleurs.blockchain.chainobject.person.PersonControleur;
 import main.model.controleurs.terminal.CommandControleur;
@@ -236,7 +236,7 @@ public abstract class NodeTerminalMain {
             personControleur.setIdentityAsCreatedIdentity(name, forName, birthDate, passPhrase, nationality);
             terminalMessageControleur.show("identityCreated");
             terminalMessageControleur.show("logDone");
-        } catch (ChainObjectException | BlockchainDataMaganagerCreatePrivateKeyException e) {
+        } catch (ChainObjectException | BlockchainDataManagerCreatePrivateKeyException e) {
             terminalMessageControleur.show(e.getCode());
             terminalMessageControleur.show("identityCreationError");
         }
@@ -255,7 +255,7 @@ public abstract class NodeTerminalMain {
 
         try {
             personControleur.createAPersonPrivateKeyWithAtribute(name, forName, birthDate, passPhrase);
-        } catch (BlockchainDataMaganagerCreatePrivateKeyException e) {
+        } catch (BlockchainDataManagerCreatePrivateKeyException e) {
             terminalMessageControleur.get(e.getCode());
         }
         return null;
