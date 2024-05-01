@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import exception.SystemException;
 import exception.model.dao.blockchain.encryptor.GenerateEncryptorBlockchainDataManagerException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import main.model.dao.DataManager;
@@ -46,7 +47,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     }
 
     /////////// SAVE
-    private static Properties personToAProperties(Person person, Key encryptor, String savedTypeTag) {
+    private static Properties personToAProperties(Person person, Key encryptor, String savedTypeTag)
+            throws SystemException {
         Properties properties = ChainObjectDataManager.chainObjectToAProperties(person, encryptor,
                 savedTypeTag + SAVED_PERSON_TAG);
 
@@ -58,7 +60,7 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     }
 
     private static Properties physicalPersonToAProperties(PhysicalPerson physicalPerson, Key encryptor,
-            String savedTypeTage) {
+            String savedTypeTage) throws SystemException {
         Properties properties = personToAProperties(physicalPerson, encryptor,
                 SAVED_PHYSICALPERSON_TAG + savedTypeTage);
 
@@ -73,7 +75,7 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
     }
 
     public static void saveAPhysicalPerson(PhysicalPerson physicalPerson)
-            throws GenerateEncryptorBlockchainDataManagerException {
+            throws SystemException {
         saveAPerson(physicalPersonToAProperties(physicalPerson, generateEncyptor(), ""),
                 publicKeyToString(physicalPerson.getPublicKey()) + PHYSICALPERSON_FILE_SAVED_TAG);
     }

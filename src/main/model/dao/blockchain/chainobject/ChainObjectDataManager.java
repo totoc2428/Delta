@@ -9,6 +9,8 @@ import java.util.HashMap;
 
 import java.util.Properties;
 
+import exception.SystemException;
+import exception.model.dao.blockchain.encryptor.EncryptWithEncryptorBlockchainDataManagerException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import main.model.dao.DataManager;
 import main.model.dao.blockchain.BlockchainDataManager;
@@ -42,7 +44,8 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
      * @param chainObject the chainObject you want to convert in to a properties.
      * @return the chainObject into a Properties format.
      */
-    public static Properties chainObjectToAProperties(ChainObject chainObject, Key encryptor, String savedTypeTag) {
+    public static Properties chainObjectToAProperties(ChainObject chainObject, Key encryptor, String savedTypeTag)
+            throws SystemException {
         if (chainObject != null) {
             Properties properties = new Properties();
 
@@ -72,7 +75,7 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
      *                   encrypt the object set this parmeter to null.
      */
     public static void saveAnObjectInAProperties(String key, Properties properties, Object object,
-            Key encryptor) {
+            Key encryptor) throws SystemException {
         if (object instanceof ChainObject) {
             ChainObject co = (ChainObject) object;
             if (co.getPrivateKey() != null) {
@@ -112,9 +115,10 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
      * @param string     the string you want to save in the properties.
      * @param encryptor  the public key to encrypt the object. If you don't want to
      *                   encrypt the object set this parmeter to null.
+     * @throws SystemException
      */
     private static void saveAnStringInAProperties(String key, String tag, Properties properties, String string,
-            Key encryptor) {
+            Key encryptor) throws SystemException {
         if (string == null) {
             string = "null";
         }

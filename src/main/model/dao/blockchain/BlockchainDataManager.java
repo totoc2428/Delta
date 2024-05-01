@@ -26,6 +26,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
+import exception.model.dao.blockchain.encryptor.EncryptWithEncryptorBlockchainDataManagerException;
 import exception.model.dao.blockchain.encryptor.GenerateEncryptorBlockchainDataManagerException;
 import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import io.jsonwebtoken.security.InvalidKeyException;
@@ -155,8 +156,10 @@ public abstract class BlockchainDataManager extends DataManager {
      * @param plaintext the message that you want encrypt.
      * @param encryptor the encryptor that you want to use to encrypt the message.
      * @return the encrypted message in a {@link String} format.
+     * @throws EncryptWithEncryptorBlockchainDataManagerException
      */
-    public static String encryptWithEncryptor(String plaintext, Key encryptor) {
+    public static String encryptWithEncryptor(String plaintext, Key encryptor)
+            throws EncryptWithEncryptorBlockchainDataManagerException {
         // Chiffrer le message
         try {
             Cipher cipher = Cipher.getInstance("AES");
@@ -168,26 +171,9 @@ public abstract class BlockchainDataManager extends DataManager {
 
             System.out.println("on est là");
             return encryptedMessage;
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (java.security.InvalidKeyException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new EncryptWithEncryptorBlockchainDataManagerException();
         }
-
-        return "";
-        // Encoder le message chiffré en base64 pour obtenir une représentation de
-        // chaîne de caractères
-
     }
 
     /**
