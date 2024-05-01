@@ -26,6 +26,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
+import exception.model.dao.blockchain.encryptor.GenerateEncryptorBlockchainDataManagerException;
 import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import io.jsonwebtoken.security.InvalidKeyException;
 import main.model.dao.DataManager;
@@ -317,15 +318,15 @@ public abstract class BlockchainDataManager extends DataManager {
     /**
      * @return the generated keyPair generator with the algorithme defined in con
      *         file.
+     * @throws GenerateEncryptorBlockchainDataManagerException
      */
-    public static Key generateEncyptor() {
+    public static Key generateEncyptor() throws GenerateEncryptorBlockchainDataManagerException {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance(ENCRYPTOR_ALGORITHM);
             keyGen.init(AES_KEY_SIZE);
             return keyGen.generateKey();
         } catch (Exception e) {
-            TerminalStyle.showError(e.getMessage());
-            return null;
+            throw new GenerateEncryptorBlockchainDataManagerException();
         }
     }
 

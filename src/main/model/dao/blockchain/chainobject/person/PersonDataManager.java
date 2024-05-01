@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import exception.model.dao.blockchain.encryptor.GenerateEncryptorBlockchainDataManagerException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import main.model.dao.DataManager;
 import main.model.dao.blockchain.BlockchainDataManager;
@@ -71,7 +72,8 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
                 personSrcPath + BlockchainDataManager.sha256Hash(fileName) + PERSON_FILE_SAVED_TAG);
     }
 
-    public static void saveAPhysicalPerson(PhysicalPerson physicalPerson) {
+    public static void saveAPhysicalPerson(PhysicalPerson physicalPerson)
+            throws GenerateEncryptorBlockchainDataManagerException {
         saveAPerson(physicalPersonToAProperties(physicalPerson, generateEncyptor(), ""),
                 publicKeyToString(physicalPerson.getPublicKey()) + PHYSICALPERSON_FILE_SAVED_TAG);
     }

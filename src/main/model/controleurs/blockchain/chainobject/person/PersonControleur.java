@@ -9,12 +9,12 @@ import main.model.dao.blockchain.BlockchainDataManager;
 import main.model.dao.blockchain.chainobject.person.PersonDataManager;
 import main.model.dto.blockchain.chainobject.person.Person;
 import main.model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
+import exception.SystemException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCreatePrivateKeyDateIsNullException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCreatePrivateKeyException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCreatePrivateKeyForNamesIsNullException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCreatePrivateKeyNameIsNullException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCreatePrivateKeyPassPhraseIsNullException;
-import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 
 public class PersonControleur {
@@ -75,8 +75,7 @@ public class PersonControleur {
     }
 
     public boolean setIdentityAsCreatedIdentity(String name, String forNames, String localDate, String passPhrase,
-            String nationality) throws ChainObjectException, BlockchainDataManagerCreatePrivateKeyException,
-            GetFromPrivatePublicKeyBlockchainDataManagerException {
+            String nationality) throws SystemException {
         boolean seted = false;
         if (DataManager.passPhraseIsInCorectFormat(passPhrase)) {
             PrivateKey privateKey;
@@ -93,7 +92,7 @@ public class PersonControleur {
         return seted;
     }
 
-    public void close() {
+    public void close() throws SystemException {
         PersonDataManager.saveAPhysicalPerson(identity);
     }
 }

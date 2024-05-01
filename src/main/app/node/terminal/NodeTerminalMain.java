@@ -6,8 +6,8 @@ import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import exception.SystemException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCreatePrivateKeyException;
-import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import main.model.controleurs.blockchain.chainobject.person.PersonControleur;
 import main.model.controleurs.terminal.CommandControleur;
@@ -237,8 +237,7 @@ public abstract class NodeTerminalMain {
             personControleur.setIdentityAsCreatedIdentity(name, forName, birthDate, passPhrase, nationality);
             terminalMessageControleur.show("identityCreated");
             terminalMessageControleur.show("logDone");
-        } catch (ChainObjectException | BlockchainDataManagerCreatePrivateKeyException
-                | GetFromPrivatePublicKeyBlockchainDataManagerException e) {
+        } catch (SystemException e) {
             terminalMessageControleur.show(e.getCode());
 
             terminalMessageControleur.show("identityCreationError");

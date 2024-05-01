@@ -1,10 +1,12 @@
 package test.model.dao.blockchain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Properties;
@@ -201,6 +203,31 @@ public class BlockchainDataManagerTest {
 
         });
 
+    }
+
+    @Test
+    public void testGenerateEncyptor() {
+
+        assertDoesNotThrow(() -> {
+            Key encryptor = BlockchainDataManager.generateEncyptor();
+            Key encryptor2 = BlockchainDataManager.generateEncyptor();
+
+            assertNotNull(encryptor);
+            assertNotNull(encryptor2);
+
+            assertNotEquals(encryptor, encryptor2);
+        });
+
+    }
+
+    @Test
+    public void testEncryptWithEncryptor() {
+        String inputForPrivateKey = "test_input_for_private_key";
+
+        assertDoesNotThrow(() -> {
+            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString(inputForPrivateKey);
+
+        });
     }
 
 }
