@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import org.junit.Test;
 
+import exception.SystemException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
 import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import main.model.dao.DataManager;
@@ -225,7 +226,25 @@ public class BlockchainDataManagerTest {
         String inputForPrivateKey = "test_input_for_private_key";
 
         assertDoesNotThrow(() -> {
-            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString(inputForPrivateKey);
+
+            Key encryptor = BlockchainDataManager.generateEncyptor();
+
+            String encryptedText = BlockchainDataManager.encryptWithEncryptor(inputForPrivateKey, encryptor);
+            String encryptedTextCheck = BlockchainDataManager.encryptWithEncryptor(inputForPrivateKey, encryptor);
+
+            assertNotNull(encryptedText);
+            assertNotNull(encryptedTextCheck);
+
+            assertEquals(encryptedText, encryptedTextCheck);
+        });
+
+        assertThrows(Exception.class, () -> {
+            Key encryptor = BlockchainDataManager.generateEncyptor();
+
+            BlockchainDataManager.encryptWithEncryptor(inputForPrivateKey, null);
+            BlockchainDataManager.encryptWithEncryptor(null, encryptor);
+
+            BlockchainDataManager.encryptWithEncryptor("", encryptor);
 
         });
     }
