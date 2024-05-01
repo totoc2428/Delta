@@ -13,7 +13,6 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import exception.SystemException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
 import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import main.model.dao.DataManager;
