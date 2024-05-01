@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import main.model.dao.DataManager;
-import main.model.dao.blockchain.BlockchainDataMaganager;
+import main.model.dao.blockchain.BlockchainDataManager;
 import main.model.dao.blockchain.chainobject.person.PersonDataManager;
 import main.model.dto.blockchain.chainobject.person.Person;
 import main.model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
@@ -68,7 +68,7 @@ public class PersonControleur {
                     + DataManager.parseDate(localDate).toString()
                     + passPhrase;
 
-            privateKey = BlockchainDataMaganager.generatePrivateKeyFromString(stringKey);
+            privateKey = BlockchainDataManager.generatePrivateKeyFromString(stringKey);
         }
 
         return privateKey;
@@ -82,7 +82,7 @@ public class PersonControleur {
             PrivateKey privateKey;
             privateKey = createAPersonPrivateKeyWithAtribute(name, forNames, localDate, passPhrase);
             PhysicalPerson physicalPerson = new PhysicalPerson(privateKey,
-                    BlockchainDataMaganager.getPublicKeyFromPrivateKey(privateKey), name,
+                    BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey), name,
                     DataManager.parseDate(localDate), false, new ArrayList<>(Arrays.asList(forNames.split(" "))),
                     nationality);
             PersonDataManager.saveAPhysicalPerson(physicalPerson);

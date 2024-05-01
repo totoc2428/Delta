@@ -11,12 +11,12 @@ import java.util.Properties;
 
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import main.model.dao.DataManager;
-import main.model.dao.blockchain.BlockchainDataMaganager;
+import main.model.dao.blockchain.BlockchainDataManager;
 import main.model.dto.blockchain.chainobject.ChainObject;
 import main.model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
 import main.util.style.TerminalStyle;
 
-public abstract class ChainObjectDataManager extends BlockchainDataMaganager {
+public abstract class ChainObjectDataManager extends BlockchainDataManager {
 
     protected static final Properties CHAINOBJECT_PROPERTIES = read(
             BLOCKCHAIN_PROPERTIES.getProperty("CHAINOBJECT_PROPERTIES"));

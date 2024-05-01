@@ -31,7 +31,7 @@ import io.jsonwebtoken.security.InvalidKeyException;
 import main.model.dao.DataManager;
 import main.util.style.TerminalStyle;
 
-public abstract class BlockchainDataMaganager extends DataManager {
+public abstract class BlockchainDataManager extends DataManager {
 
     public final static Properties BLOCKCHAIN_PROPERTIES = DataManager
             .read(INIT_PROPERTIES.getProperty("BLOCKCHAIN_PROPERTIES"));

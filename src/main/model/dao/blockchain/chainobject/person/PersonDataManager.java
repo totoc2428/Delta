@@ -10,7 +10,7 @@ import java.util.Properties;
 
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import main.model.dao.DataManager;
-import main.model.dao.blockchain.BlockchainDataMaganager;
+import main.model.dao.blockchain.BlockchainDataManager;
 import main.model.dao.blockchain.chainobject.ChainObjectDataManager;
 import main.model.dto.blockchain.chainobject.ChainObject;
 import main.model.dto.blockchain.chainobject.person.Person;
@@ -68,7 +68,7 @@ public abstract class PersonDataManager extends ChainObjectDataManager {
 
     private static void saveAPerson(Properties personProperties, String fileName) {
         saveChainObject(personProperties,
-                personSrcPath + BlockchainDataMaganager.sha256Hash(fileName) + PERSON_FILE_SAVED_TAG);
+                personSrcPath + BlockchainDataManager.sha256Hash(fileName) + PERSON_FILE_SAVED_TAG);
     }
 
     public static void saveAPhysicalPerson(PhysicalPerson physicalPerson) {

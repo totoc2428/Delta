@@ -13,7 +13,7 @@ import main.model.controleurs.blockchain.chainobject.person.PersonControleur;
 import main.model.controleurs.terminal.CommandControleur;
 import main.model.controleurs.terminal.TerminalMessageControleur;
 import main.model.dao.DataManager;
-import main.model.dao.blockchain.BlockchainDataMaganager;
+import main.model.dao.blockchain.BlockchainDataManager;
 import main.model.dto.terminal.Command;
 import main.util.style.TerminalStyle;
 import main.util.style.TerminalColor;
@@ -194,7 +194,7 @@ public abstract class NodeTerminalMain {
 
     private static void runLogCommandPoption() {
         command.show(languagePreferences, "pOutput_");
-        PrivateKey privateKey = BlockchainDataMaganager.stringToPrivateKey(allCommand[2]);
+        PrivateKey privateKey = BlockchainDataManager.stringToPrivateKey(allCommand[2]);
         try {
             personControleur.setIdentity(privateKey);
         } catch (ChainObjectException e) {

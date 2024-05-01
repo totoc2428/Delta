@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.Scanner;
 
-import main.model.dao.blockchain.BlockchainDataMaganager;
+import main.model.dao.blockchain.BlockchainDataManager;
 import main.model.dto.blockchain.chainobject.ChainObject;
 import main.util.style.TerminalStyle;
 
@@ -237,10 +237,10 @@ public abstract class DataManager {
 
                 if (chainObject.getPrivateKey() != null) {
                     string += SAVED_LIST_SPACE
-                            + BlockchainDataMaganager.privateKeyToString(chainObject.getPrivateKey());
+                            + BlockchainDataManager.privateKeyToString(chainObject.getPrivateKey());
                 } else {
                     string += SAVED_LIST_SPACE
-                            + BlockchainDataMaganager.publicKeyToString(chainObject.getPublicKey());
+                            + BlockchainDataManager.publicKeyToString(chainObject.getPublicKey());
 
                 }
             } else {
