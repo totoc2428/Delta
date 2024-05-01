@@ -183,7 +183,7 @@ public abstract class BlockchainDataManager extends DataManager {
      */
     public static String encryptWithPublicKey(String plaintext, PublicKey publicKey) {
         try {
-            Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             byte[] encryptedBytes = cipher.doFinal(plaintext.getBytes());
             return Base64.getEncoder().encodeToString(encryptedBytes);
@@ -203,19 +203,22 @@ public abstract class BlockchainDataManager extends DataManager {
      * @return the message, decrypted.
      */
     public static String decryptWithPrivateKey(String encryptedString, PrivateKey privateKey) {
-        byte[] encryptedBytes = Base64.getDecoder().decode(encryptedString);
-        Cipher cipher;
         try {
-            cipher = Cipher.getInstance(privateKey.getAlgorithm());
+            byte[] encryptedBytes = Base64.getDecoder().decode(encryptedString);
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
+
             byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
 
             return new String(decryptedBytes);
         } catch (Exception e) {
-            TerminalStyle.showError(e.getMessage());
-        }
 
-        return null;
+            e.printStackTrace();
+            TerminalStyle.showError(e.getMessage());
+
+            return null;
+        }
     }
 
     /**

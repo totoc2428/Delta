@@ -83,6 +83,8 @@ public class BlockchainDataManagerTest {
             PublicKey publicKey2 = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
 
             assertNotNull(publicKey);
+            assertNotNull(publicKey2);
+
             assertEquals(publicKey, publicKey2);
 
         });
@@ -259,10 +261,15 @@ public class BlockchainDataManagerTest {
             String result = BlockchainDataManager.encryptWithPublicKey(inputForPrivateKey, publicKey);
             String result2 = BlockchainDataManager.encryptWithPublicKey(inputForPrivateKey, publicKey);
 
+            String resultCheck = BlockchainDataManager.decryptWithPrivateKey(result, privateKey);
+            String result2Check = BlockchainDataManager.decryptWithPrivateKey(result2, privateKey);
+
             assertNotNull(result);
             assertNotNull(result2);
 
-            assertEquals(result, result2);
+            assertEquals(inputForPrivateKey, resultCheck);
+            assertEquals(inputForPrivateKey, result2Check);
+
         });
     }
 }
