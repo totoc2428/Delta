@@ -3,15 +3,19 @@ package main.model.dao.blockchain;
 import java.math.BigInteger;
 import java.security.Key;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
@@ -22,6 +26,8 @@ import java.util.Properties;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
@@ -304,25 +310,20 @@ public abstract class BlockchainDataManager extends DataManager {
     public static PrivateKey generatePrivateKeyFromString(String input)
             throws BlockchainDataManagerPrivateKeyBuildException {
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-512");
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 
-            // Hachage du message
-            byte[] hash = digest.digest(input.getBytes());
+            KeySpec spec = new PBEKeySpec(input.toCharArray(), new byte[16], 65536, 2048);
+            SecretKey tmp = factory.generateSecret(spec);
 
-            // Utilisation des 64 premiers octets du hash pour générer la clé privée
-            byte[] truncatedHash = new byte[64];
-            System.arraycopy(hash, 0, truncatedHash, 0, 64);
+            SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+            SecureRandom random = SecureRandom.getInstanceStrong();
+            random.setSeed(secret.getEncoded());
 
-            // Conversion du tableau d'octets en un grand entier positif
-            BigInteger bigInt = new BigInteger(1, truncatedHash);
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+            keyGen.initialize(2048, random);
+            KeyPair keyPair = keyGen.generateKeyPair();
 
-            // Création d'une spécification de clé privée RSA
-            RSAPrivateKeySpec spec = new RSAPrivateKeySpec(bigInt, BigInteger.valueOf(65537));
-
-            // Génération et retour de la clé privée
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-
-            return keyFactory.generatePrivate(spec);
+            return keyPair.getPrivate();
 
         } catch (Exception e) {
             throw new BlockchainDataManagerPrivateKeyBuildException();

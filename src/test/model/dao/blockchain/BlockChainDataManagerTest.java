@@ -8,13 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.security.Key;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.Base64;
 import java.util.Properties;
 
 import org.junit.Test;
@@ -261,11 +256,9 @@ public class BlockchainDataManagerTest {
         String inputForPrivateKey = "test_input_for_private_key";
 
         assertDoesNotThrow(() -> {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-            keyGen.initialize(2048);
-            KeyPair keyPair = keyGen.generateKeyPair();
-            PublicKey publicKey = keyPair.getPublic();
-            PrivateKey privateKey = keyPair.getPrivate();
+
+            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString("truc");
+            PublicKey publicKey = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
 
             String eResult = BlockchainDataManager.encryptWithPublicKey(inputForPrivateKey, publicKey);
 
@@ -284,12 +277,5 @@ public class BlockchainDataManagerTest {
 
         });
 
-    }
-
-    public static PrivateKey loadPrivateKey(String privateKeyBase64) throws Exception {
-        byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyBase64);
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        return keyFactory.generatePrivate(keySpec);
     }
 }
