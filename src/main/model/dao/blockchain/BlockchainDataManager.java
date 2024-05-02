@@ -310,17 +310,15 @@ public abstract class BlockchainDataManager extends DataManager {
     public static PrivateKey generatePrivateKeyFromString(String input)
             throws BlockchainDataManagerPrivateKeyBuildException {
         try {
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+            random.setSeed(input.getBytes());
 
-            KeySpec spec = new PBEKeySpec(input.toCharArray(), new byte[16], 65536, 2048);
-            SecretKey tmp = factory.generateSecret(spec);
-
-            SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
-            SecureRandom random = SecureRandom.getInstanceStrong();
-            random.setSeed(secret.getEncoded());
-
+            // Créer un générateur de clés RSA et initialiser avec le nombre aléatoire
+            // sécurisé
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(2048, random);
+
+            // Générer la paire de clés
             KeyPair keyPair = keyGen.generateKeyPair();
 
             return keyPair.getPrivate();

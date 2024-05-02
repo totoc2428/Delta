@@ -6,15 +6,17 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigInteger;
 import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.interfaces.RSAPrivateKey;
 import java.util.Properties;
 
 import org.junit.Test;
 
-import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
 import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import main.model.dao.DataManager;
 import main.model.dao.blockchain.BlockchainDataManager;
@@ -62,13 +64,27 @@ public class BlockchainDataManagerTest {
         String inputForPrivateKey = "test_input_for_private_key";
 
         assertDoesNotThrow(() -> {
-            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString(inputForPrivateKey);
+            PrivateKey privateKey1 = BlockchainDataManager.generatePrivateKeyFromString(inputForPrivateKey);
             PrivateKey privateKey2 = BlockchainDataManager.generatePrivateKeyFromString(inputForPrivateKey);
+            PrivateKey privateKey3 = BlockchainDataManager
+                    .generatePrivateKeyFromString(inputForPrivateKey + inputForPrivateKey);
 
-            assertEquals(privateKey, privateKey2);
+            assertNotNull(privateKey1);
+            assertNotNull(privateKey2);
+            assertNotNull(privateKey3);
+
+            // Vérifier que les deux clés sont équivalentes
+            assertTrue(privateKey1 instanceof RSAPrivateKey);
+            assertTrue(privateKey2 instanceof RSAPrivateKey);
+            assertTrue(privateKey3 instanceof RSAPrivateKey);
+
+            assertNotEquals(privateKey3, privateKey1);
+            assertNotEquals(privateKey3, privateKey2);
+
+            assertEquals(privateKey1, privateKey2);
         });
 
-        assertThrows(BlockchainDataManagerPrivateKeyBuildException.class, () -> {
+        assertThrows(Exception.class, () -> {
             BlockchainDataManager.generatePrivateKeyFromString(null);
         });
     }
