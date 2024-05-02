@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.security.Key;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -257,61 +259,30 @@ public class BlockchainDataManagerTest {
     @Test
     public void testEncryptWithPublicKey() {
         String inputForPrivateKey = "test_input_for_private_key";
-        /*
-         * assertDoesNotThrow(() -> {
-         * 
-         * PrivateKey privateKey =
-         * BlockchainDataManager.generatePrivateKeyFromString(inputForPrivateKey);
-         * PublicKey publicKey =
-         * BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
-         * 
-         * String keyString = BlockchainDataManager.privateKeyToString(privateKey);
-         * 
-         * assertNotNull(keyString);
-         * 
-         * assertFalse(keyString.isEmpty());
-         * assertFalse(keyString.isBlank());
-         * 
-         * String result = BlockchainDataManager.encryptWithPublicKey(keyString,
-         * publicKey);
-         * String result2 = BlockchainDataManager.encryptWithPublicKey(keyString,
-         * publicKey);
-         * 
-         * assertNotNull(result);
-         * assertNotNull(result2);
-         * 
-         * assertFalse(result.isEmpty());
-         * assertFalse(result.isBlank());
-         * 
-         * assertFalse(result2.isEmpty());
-         * assertFalse(result2.isBlank());
-         * 
-         * String resultCheck = BlockchainDataManager.decryptWithPrivateKey(result,
-         * privateKey);
-         * String result2Check = BlockchainDataManager.decryptWithPrivateKey(result2,
-         * privateKey);
-         * 
-         * 
-         * assertEquals(keyString, resultCheck);
-         * assertEquals(keyString, result2Check);
-         * 
-         * 
-         * });
-         */
 
-        PrivateKey privateKey;
-        try {
-            privateKey = BlockchainDataManagerTest.loadPrivateKey("llallal");
-            // Message chiffré
-            String encryptedMessage = "aXtndHN4MjNiYXd4Znc3Zj4=";
+        assertDoesNotThrow(() -> {
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+            keyGen.initialize(2048);
+            KeyPair keyPair = keyGen.generateKeyPair();
+            PublicKey publicKey = keyPair.getPublic();
+            PrivateKey privateKey = keyPair.getPrivate();
 
-            // Déchiffrer le message
-            String decryptedMessage = BlockchainDataManager.decryptWithPrivateKey(encryptedMessage, privateKey);
+            String eResult = BlockchainDataManager.encryptWithPublicKey(inputForPrivateKey, publicKey);
 
-            System.out.println("Message déchiffré : " + decryptedMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            assertNotNull(eResult);
+            assertFalse(eResult.isBlank());
+            assertFalse(eResult.isEmpty());
+
+            String dResult = BlockchainDataManager.decryptWithPrivateKey(eResult.split(":")[0], privateKey,
+                    eResult.split(":")[1]);
+
+            assertNotNull(dResult);
+            assertFalse(dResult.isBlank());
+            assertFalse(dResult.isEmpty());
+
+            assertEquals(inputForPrivateKey, dResult);
+
+        });
 
     }
 

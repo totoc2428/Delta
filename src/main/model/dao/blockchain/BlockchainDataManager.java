@@ -178,43 +178,39 @@ public abstract class BlockchainDataManager extends DataManager {
      * This method encrypt a message whith a publicKey.
      * /!\ To decrypt the message you need to have the privateKey.
      * 
-     * @param plaintext the message that you want encrypt.
+     * @param data      the message that you want encrypt.
      * @param publicKey the encryptor that you want to use to encrypt the message.
      * @return the encrypted message in a {@link String} format.
      */
-    public static String encryptWithPublicKey(String plaintext, PublicKey publicKey) {
+    public static String encryptWithPublicKey(String data, PublicKey publicKey) {
         try {
-            SecretKey sessionKey = generateSessionKey();
-            Cipher rsaCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            rsaCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            // Génération de la clé AES
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            keyGen.init(256);
+            SecretKey secretKey = keyGen.generateKey();
 
-            byte[] encryptedSessionKeyBytes = rsaCipher.doFinal(sessionKey.getEncoded());
-
+            // Chiffrement des données avec la clé AES
             Cipher aesCipher = Cipher.getInstance("AES");
-            aesCipher.init(Cipher.ENCRYPT_MODE, sessionKey);
+            aesCipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedData = aesCipher.doFinal(data.getBytes());
 
-            byte[] encryptedMessageBytes = aesCipher.doFinal(plaintext.getBytes());
+            // Chiffrement de la clé AES avec la clé publique RSA
+            Cipher rsaCipher = Cipher.getInstance("RSA");
+            rsaCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            byte[] encryptedAESKey = rsaCipher.doFinal(secretKey.getEncoded());
 
-            byte[] combined = new byte[encryptedSessionKeyBytes.length + encryptedMessageBytes.length];
-            System.arraycopy(encryptedSessionKeyBytes, 0, combined, 0, encryptedSessionKeyBytes.length);
-            System.arraycopy(encryptedMessageBytes, 0, combined, encryptedSessionKeyBytes.length,
-                    encryptedMessageBytes.length);
+            // Encodage en base64
+            String encryptedDataBase64 = Base64.getEncoder().encodeToString(encryptedData);
+            String encryptedAESKeyBase64 = Base64.getEncoder().encodeToString(encryptedAESKey);
 
-            String encryptedString = Base64.getEncoder().encodeToString(combined);
-
-            return encryptedString;
+            // Retourne les données chiffrées et la clé AES chiffrée
+            return encryptedDataBase64 + ":" + encryptedAESKeyBase64;
 
         } catch (Exception e) {
             TerminalStyle.showError(e.getMessage());
         }
 
         return null;
-    }
-
-    private static SecretKey generateSessionKey() throws Exception {
-        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-        keyGen.init(128);
-        return keyGen.generateKey();
     }
 
     /**
@@ -225,41 +221,26 @@ public abstract class BlockchainDataManager extends DataManager {
      * @param privateKey      the private key to decrypt the message.
      * @return the message, decrypted.
      */
-    public static String decryptWithPrivateKey(String encryptedString, PrivateKey privateKey) {
+    public static String decryptWithPrivateKey(String encryptedData, PrivateKey privateKey, String encryptedAESKey) {
         try {
-            // Convertir la chaîne encodée en tableau d'octets
-            byte[] combined = Base64.getDecoder().decode(encryptedString);
+            // Décodage des données encodées en base64
+            byte[] encryptedDataBytes = Base64.getDecoder().decode(encryptedData);
+            byte[] encryptedAESKeyBytes = Base64.getDecoder().decode(encryptedAESKey);
 
-            // Récupérer la longueur de la clé de session (128 bits = 16 octets)
-            int sessionKeyLength = 128 / 8;
-
-            // Extraire la clé de session chiffrée
-            byte[] encryptedSessionKeyBytes = new byte[sessionKeyLength];
-            byte[] encryptedMessageBytes = new byte[combined.length - sessionKeyLength];
-            System.arraycopy(combined, 0, encryptedSessionKeyBytes, 0, sessionKeyLength);
-            System.arraycopy(combined, sessionKeyLength, encryptedMessageBytes, 0, encryptedMessageBytes.length);
-
-            // Initialiser le chiffreur RSA avec la clé privée
-            Cipher rsaCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            // Déchiffrement de la clé AES avec la clé privée RSA
+            Cipher rsaCipher = Cipher.getInstance("RSA");
             rsaCipher.init(Cipher.DECRYPT_MODE, privateKey);
+            byte[] aesKeyBytes = rsaCipher.doFinal(encryptedAESKeyBytes);
+            SecretKeySpec aesKey = new SecretKeySpec(aesKeyBytes, "AES");
 
-            // Déchiffrer la clé de session avec RSA
-            byte[] sessionKeyBytes = rsaCipher.doFinal(encryptedSessionKeyBytes);
-
-            // Récupérer la clé de session
-            SecretKey sessionKey = new SecretKeySpec(sessionKeyBytes, "AES");
-
-            // Initialiser le chiffreur AES avec la clé de session
+            // Déchiffrement des données avec la clé AES
             Cipher aesCipher = Cipher.getInstance("AES");
-            aesCipher.init(Cipher.DECRYPT_MODE, sessionKey);
+            aesCipher.init(Cipher.DECRYPT_MODE, aesKey);
+            byte[] decryptedDataBytes = aesCipher.doFinal(encryptedDataBytes);
 
-            // Déchiffrer le message avec AES
-            byte[] decryptedMessageBytes = aesCipher.doFinal(encryptedMessageBytes);
+            // Retourne les données déchiffrées
+            return new String(decryptedDataBytes);
 
-            // Convertir les octets déchiffrés en chaîne de caractères
-            String decryptedMessage = new String(decryptedMessageBytes);
-
-            return decryptedMessage;
         } catch (Exception e) {
 
             e.printStackTrace();

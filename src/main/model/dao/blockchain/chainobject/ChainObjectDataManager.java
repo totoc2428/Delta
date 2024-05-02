@@ -156,7 +156,7 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
         String value = null;
         if (properties.getProperty(key).contains(SAVED_PRIVATE_VALUE_TAG)) {
             if (privateKey != null) {
-                value = decryptWithPrivateKey(properties.getProperty(key), privateKey);
+                value = decryptWithPrivateKey(properties.getProperty(key), privateKey, null);
             }
         } else if (properties.getProperty(key).contains(SAVED_PUBLIC_VALUE_TAG)) {
             value = properties.getProperty(key);
