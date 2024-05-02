@@ -24,8 +24,9 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import exception.SystemException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
-import exception.model.dao.blockchain.encryptor.EncryptWithEncryptorBlockchainDataManagerException;
+import exception.model.dao.blockchain.encrypt.EncryptBlockchainDataManagerException;
 import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import io.jsonwebtoken.security.InvalidKeyException;
 import main.model.dao.DataManager;
@@ -181,10 +182,10 @@ public abstract class BlockchainDataManager extends DataManager {
      * @param plaintext the message that you want encrypt.
      * @param encryptor the encryptor that you want to use to encrypt the message.
      * @return the encrypted message in a {@link String} format.
-     * @throws EncryptWithEncryptorBlockchainDataManagerException
+     * @throws EncryptBlockchainDataManagerException
      */
     public static String encryptWithEncryptor(String plaintext, Key encryptor)
-            throws EncryptWithEncryptorBlockchainDataManagerException {
+            throws EncryptBlockchainDataManagerException {
         // Chiffrer le message
         try {
             Cipher cipher = Cipher.getInstance("AES");
@@ -196,7 +197,7 @@ public abstract class BlockchainDataManager extends DataManager {
 
             return encryptedMessage;
         } catch (Exception e) {
-            throw new EncryptWithEncryptorBlockchainDataManagerException();
+            throw new EncryptBlockchainDataManagerException();
         }
     }
 
@@ -208,7 +209,7 @@ public abstract class BlockchainDataManager extends DataManager {
      * @param publicKey the encryptor that you want to use to encrypt the message.
      * @return the encrypted message in a {@link String} format.
      */
-    public static String encryptWithPublicKey(String data, PublicKey publicKey) {
+    public static String encryptWithPublicKey(String data, PublicKey publicKey) throws SystemException {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance(ENCRYPTOR_ALGORITHM);
             keyGen.init(256);
@@ -229,10 +230,8 @@ public abstract class BlockchainDataManager extends DataManager {
             return encryptedDataBase64 + SAVED_KEY_ENCRYPTOR_SPACE + encryptedAESKeyBase64;
 
         } catch (Exception e) {
-            TerminalStyle.showError(e.getMessage());
+            throw new EncryptBlockchainDataManagerException();
         }
-
-        return null;
     }
 
     /**
