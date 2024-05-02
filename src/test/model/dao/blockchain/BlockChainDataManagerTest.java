@@ -238,12 +238,12 @@ public class BlockchainDataManagerTest {
     }
 
     @Test
-    public void testEncryptWithPublicKey() {
+    public void testEncrypDecrypttWithPublicKey() {
         String inputForPrivateKey = "test_input_for_private_key";
 
         assertDoesNotThrow(() -> {
 
-            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString("truc");
+            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString(inputForPrivateKey);
             PublicKey publicKey = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
 
             String eResult = BlockchainDataManager.encryptWithPublicKey(inputForPrivateKey, publicKey);
@@ -261,6 +261,32 @@ public class BlockchainDataManagerTest {
             assertEquals(inputForPrivateKey, dResult);
 
         });
+
+        assertThrows(Exception.class, () -> {
+
+            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString(inputForPrivateKey);
+            PrivateKey privateKey2 = BlockchainDataManager
+                    .generatePrivateKeyFromString(inputForPrivateKey + inputForPrivateKey);
+
+            PublicKey publicKey = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
+
+            BlockchainDataManager.encryptWithPublicKey(null, null);
+            BlockchainDataManager.encryptWithPublicKey(inputForPrivateKey, null);
+
+            BlockchainDataManager.decryptWithPrivateKey(null, null);
+            BlockchainDataManager.decryptWithPrivateKey(null, privateKey);
+            BlockchainDataManager.decryptWithPrivateKey(inputForPrivateKey, privateKey);
+
+            String eResult = BlockchainDataManager.encryptWithPublicKey(inputForPrivateKey, publicKey);
+
+            BlockchainDataManager.decryptWithPrivateKey(eResult, privateKey2);
+
+        });
+
+    }
+
+    @Test
+    public void testSignData() {
 
     }
 }
