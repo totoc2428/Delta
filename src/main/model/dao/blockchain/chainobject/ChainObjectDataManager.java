@@ -51,6 +51,7 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
             saveAnStringInAProperties(OBJECT_TYPE_KEY, "", properties, SAVED_CHAINOBJECT_TAG + savedTypeTag, null);
 
             String strEncryptor = convertKeyToString(encryptor);
+
             saveAnStringInAProperties(SAVED_ENCRYPTOR_KEY, "", properties,
                     strEncryptor, chainObject.getPrivateKey());
 
@@ -130,6 +131,7 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
             } else {
                 key = SAVED_PRIVATE_VALUE_TAG + tag + key;
                 string = encryptWithEncryptor(string, encryptor);
+
                 TerminalStyle.showWarning(encryptor.toString());
             }
             if (properties.getProperty(key) != null) {

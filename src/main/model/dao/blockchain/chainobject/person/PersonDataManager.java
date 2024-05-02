@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import exception.SystemException;
-import exception.model.dao.blockchain.encryptor.GenerateEncryptorBlockchainDataManagerException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import main.model.dao.DataManager;
 import main.model.dao.blockchain.BlockchainDataManager;
