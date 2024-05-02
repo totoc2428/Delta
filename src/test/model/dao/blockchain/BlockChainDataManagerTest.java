@@ -287,6 +287,27 @@ public class BlockchainDataManagerTest {
 
     @Test
     public void testSignData() {
+        String inputForPrivateKey = "test_input_for_private_key";
+
+        assertDoesNotThrow(() -> {
+            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString(inputForPrivateKey);
+            PublicKey publicKey = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
+            PrivateKey privateKey2 = BlockchainDataManager
+                    .generatePrivateKeyFromString(inputForPrivateKey + inputForPrivateKey);
+            PublicKey publicKey2 = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey2);
+
+            String signature = BlockchainDataManager.signData(privateKey, inputForPrivateKey);
+            String signature2 = BlockchainDataManager.signData(privateKey2, inputForPrivateKey);
+
+            assertNotNull(signature);
+            assertNotNull(signature2);
+
+            assertNotEquals(signature, signature2);
+
+            assertTrue(BlockchainDataManager.verifySignature(publicKey, inputForPrivateKey, signature));
+            assertTrue(BlockchainDataManager.verifySignature(publicKey2, inputForPrivateKey, signature2));
+
+        });
 
     }
 }
