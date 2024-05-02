@@ -5,17 +5,13 @@ import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
@@ -26,13 +22,10 @@ import java.util.Properties;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
 import exception.model.dao.blockchain.encryptor.EncryptWithEncryptorBlockchainDataManagerException;
-import exception.model.dao.blockchain.encryptor.GenerateEncryptorBlockchainDataManagerException;
 import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import io.jsonwebtoken.security.InvalidKeyException;
 import main.model.dao.DataManager;
@@ -45,16 +38,46 @@ public abstract class BlockchainDataManager extends DataManager {
 
     public final static String KEY_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty(
             "KEY_ALGORITHM");
+    public final static String KEY_RANDOM_GENERATOR_INSTANCE = BLOCKCHAIN_PROPERTIES
+            .getProperty("KEY_RANDOM_GENERATOR_INSTANCE");
+    public final static int KEY_SIZE = Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("KEY_SIZE"));
+    public final static int KEY_EXPONANT = Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("KEY_EXPONANT"));
+
+    public final static String SAVED_KEY_ENCRYPTOR_SPACE = BLOCKCHAIN_PROPERTIES
+            .getProperty("SAVED_KEY_ENCRYPTOR_SPACE");
+
     public final static String DIGEST_ALGORITHM = BLOCKCHAIN_PROPERTIES
             .getProperty("DIGEST_ALGORITHM");
 
-    // private final static int KEY_SIZE =
-    // Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("KEY_SIZE"));
-
     public final static String ENCRYPTOR_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty("ENCRYPTOR_ALGORITHM");
-    public final static int AES_KEY_SIZE = Integer.parseInt(BLOCKCHAIN_PROPERTIES.getProperty("AES_KEY_SIZE"));
+    public final static int ENCRYPTOR_KEY_SIZE = Integer
+            .parseInt(BLOCKCHAIN_PROPERTIES.getProperty("ENCRYPTOR_KEY_SIZE"));
 
     private static String srcPath = BLOCKCHAIN_PROPERTIES.getProperty("srcPath");
+
+    /**
+     * @param input the string you want to transform in to privateKey
+     * @return the privateKey correponding to string
+     * @throws BlockchainDataManagerPrivateKeyBuildException
+     */
+    public static PrivateKey generatePrivateKeyFromString(String input)
+            throws BlockchainDataManagerPrivateKeyBuildException {
+        try {
+            SecureRandom random = SecureRandom.getInstance(KEY_RANDOM_GENERATOR_INSTANCE);
+            random.setSeed(input.getBytes());
+
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
+            keyGen.initialize(KEY_SIZE, random);
+
+            KeyPair keyPair = keyGen.generateKeyPair();
+
+            return keyPair.getPrivate();
+
+        } catch (Exception e) {
+            throw new BlockchainDataManagerPrivateKeyBuildException();
+        }
+
+    }
 
     /**
      * This method retrieve the publicKey of a privateKey.
@@ -68,15 +91,12 @@ public abstract class BlockchainDataManager extends DataManager {
     public static PublicKey getPublicKeyFromPrivateKey(PrivateKey privateKey)
             throws GetFromPrivatePublicKeyBlockchainDataManagerException {
         try {
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
             RSAPrivateKeySpec privateKeySpec = keyFactory.getKeySpec(privateKey, RSAPrivateKeySpec.class);
 
-            // Créer une spécification de clé publique RSA à partir du module (n) et de
-            // l'exposant public (e)
             RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(privateKeySpec.getModulus(),
-                    BigInteger.valueOf(65537)); // Exposant public standard
+                    BigInteger.valueOf(KEY_EXPONANT));
 
-            // Générer et retourner la clé publique
             return keyFactory.generatePublic(publicKeySpec);
         } catch (Exception e) {
             throw new GetFromPrivatePublicKeyBlockchainDataManagerException();
@@ -190,27 +210,23 @@ public abstract class BlockchainDataManager extends DataManager {
      */
     public static String encryptWithPublicKey(String data, PublicKey publicKey) {
         try {
-            // Génération de la clé AES
-            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            KeyGenerator keyGen = KeyGenerator.getInstance(ENCRYPTOR_ALGORITHM);
             keyGen.init(256);
             SecretKey secretKey = keyGen.generateKey();
 
-            // Chiffrement des données avec la clé AES
-            Cipher aesCipher = Cipher.getInstance("AES");
+            Cipher aesCipher = Cipher.getInstance(ENCRYPTOR_ALGORITHM);
             aesCipher.init(Cipher.ENCRYPT_MODE, secretKey);
             byte[] encryptedData = aesCipher.doFinal(data.getBytes());
 
             // Chiffrement de la clé AES avec la clé publique RSA
-            Cipher rsaCipher = Cipher.getInstance("RSA");
+            Cipher rsaCipher = Cipher.getInstance(KEY_ALGORITHM);
             rsaCipher.init(Cipher.ENCRYPT_MODE, publicKey);
             byte[] encryptedAESKey = rsaCipher.doFinal(secretKey.getEncoded());
 
-            // Encodage en base64
             String encryptedDataBase64 = Base64.getEncoder().encodeToString(encryptedData);
             String encryptedAESKeyBase64 = Base64.getEncoder().encodeToString(encryptedAESKey);
 
-            // Retourne les données chiffrées et la clé AES chiffrée
-            return encryptedDataBase64 + ":" + encryptedAESKeyBase64;
+            return encryptedDataBase64 + SAVED_KEY_ENCRYPTOR_SPACE + encryptedAESKeyBase64;
 
         } catch (Exception e) {
             TerminalStyle.showError(e.getMessage());
@@ -223,24 +239,26 @@ public abstract class BlockchainDataManager extends DataManager {
      * This medthod decrypt an encrypted message with a publickey corresponding to
      * the privateKey.
      * 
-     * @param encryptedString The encrypted message.
+     * @param encryptedString The encrypted message (result of
+     *                        {@link #encryptWithPublicKey()} method.)
      * @param privateKey      the private key to decrypt the message.
      * @return the message, decrypted.
      */
-    public static String decryptWithPrivateKey(String encryptedData, PrivateKey privateKey, String encryptedAESKey) {
+    public static String decryptWithPrivateKey(String AllEncryptedData, PrivateKey privateKey) {
         try {
-            // Décodage des données encodées en base64
+            String encryptedData = AllEncryptedData.split(SAVED_KEY_ENCRYPTOR_SPACE)[0];
+            String encryptedAESKey = AllEncryptedData.split(SAVED_KEY_ENCRYPTOR_SPACE)[1];
+
             byte[] encryptedDataBytes = Base64.getDecoder().decode(encryptedData);
             byte[] encryptedAESKeyBytes = Base64.getDecoder().decode(encryptedAESKey);
 
-            // Déchiffrement de la clé AES avec la clé privée RSA
-            Cipher rsaCipher = Cipher.getInstance("RSA");
+            Cipher rsaCipher = Cipher.getInstance(KEY_ALGORITHM);
             rsaCipher.init(Cipher.DECRYPT_MODE, privateKey);
             byte[] aesKeyBytes = rsaCipher.doFinal(encryptedAESKeyBytes);
-            SecretKeySpec aesKey = new SecretKeySpec(aesKeyBytes, "AES");
+            SecretKeySpec aesKey = new SecretKeySpec(aesKeyBytes, ENCRYPTOR_ALGORITHM);
 
             // Déchiffrement des données avec la clé AES
-            Cipher aesCipher = Cipher.getInstance("AES");
+            Cipher aesCipher = Cipher.getInstance(ENCRYPTOR_ALGORITHM);
             aesCipher.init(Cipher.DECRYPT_MODE, aesKey);
             byte[] decryptedDataBytes = aesCipher.doFinal(encryptedDataBytes);
 
@@ -298,110 +316,6 @@ public abstract class BlockchainDataManager extends DataManager {
         } catch (NoSuchAlgorithmException | InvalidKeyException | java.security.InvalidKeyException
                 | SignatureException e) {
             TerminalStyle.showError(e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * @param input the string you want to transform in to privateKey
-     * @return the privateKey correponding to string
-     * @throws BlockchainDataManagerPrivateKeyBuildException
-     */
-    public static PrivateKey generatePrivateKeyFromString(String input)
-            throws BlockchainDataManagerPrivateKeyBuildException {
-        try {
-            SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-            random.setSeed(input.getBytes());
-
-            // Créer un générateur de clés RSA et initialiser avec le nombre aléatoire
-            // sécurisé
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-            keyGen.initialize(2048, random);
-
-            // Générer la paire de clés
-            KeyPair keyPair = keyGen.generateKeyPair();
-
-            return keyPair.getPrivate();
-
-        } catch (Exception e) {
-            throw new BlockchainDataManagerPrivateKeyBuildException();
-        }
-
-    }
-
-    /**
-     * @return the generated keyPair generator with the algorithme defined in con
-     *         file.
-     * @throws GenerateEncryptorBlockchainDataManagerException
-     */
-    public static Key generateEncyptor() throws GenerateEncryptorBlockchainDataManagerException {
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance(ENCRYPTOR_ALGORITHM);
-            keyGen.init(AES_KEY_SIZE);
-            return keyGen.generateKey();
-        } catch (Exception e) {
-            throw new GenerateEncryptorBlockchainDataManagerException();
-        }
-    }
-
-    //// AES
-
-    public static boolean isAESKey(Key privateKey) {
-        if (privateKey instanceof RSAPrivateKey) {
-            int keyLength = ((RSAPrivateKey) privateKey).getModulus().bitLength();
-            if (keyLength == AES_KEY_SIZE) {
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static boolean isAESKey(PublicKey publicKey) {
-        if (publicKey instanceof RSAPrivateKey) {
-            int keyLength = ((RSAPrivateKey) publicKey).getModulus().bitLength();
-            if (keyLength == AES_KEY_SIZE) {
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static String convertKeyToString(Key key) {
-        byte[] bytesCle = key.getEncoded();
-        String basekey64 = Base64.getEncoder().encodeToString(bytesCle);
-        return basekey64;
-    }
-
-    //// RSA
-    public static boolean isRSAKey(PrivateKey privateKey) {
-        return (privateKey instanceof RSAPrivateKey);
-    }
-
-    public static boolean isRSAKey(PublicKey publicKey) {
-        return (publicKey instanceof RSAPublicKey);
-    }
-
-    // SHA
-    public static String sha256Hash(String input) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = digest.digest(input.getBytes());
-
-            StringBuilder hexString = new StringBuilder();
-            for (byte hashByte : hashBytes) {
-                String hex = Integer.toHexString(0xff & hashByte);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
             return null;
         }
     }

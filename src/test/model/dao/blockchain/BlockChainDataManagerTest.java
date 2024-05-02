@@ -8,8 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.math.BigInteger;
-import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
@@ -28,10 +26,15 @@ public class BlockchainDataManagerTest {
         assertNotNull(BlockchainDataManager.BLOCKCHAIN_PROPERTIES);
 
         assertNotNull(BlockchainDataManager.KEY_ALGORITHM);
+        assertNotNull(BlockchainDataManager.KEY_RANDOM_GENERATOR_INSTANCE);
+        assertNotNull(BlockchainDataManager.KEY_EXPONANT);
+
         assertNotNull(BlockchainDataManager.DIGEST_ALGORITHM);
 
+        assertNotNull(BlockchainDataManager.SAVED_KEY_ENCRYPTOR_SPACE);
+
         assertNotNull(BlockchainDataManager.ENCRYPTOR_ALGORITHM);
-        assertNotNull(BlockchainDataManager.AES_KEY_SIZE);
+        assertNotNull(BlockchainDataManager.ENCRYPTOR_KEY_SIZE);
 
         assertNotNull(BlockchainDataManager.getSrcPath());
     }
@@ -43,18 +46,28 @@ public class BlockchainDataManagerTest {
                 .read(DataManager.INIT_PROPERTIES.getProperty("BLOCKCHAIN_PROPERTIES"));
 
         String keyAlgorithm = blockchainProperties.getProperty("KEY_ALGORITHM");
+        String keyRandomGeneratorInstance = blockchainProperties.getProperty("KEY_RANDOM_GENERATOR_INSTANCE");
+        int keyExponant = Integer.parseInt(blockchainProperties.getProperty("KEY_EXPONANT"));
+
+        String savedKeyEncryptorSpace = blockchainProperties.getProperty("SAVED_KEY_ENCRYPTOR_SPACE");
+
         String digestAlgorithm = blockchainProperties.getProperty("DIGEST_ALGORITHM");
 
         String encryptorAlgorithm = blockchainProperties.getProperty("ENCRYPTOR_ALGORITHM");
-        int aesKeySize = Integer.parseInt(blockchainProperties.getProperty("AES_KEY_SIZE"));
+        int aesKeySize = Integer.parseInt(blockchainProperties.getProperty("ENCRYPTOR_KEY_SIZE"));
 
         String srcPath = blockchainProperties.getProperty("srcPath");
 
         assertEquals(keyAlgorithm, BlockchainDataManager.KEY_ALGORITHM);
+        assertEquals(keyRandomGeneratorInstance, BlockchainDataManager.KEY_RANDOM_GENERATOR_INSTANCE);
+        assertEquals(keyExponant, BlockchainDataManager.KEY_EXPONANT);
+
+        assertEquals(savedKeyEncryptorSpace, BlockchainDataManager.SAVED_KEY_ENCRYPTOR_SPACE);
+
         assertEquals(digestAlgorithm, BlockchainDataManager.DIGEST_ALGORITHM);
 
         assertEquals(encryptorAlgorithm, BlockchainDataManager.ENCRYPTOR_ALGORITHM);
-        assertEquals(aesKeySize, BlockchainDataManager.AES_KEY_SIZE);
+        assertEquals(aesKeySize, BlockchainDataManager.ENCRYPTOR_KEY_SIZE);
 
         assertEquals(srcPath, BlockchainDataManager.getSrcPath());
     }
@@ -225,49 +238,6 @@ public class BlockchainDataManagerTest {
     }
 
     @Test
-    public void testGenerateEncyptor() {
-
-        assertDoesNotThrow(() -> {
-            Key encryptor = BlockchainDataManager.generateEncyptor();
-            Key encryptor2 = BlockchainDataManager.generateEncyptor();
-
-            assertNotNull(encryptor);
-            assertNotNull(encryptor2);
-
-            assertNotEquals(encryptor, encryptor2);
-        });
-
-    }
-
-    @Test
-    public void testEncryptWithEncryptor() {
-        String inputForPrivateKey = "test_input_for_private_key";
-
-        assertDoesNotThrow(() -> {
-
-            Key encryptor = BlockchainDataManager.generateEncyptor();
-
-            String encryptedText = BlockchainDataManager.encryptWithEncryptor(inputForPrivateKey, encryptor);
-            String encryptedTextCheck = BlockchainDataManager.encryptWithEncryptor(inputForPrivateKey, encryptor);
-
-            assertNotNull(encryptedText);
-            assertNotNull(encryptedTextCheck);
-
-            assertEquals(encryptedText, encryptedTextCheck);
-        });
-
-        assertThrows(Exception.class, () -> {
-            Key encryptor = BlockchainDataManager.generateEncyptor();
-
-            BlockchainDataManager.encryptWithEncryptor(inputForPrivateKey, null);
-            BlockchainDataManager.encryptWithEncryptor(null, encryptor);
-
-            BlockchainDataManager.encryptWithEncryptor("", encryptor);
-
-        });
-    }
-
-    @Test
     public void testEncryptWithPublicKey() {
         String inputForPrivateKey = "test_input_for_private_key";
 
@@ -282,8 +252,7 @@ public class BlockchainDataManagerTest {
             assertFalse(eResult.isBlank());
             assertFalse(eResult.isEmpty());
 
-            String dResult = BlockchainDataManager.decryptWithPrivateKey(eResult.split(":")[0], privateKey,
-                    eResult.split(":")[1]);
+            String dResult = BlockchainDataManager.decryptWithPrivateKey(eResult, privateKey);
 
             assertNotNull(dResult);
             assertFalse(dResult.isBlank());

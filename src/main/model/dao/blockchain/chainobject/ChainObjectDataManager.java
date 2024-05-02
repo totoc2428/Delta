@@ -50,10 +50,10 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
 
             saveAnStringInAProperties(OBJECT_TYPE_KEY, "", properties, SAVED_CHAINOBJECT_TAG + savedTypeTag, null);
 
-            String strEncryptor = convertKeyToString(encryptor);
+            // String strEncryptor = convertKeyToString(encryptor);
 
             saveAnStringInAProperties(SAVED_ENCRYPTOR_KEY, "", properties,
-                    strEncryptor, chainObject.getPrivateKey());
+                    "strEncryptor", chainObject.getPrivateKey());
 
             String strPublicKey = publicKeyToString(chainObject.getPublicKey());
             saveAnStringInAProperties("publicKey", "", properties, strPublicKey, null);
