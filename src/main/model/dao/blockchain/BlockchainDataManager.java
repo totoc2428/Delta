@@ -49,6 +49,7 @@ public abstract class BlockchainDataManager extends DataManager {
 
     public final static String DIGEST_ALGORITHM = BLOCKCHAIN_PROPERTIES
             .getProperty("DIGEST_ALGORITHM");
+    public final static String SIGNATURE_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty("SIGNATURE_ALGORITHM");
 
     public final static String ENCRYPTOR_ALGORITHM = BLOCKCHAIN_PROPERTIES.getProperty("ENCRYPTOR_ALGORITHM");
     public final static int ENCRYPTOR_KEY_SIZE = Integer
@@ -176,32 +177,6 @@ public abstract class BlockchainDataManager extends DataManager {
     }
 
     /**
-     * This method encrypt a message whith a encryptor.
-     * /!\ To decrypt the message you need to have the privateKey.
-     * 
-     * @param plaintext the message that you want encrypt.
-     * @param encryptor the encryptor that you want to use to encrypt the message.
-     * @return the encrypted message in a {@link String} format.
-     * @throws EncryptBlockchainDataManagerException
-     */
-    public static String encryptWithEncryptor(String plaintext, Key encryptor)
-            throws EncryptBlockchainDataManagerException {
-        // Chiffrer le message
-        try {
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.ENCRYPT_MODE, encryptor);
-            byte[] encryptedBytes;
-
-            encryptedBytes = cipher.doFinal(plaintext.getBytes());
-            String encryptedMessage = Base64.getEncoder().encodeToString(encryptedBytes);
-
-            return encryptedMessage;
-        } catch (Exception e) {
-            throw new EncryptBlockchainDataManagerException();
-        }
-    }
-
-    /**
      * This method encrypt a message whith a publicKey.
      * /!\ To decrypt the message you need to have the privateKey.
      * 
@@ -285,11 +260,13 @@ public abstract class BlockchainDataManager extends DataManager {
      */
     public static boolean verifySignature(PublicKey publicKey, String data, String signature) {
         try {
-            Signature sig = Signature.getInstance(DIGEST_ALGORITHM);
+            Signature sig = Signature.getInstance(SIGNATURE_ALGORITHM);
             sig.initVerify(publicKey);
             sig.update(data.getBytes());
             byte[] signatureBytes = Base64.getDecoder().decode(signature);
+
             return sig.verify(signatureBytes);
+
         } catch (NoSuchAlgorithmException | InvalidKeyException | java.security.InvalidKeyException
                 | SignatureException e) {
             TerminalStyle.showError(e.getMessage());
@@ -307,11 +284,13 @@ public abstract class BlockchainDataManager extends DataManager {
      */
     public static String signData(PrivateKey privateKey, String data) {
         try {
-            Signature signature = Signature.getInstance(DIGEST_ALGORITHM);
+            Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
             signature.initSign(privateKey);
             signature.update(data.getBytes());
             byte[] signatureBytes = signature.sign();
+
             return Base64.getEncoder().encodeToString(signatureBytes);
+
         } catch (NoSuchAlgorithmException | InvalidKeyException | java.security.InvalidKeyException
                 | SignatureException e) {
             TerminalStyle.showError(e.getMessage());

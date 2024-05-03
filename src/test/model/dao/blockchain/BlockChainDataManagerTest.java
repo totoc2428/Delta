@@ -100,6 +100,11 @@ public class BlockchainDataManagerTest {
         assertThrows(Exception.class, () -> {
             BlockchainDataManager.generatePrivateKeyFromString(null);
         });
+
+        assertThrows(Exception.class, () -> {
+            BlockchainDataManager.generatePrivateKeyFromString(" ");
+            BlockchainDataManager.generatePrivateKeyFromString("");
+        });
     }
 
     @Test
@@ -307,7 +312,21 @@ public class BlockchainDataManagerTest {
             assertTrue(BlockchainDataManager.verifySignature(publicKey, inputForPrivateKey, signature));
             assertTrue(BlockchainDataManager.verifySignature(publicKey2, inputForPrivateKey, signature2));
 
+            assertFalse(BlockchainDataManager.verifySignature(publicKey2, inputForPrivateKey, signature));
+            assertFalse(BlockchainDataManager.verifySignature(publicKey, inputForPrivateKey, signature2));
+
         });
 
+        assertThrows(Exception.class, () -> {
+            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString(inputForPrivateKey);
+
+            BlockchainDataManager.signData(null, null);
+            BlockchainDataManager.signData(null, inputForPrivateKey);
+            BlockchainDataManager.signData(privateKey, null);
+
+            BlockchainDataManager.verifySignature(null, null, null);
+            BlockchainDataManager.verifySignature(null, inputForPrivateKey, null);
+
+        });
     }
 }
