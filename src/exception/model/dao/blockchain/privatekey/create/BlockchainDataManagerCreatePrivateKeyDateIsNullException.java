@@ -1,4 +1,4 @@
-package exception.model.dao.blockchain.createprivateKey;
+package exception.model.dao.blockchain.privatekey.create;
 
 public class BlockchainDataManagerCreatePrivateKeyDateIsNullException
         extends BlockchainDataManagerCreatePrivateKeyException {

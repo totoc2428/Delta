@@ -1,4 +1,4 @@
-package exception.model.dao.blockchain.createprivateKey;
+package exception.model.dao.blockchain.privatekey.create;
 
 import exception.model.dao.blockchain.BlockchainDataManagerException;
 

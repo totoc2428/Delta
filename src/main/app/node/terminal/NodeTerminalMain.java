@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import exception.SystemException;
-import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerCreatePrivateKeyException;
+import exception.model.dao.blockchain.privatekey.create.BlockchainDataManagerCreatePrivateKeyException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 import main.model.controleurs.blockchain.chainobject.person.PersonControleur;
 import main.model.controleurs.terminal.CommandControleur;
