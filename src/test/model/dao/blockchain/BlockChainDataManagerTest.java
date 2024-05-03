@@ -30,6 +30,7 @@ public class BlockchainDataManagerTest {
         assertNotNull(BlockchainDataManager.KEY_EXPONANT);
 
         assertNotNull(BlockchainDataManager.DIGEST_ALGORITHM);
+        assertNotNull(BlockchainDataManager.SIGNATURE_ALGORITHM);
 
         assertNotNull(BlockchainDataManager.SAVED_KEY_ENCRYPTOR_SPACE);
 
@@ -52,6 +53,7 @@ public class BlockchainDataManagerTest {
         String savedKeyEncryptorSpace = blockchainProperties.getProperty("SAVED_KEY_ENCRYPTOR_SPACE");
 
         String digestAlgorithm = blockchainProperties.getProperty("DIGEST_ALGORITHM");
+        String signatureAlgorithm = blockchainProperties.getProperty("SIGNATURE_ALGORITHM");
 
         String encryptorAlgorithm = blockchainProperties.getProperty("ENCRYPTOR_ALGORITHM");
         int aesKeySize = Integer.parseInt(blockchainProperties.getProperty("ENCRYPTOR_KEY_SIZE"));
@@ -65,6 +67,7 @@ public class BlockchainDataManagerTest {
         assertEquals(savedKeyEncryptorSpace, BlockchainDataManager.SAVED_KEY_ENCRYPTOR_SPACE);
 
         assertEquals(digestAlgorithm, BlockchainDataManager.DIGEST_ALGORITHM);
+        assertEquals(signatureAlgorithm, BlockchainDataManager.SIGNATURE_ALGORITHM);
 
         assertEquals(encryptorAlgorithm, BlockchainDataManager.ENCRYPTOR_ALGORITHM);
         assertEquals(aesKeySize, BlockchainDataManager.ENCRYPTOR_KEY_SIZE);
