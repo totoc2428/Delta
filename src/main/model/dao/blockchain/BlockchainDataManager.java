@@ -64,21 +64,24 @@ public abstract class BlockchainDataManager extends DataManager {
      */
     public static PrivateKey generatePrivateKeyFromString(String input)
             throws BlockchainDataManagerPrivateKeyBuildException {
-        try {
-            SecureRandom random = SecureRandom.getInstance(KEY_RANDOM_GENERATOR_INSTANCE);
-            random.setSeed(input.getBytes());
-
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
-            keyGen.initialize(KEY_SIZE, random);
-
-            KeyPair keyPair = keyGen.generateKeyPair();
-
-            return keyPair.getPrivate();
-
-        } catch (Exception e) {
+        if (input.isBlank() || input.isEmpty()) {
             throw new BlockchainDataManagerPrivateKeyBuildException();
-        }
+        } else {
+            try {
+                SecureRandom random = SecureRandom.getInstance(KEY_RANDOM_GENERATOR_INSTANCE);
+                random.setSeed(input.getBytes());
 
+                KeyPairGenerator keyGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
+                keyGen.initialize(KEY_SIZE, random);
+
+                KeyPair keyPair = keyGen.generateKeyPair();
+
+                return keyPair.getPrivate();
+
+            } catch (Exception e) {
+                throw new BlockchainDataManagerPrivateKeyBuildException();
+            }
+        }
     }
 
     /**
