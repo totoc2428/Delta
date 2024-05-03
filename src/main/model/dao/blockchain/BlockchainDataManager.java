@@ -28,6 +28,8 @@ import exception.SystemException;
 import exception.model.dao.blockchain.createprivateKey.BlockchainDataManagerPrivateKeyBuildException;
 import exception.model.dao.blockchain.encrypt.EncryptBlockchainDataManagerException;
 import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
+import exception.model.dao.blockchain.publickey.string.get.build.BuildGetStringToPublicKeyBlockchainDataManagerException;
+import exception.model.dao.blockchain.publickey.string.get.invalid.InvalidGetStringToPublicKeyBlockchainDataManagerException;
 import io.jsonwebtoken.security.InvalidKeyException;
 import main.model.dao.DataManager;
 import main.util.style.TerminalStyle;
@@ -138,21 +140,20 @@ public abstract class BlockchainDataManager extends DataManager {
      *                        result of {@link Key#publicKeyToString(PublicKey)}
      * @return the text publicKey in a {@link PublicKey} format.
      */
-    public static PublicKey stringToPublicKey(String publicKeyString) {
-        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyString);
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
-        KeyFactory keyFactory;
-        try {
-            keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
-            return keyFactory.generatePublic(keySpec);
-        } catch (InvalidKeySpecException e) {
-            TerminalStyle.showError(e.getMessage());
-        } catch (NoSuchAlgorithmException e) {
-            // TODO make execption;
-            TerminalStyle.showError(e.getMessage());
+    public static PublicKey stringToPublicKey(String publicKeyString) throws SystemException {
+        if (publicKeyString.isBlank() || publicKeyString.isEmpty()) {
+            throw new InvalidGetStringToPublicKeyBlockchainDataManagerException();
+        } else {
+            byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyString);
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+            KeyFactory keyFactory;
+            try {
+                keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+                return keyFactory.generatePublic(keySpec);
+            } catch (Exception e) {
+                throw new BuildGetStringToPublicKeyBlockchainDataManagerException();
+            }
         }
-
-        return null;
     }
 
     /**
