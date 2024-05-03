@@ -1,4 +1,6 @@
-package exception.model.dao.blockchain.privatekey.create;
+package exception.model.dao.blockchain.privatekey.create.name;
+
+import exception.model.dao.blockchain.privatekey.create.BlockchainDataManagerCreatePrivateKeyException;
 
 public class BlockchainDataManagerCreatePrivateKeyNameIsNullException
         extends BlockchainDataManagerCreatePrivateKeyException {

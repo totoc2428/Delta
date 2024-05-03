@@ -26,7 +26,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import exception.SystemException;
 import exception.model.dao.blockchain.encrypt.EncryptBlockchainDataManagerException;
-import exception.model.dao.blockchain.privatekey.create.BlockchainDataManagerPrivateKeyBuildException;
+import exception.model.dao.blockchain.privatekey.create.build.BlockchainDataManagerPrivateKeyBuildException;
 import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import exception.model.dao.blockchain.publickey.string.get.build.BuildGetStringToPublicKeyBlockchainDataManagerException;
 import exception.model.dao.blockchain.publickey.string.get.invalid.InvalidGetStringToPublicKeyBlockchainDataManagerException;
