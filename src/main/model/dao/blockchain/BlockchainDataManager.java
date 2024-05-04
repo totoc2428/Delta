@@ -27,6 +27,7 @@ import javax.crypto.spec.SecretKeySpec;
 import exception.SystemException;
 import exception.model.dao.blockchain.encrypt.EncryptBlockchainDataManagerException;
 import exception.model.dao.blockchain.privatekey.create.build.BlockchainDataManagerPrivateKeyBuildException;
+import exception.model.dao.blockchain.privatekey.string.StringToPrivateKeyBlockchainDataManagerException;
 import exception.model.dao.blockchain.publickey.getfromprivate.GetFromPrivatePublicKeyBlockchainDataManagerException;
 import exception.model.dao.blockchain.publickey.string.get.build.BuildGetStringToPublicKeyBlockchainDataManagerException;
 import exception.model.dao.blockchain.publickey.string.get.invalid.InvalidGetStringToPublicKeyBlockchainDataManagerException;
@@ -117,20 +118,24 @@ public abstract class BlockchainDataManager extends DataManager {
      * 
      * @param privateKeyString the privateKey in a text format. The text need to
      *                         be a result of
-     *                         {@link Key#getPublicKeyFromPrivateKey(PrivateKey)}.
+     *                         {@link #getPublicKeyFromPrivateKey(PrivateKey)}.
      * @return the text privateKey in a {@link PrivateKey} format.
      */
-    public static PrivateKey stringToPrivateKey(String privateKeyString) {
-        byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyString);
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-        KeyFactory keyFactory;
-        try {
-            keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
-            return keyFactory.generatePrivate(keySpec);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            TerminalStyle.showError(e.getMessage());
+    public static PrivateKey stringToPrivateKey(String privateKeyString) throws SystemException {
+        if (privateKeyString.isBlank() || privateKeyString.isEmpty()) {
+            throw new StringToPrivateKeyBlockchainDataManagerException();
+        } else {
+            try {
+                byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyString);
+                PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+                KeyFactory keyFactory;
+                keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+
+                return keyFactory.generatePrivate(keySpec);
+            } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+                throw new BlockchainDataManagerPrivateKeyBuildException();
+            }
         }
-        return null;
     }
 
     /**
