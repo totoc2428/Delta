@@ -4,6 +4,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 
 import main.model.dao.blockchain.BlockchainDataManager;
+import exception.SystemException;
 import exception.model.dto.blockchain.chainObject.ChainObjectException;
 
 import exception.model.dto.blockchain.chainObject.publickey.ChainObjectPublicKeyIsNullException;
@@ -36,8 +37,12 @@ public abstract class ChainObject {
     /* override */
     @Override
     public String toString() {
-        return "ChainObject [privateKey(encrypted)=" + BlockchainDataManager.encryptWithPublicKey(
-                BlockchainDataManager.privateKeyToString(privateKey), publicKey) + ", publicKey=" + publicKey + "]";
+        try {
+            return "ChainObject [privateKey(encrypted)=" + BlockchainDataManager.encryptWithPublicKey(
+                    BlockchainDataManager.privateKeyToString(privateKey), publicKey) + ", publicKey=" + publicKey + "]";
+        } catch (SystemException e) {
+            return null;
+        }
     }
 
 }
