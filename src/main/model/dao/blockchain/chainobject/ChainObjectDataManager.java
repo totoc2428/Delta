@@ -19,21 +19,21 @@ import main.util.style.TerminalStyle;
 
 public abstract class ChainObjectDataManager extends BlockchainDataManager {
 
-    protected static final Properties CHAINOBJECT_PROPERTIES = read(
+    public static final Properties CHAINOBJECT_PROPERTIES = read(
             BLOCKCHAIN_PROPERTIES.getProperty("CHAINOBJECT_PROPERTIES"));
 
-    protected static final String SAVED_PRIVATE_VALUE_TAG = CHAINOBJECT_PROPERTIES
+    public static final String SAVED_PRIVATE_VALUE_TAG = CHAINOBJECT_PROPERTIES
             .getProperty("SAVED_PRIVATE_VALUE_TAG");
-    protected static final String SAVED_PUBLIC_VALUE_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PUBLIC_VALUE_TAG");
+    public static final String SAVED_PUBLIC_VALUE_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_PUBLIC_VALUE_TAG");
 
-    protected static final String SAVED_CHAINOBJECT_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_CHAINOBJECT_TAG");
+    public static final String SAVED_CHAINOBJECT_TAG = CHAINOBJECT_PROPERTIES.getProperty("SAVED_CHAINOBJECT_TAG");
 
-    protected static final String SAVED_ENCRYPTOR_KEY = CHAINOBJECT_PROPERTIES.getProperty("SAVED_ENCRYPTOR_KEY");
+    public static final String SAVED_ENCRYPTOR_KEY = CHAINOBJECT_PROPERTIES.getProperty("SAVED_ENCRYPTOR_KEY");
 
-    protected static final String CHAINOBJECT_FILE_SAVED_TAG = CHAINOBJECT_PROPERTIES
+    public static final String CHAINOBJECT_FILE_SAVED_TAG = CHAINOBJECT_PROPERTIES
             .getProperty("CHAINOBJECT_FILE_SAVED_TAG");
 
-    protected static String chainObjectSrcPath = CHAINOBJECT_PROPERTIES.getProperty("chainObjectSrcPath");
+    private static String chainObjectSrcPath = CHAINOBJECT_PROPERTIES.getProperty("chainObjectSrcPath");
 
     // save
     /**
@@ -222,5 +222,9 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
     public static void saveChainObject(Properties personProperties, String fileName) {
         save(personProperties,
                 chainObjectSrcPath + fileName + CHAINOBJECT_FILE_SAVED_TAG);
+    }
+
+    public static String getChainObjectSrcPath() {
+        return chainObjectSrcPath;
     }
 }
