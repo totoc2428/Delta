@@ -1,7 +1,6 @@
 package main.model.dao.blockchain.chainobject;
 
 import java.io.File;
-import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
@@ -43,8 +42,11 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
      * @param chainObject the chainObject you want to convert in to a properties.
      * @return the chainObject into a Properties format.
      */
-    public static Properties chainObjectToAProperties(ChainObject chainObject, Key encryptor, String savedTypeTag)
+    public static Properties chainObjectToAProperties(ChainObject chainObject, String savedTypeTag)
             throws SystemException {
+        if (savedTypeTag == null) {
+            savedTypeTag = "";
+        }
         if (chainObject != null) {
             Properties properties = new Properties();
 
@@ -53,13 +55,13 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
             // String strEncryptor = convertKeyToString(encryptor);
 
             saveAnStringInAProperties(SAVED_ENCRYPTOR_KEY, "", properties,
-                    "strEncryptor", chainObject.getPrivateKey());
+                    "strEncryptor", chainObject.getPublicKey());
 
             String strPublicKey = publicKeyToString(chainObject.getPublicKey());
             saveAnStringInAProperties("publicKey", "", properties, strPublicKey, null);
 
             String strPrivateKey = privateKeyToString(chainObject.getPrivateKey());
-            saveAnStringInAProperties("privateKey", "", properties, strPrivateKey, encryptor);
+            saveAnStringInAProperties("privateKey", "", properties, strPrivateKey, chainObject.getPublicKey());
 
             return properties;
         }
@@ -75,7 +77,7 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
      *                   encrypt the object set this parmeter to null.
      */
     public static void saveAnObjectInAProperties(String key, Properties properties, Object object,
-            Key encryptor) throws SystemException {
+            PublicKey encryptor) throws SystemException {
         if (object instanceof ChainObject) {
             ChainObject co = (ChainObject) object;
             if (co.getPrivateKey() != null) {
@@ -113,12 +115,12 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
      * @param tag        the tag if this tag contain to recogise any object type.
      * @param properties the properties you want to edit.
      * @param string     the string you want to save in the properties.
-     * @param encryptor  the public key to encrypt the object. If you don't want to
+     * @param publicKey  the public key to encrypt the object. If you don't want to
      *                   encrypt the object set this parmeter to null.
      * @throws SystemException
      */
     private static void saveAnStringInAProperties(String key, String tag, Properties properties, String string,
-            Key encryptor) throws SystemException {
+            PublicKey publicKey) throws SystemException {
         if (string == null) {
             string = "null";
         }
@@ -126,13 +128,11 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
             tag = "";
         }
         if (key != null) {
-            if (encryptor == null) {
+            if (publicKey == null) {
                 key = SAVED_PUBLIC_VALUE_TAG + tag + key;
             } else {
                 key = SAVED_PRIVATE_VALUE_TAG + tag + key;
-                string = encryptWithEncryptor(string, encryptor);
-
-                TerminalStyle.showWarning(encryptor.toString());
+                string = encryptWithPublicKey(string, publicKey);
             }
             if (properties.getProperty(key) != null) {
                 properties.setProperty(key, string);
@@ -156,7 +156,7 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
         String value = null;
         if (properties.getProperty(key).contains(SAVED_PRIVATE_VALUE_TAG)) {
             if (privateKey != null) {
-                value = decryptWithPrivateKey(properties.getProperty(key), privateKey, null);
+                value = decryptWithPrivateKey(properties.getProperty(key), privateKey);
             }
         } else if (properties.getProperty(key).contains(SAVED_PUBLIC_VALUE_TAG)) {
             value = properties.getProperty(key);
@@ -196,7 +196,12 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
     public static ChainObject chainObjectReadFromProperties(Properties properties, PrivateKey privateKey) {
         ChainObject chainObject = null;
         if (isAChainObject(properties)) {
-            PublicKey publicKey = stringToPublicKey(properties.getProperty(SAVED_PUBLIC_VALUE_TAG + "publicKey"));
+            PublicKey publicKey = null;
+            try {
+                publicKey = stringToPublicKey(properties.getProperty(SAVED_PUBLIC_VALUE_TAG + "publicKey"));
+            } catch (SystemException e) {
+                e.printStackTrace();
+            }
             try {
                 chainObject = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, false, null, null);
             } catch (ChainObjectException e) {

@@ -2,13 +2,19 @@ package test.model.dao.blockchain.chainobject;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.Properties;
 
 import org.junit.Test;
 
+import main.model.dao.DataManager;
 import main.model.dao.blockchain.BlockchainDataManager;
 import main.model.dao.blockchain.chainobject.ChainObjectDataManager;
+import main.model.dto.blockchain.chainobject.ChainObject;
+import main.model.dto.blockchain.chainobject.person.physical.PhysicalPerson;
 
 public class ChainObjectDataManagerTest {
     @Test
@@ -55,5 +61,30 @@ public class ChainObjectDataManagerTest {
 
         assertEquals(chainObjectSrcPath, ChainObjectDataManager.getChainObjectSrcPath());
 
+    }
+
+    @Test
+    public void testChainObjectToAProperties() {
+        assertDoesNotThrow(() -> {
+            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString("test_private_key");
+            PublicKey publicKey = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
+
+            ChainObject chainObject = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, false, null,
+                    null);
+
+            assertNotNull(chainObject);
+
+            Properties properties = ChainObjectDataManager.chainObjectToAProperties(chainObject, "");
+
+            assertNotNull(properties);
+
+            System.out.println(properties);
+
+            assertEquals(properties.getProperty(ChainObjectDataManager.SAVED_PUBLIC_VALUE_TAG + "publicKey"),
+                    BlockchainDataManager.publicKeyToString(publicKey));
+            // assertEquals(properties.getProperty("privateKey"),
+            // BlockchainDataManager.privateKeyToString(privateKey));
+
+        });
     }
 }
