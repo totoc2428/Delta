@@ -120,7 +120,8 @@ public class ChainObjectDataManagerTest {
             assertFalse(properties.isEmpty());
 
             assertTrue(properties.keySet().contains(ChainObjectDataManager.SAVED_PRIVATE_VALUE_TAG + key));
-            assertEquals(properties.getProperty(ChainObjectDataManager.SAVED_PRIVATE_VALUE_TAG + key), value);
+            assertEquals(BlockchainDataManager.decryptWithPrivateKey(
+                    properties.getProperty(ChainObjectDataManager.SAVED_PRIVATE_VALUE_TAG + key), privateKey), value);
 
         });
     }
