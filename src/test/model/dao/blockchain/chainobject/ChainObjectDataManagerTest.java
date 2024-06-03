@@ -82,8 +82,11 @@ public class ChainObjectDataManagerTest {
 
             assertEquals(properties.getProperty(ChainObjectDataManager.SAVED_PUBLIC_VALUE_TAG + "publicKey"),
                     BlockchainDataManager.publicKeyToString(publicKey));
-            // assertEquals(properties.getProperty("privateKey"),
-            // BlockchainDataManager.privateKeyToString(privateKey));
+            assertEquals(BlockchainDataManager.decryptWithPrivateKey(
+                    properties.getProperty(ChainObjectDataManager.SAVED_PRIVATE_VALUE_TAG
+                            + "privateKey"),
+                    privateKey),
+                    BlockchainDataManager.privateKeyToString(privateKey));
 
         });
     }
