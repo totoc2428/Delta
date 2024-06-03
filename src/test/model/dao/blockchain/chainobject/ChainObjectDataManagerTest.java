@@ -1,7 +1,9 @@
 package test.model.dao.blockchain.chainobject;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.security.PrivateKey;
@@ -10,7 +12,6 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import main.model.dao.DataManager;
 import main.model.dao.blockchain.BlockchainDataManager;
 import main.model.dao.blockchain.chainobject.ChainObjectDataManager;
 import main.model.dto.blockchain.chainobject.ChainObject;
@@ -87,6 +88,39 @@ public class ChainObjectDataManagerTest {
                             + "privateKey"),
                     privateKey),
                     BlockchainDataManager.privateKeyToString(privateKey));
+
+        });
+    }
+
+    @Test
+    public void testSaveAnObjectInAProperties() {
+
+        assertDoesNotThrow(() -> {
+            Properties properties = new Properties();
+
+            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString("test_private_key");
+            PublicKey publicKey = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
+
+            String key = "test_key";
+            String value = "test_value";
+
+            ChainObjectDataManager.saveAnObjectInAProperties(key, properties, value, null);
+
+            assertNotNull(properties);
+            assertFalse(properties.isEmpty());
+
+            assertTrue(properties.keySet().contains(ChainObjectDataManager.SAVED_PUBLIC_VALUE_TAG + key));
+            assertEquals(properties.getProperty(ChainObjectDataManager.SAVED_PUBLIC_VALUE_TAG + key), value);
+
+            properties.clear();
+
+            ChainObjectDataManager.saveAnObjectInAProperties(key, properties, value, publicKey);
+
+            assertNotNull(properties);
+            assertFalse(properties.isEmpty());
+
+            assertTrue(properties.keySet().contains(ChainObjectDataManager.SAVED_PRIVATE_VALUE_TAG + key));
+            assertEquals(properties.getProperty(ChainObjectDataManager.SAVED_PRIVATE_VALUE_TAG + key), value);
 
         });
     }
