@@ -125,4 +125,27 @@ public class ChainObjectDataManagerTest {
 
         });
     }
+
+    @Test
+    public void testSaveAnObjectInAPropertiesTestWithAChainObject() {
+        assertDoesNotThrow(() -> {
+            Properties properties = new Properties();
+
+            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString("test_private_key");
+            PublicKey publicKey = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
+
+            String key = "test_key";
+            ChainObject value = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, false, null,
+                    null);
+
+            ChainObjectDataManager.saveAnObjectInAProperties(key, properties, value, null);
+
+            assertNotNull(properties);
+            assertFalse(properties.isEmpty());
+
+            assertTrue(properties.keySet().contains(ChainObjectDataManager.SAVED_PUBLIC_VALUE_TAG + key));
+            assertEquals(properties.getProperty(ChainObjectDataManager.SAVED_PUBLIC_VALUE_TAG + key), value);
+
+        });
+    }
 }
