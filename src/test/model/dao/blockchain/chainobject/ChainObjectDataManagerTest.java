@@ -12,7 +12,6 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import exception.model.dao.blockchain.privatekey.create.build.BlockchainDataManagerPrivateKeyBuildException;
 import main.model.dao.blockchain.BlockchainDataManager;
 import main.model.dao.blockchain.chainobject.ChainObjectDataManager;
 import main.model.dto.blockchain.chainobject.ChainObject;
@@ -157,10 +156,7 @@ public class ChainObjectDataManagerTest {
     public void testReadAObjectSavedInProperties() {
         Properties properties = new Properties();
 
-        PrivateKey privateKey;
         try {
-            privateKey = BlockchainDataManager.generatePrivateKeyFromString("test_private_key");
-            PublicKey publicKey = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
 
             String key = "test_key";
             String value = "truc";
@@ -175,7 +171,6 @@ public class ChainObjectDataManagerTest {
             String object = (String) ChainObjectDataManager.readAObjectSavedInProperties(key, properties,
                     null);
 
-            System.out.println(object);
             assertNotNull(object);
             assertEquals(object, value);
 
