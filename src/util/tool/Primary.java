@@ -1,9 +1,9 @@
 package util.tool;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import exception.message.ExceptionMessage;
 import exception.system.util.data.PropertieReadingSystemException;
 import exception.system.util.language.LangueageMessageNotFoundSystemExcetion;
 import util.data.DataManager;
@@ -63,9 +63,19 @@ public abstract class Primary {
     private static Properties initProperties() {
         try {
             return DataManager.readAFile("./ressources/init.conf");
+
         } catch (PropertieReadingSystemException e) {
             e.show();
             return null;
+        }
+    }
+
+    public static void load() {
+        try {
+            ExceptionMessage.load();
+        } catch (LangueageMessageNotFoundSystemExcetion e) {
+            e.show();
+            e.getMessage();
         }
     }
 }
