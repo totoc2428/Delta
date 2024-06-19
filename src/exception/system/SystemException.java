@@ -2,6 +2,7 @@ package exception.system;
 
 import exception.message.ExceptionMessage;
 import exception.system.util.language.LangueageMessageNotFoundSystemExcetion;
+import util.tool.terminal.TerminalStyle;
 
 public class SystemException extends Exception {
     private static String languageCode = "FR";
@@ -25,5 +26,9 @@ public class SystemException extends Exception {
         } catch (LangueageMessageNotFoundSystemExcetion e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void show() {
+        TerminalStyle.showError(this.getMessage());
     }
 }
