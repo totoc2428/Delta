@@ -12,5 +12,9 @@ public class PrimaryTest {
         assertFalse(Primary.DATA_MANAGER_INIT_PATH.isBlank());
         assertFalse(Primary.DATA_MANAGER_INIT_PATH.isEmpty());
 
+        assertNotNull(Primary.getSystemlanguageValue());
+        assertFalse(Primary.getSystemlanguageValue().isBlank());
+        assertFalse(Primary.getSystemlanguageValue().isEmpty());
+
     }
 }

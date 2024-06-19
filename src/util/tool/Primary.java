@@ -13,6 +13,15 @@ public abstract class Primary {
 
     public static final String DATA_MANAGER_INIT_PATH = INIT_PROPERTIES.getProperty("DATA_MANAGER_INIT_PATH");
 
+    public static final String ERROR_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
+            .getProperty("ERROR_MESSAGE_FOLDER_PATH");
+    public static final String INFORMATION_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
+            .getProperty("INFORMATION_MESSAGE_FOLDER_PATH");
+    public static final String NEUTRAL_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
+            .getProperty("NEUTRAL_MESSAGE_FOLDER_PATH");
+    public static final String WARNING_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
+            .getProperty("WARNING_MESSAGE_FOLDER_PATH");
+
     public static void setSystemlanguageValue(String systemlanguageValue)
             throws LangueageMessageNotFoundSystemExcetion {
         if (isLanguageAviable(systemlanguageValue)) {
