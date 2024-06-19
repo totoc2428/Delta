@@ -9,8 +9,21 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.util.Properties;
 
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+
+import exception.system.SystemException;
+import exception.system.util.language.LangueageMessageNotFoundSystemExcetion;
 
 public class DataManagerTest {
+    @BeforeAll
+    public void initDataManagerTest() {
+        try {
+            SystemException.load();
+        } catch (LangueageMessageNotFoundSystemExcetion e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void testReadAFile() {
 
