@@ -11,7 +11,7 @@ import org.junit.Test;
 public class DataManagerTest {
     @Test
     public void testReadAFile() {
-        String src = "./ressources/test.conf";
+        String src = "./test/ressources/test.conf";
 
         assertDoesNotThrow(() -> {
             Properties properties = DataManager.readAFile(src);
