@@ -7,10 +7,13 @@ import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.Properties;
 
+import exception.system.util.data.PropertieReadingSystemException;
+
 public abstract class DataManager {
-    public static Properties readAFile(File fileName) {
-        Properties properties = new Properties();
+    public static Properties readAFile(File fileName) throws PropertieReadingSystemException {
         try {
+            Properties properties = new Properties();
+
             FileInputStream fileInputStream = new FileInputStream(fileName);
             InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
             properties.load(reader);
@@ -21,16 +24,16 @@ public abstract class DataManager {
                     properties.setProperty(key, value);
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
 
-        return properties;
+            return properties;
+        } catch (FileNotFoundException e) {
+            throw new PropertieReadingSystemException();
+        } catch (java.io.IOException e) {
+            throw new PropertieReadingSystemException();
+        }
     }
 
-    public static Properties readAFile(String file) {
+    public static Properties readAFile(String file) throws PropertieReadingSystemException {
         return readAFile(Paths.get(file).toFile());
     }
 }

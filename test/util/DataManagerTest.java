@@ -15,7 +15,7 @@ public class DataManagerTest {
     public void testReadAFile() {
 
         assertDoesNotThrow(() -> {
-            String src = "./test/ressources/test.conf";
+            String src = "./test/testing_ressources_files/test.conf";
             Properties properties = DataManager.readAFile(src);
 
             assertNotNull(properties);
