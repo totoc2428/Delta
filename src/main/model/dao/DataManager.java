@@ -61,7 +61,9 @@ public abstract class DataManager {
         } catch (java.io.IOException e) {
             TerminalStyle.showError(e.getMessage());
         }
+        System.out.println(properties);
         return properties;
+        /// tester
     }
 
     /**
