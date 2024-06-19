@@ -11,7 +11,7 @@ public abstract class Primary {
 
     private static String SystemlanguageValue = INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE");
 
-    public static final String DATA_MANAGER_INIT_FILE_NAME = INIT_PROPERTIES.getProperty("INIT_DATAMANAGER");
+    public static final String DATA_MANAGER_INIT_PATH = INIT_PROPERTIES.getProperty("DATA_MANAGER_INIT_PATH");
 
     public static void setSystemlanguageValue(String systemlanguageValue)
             throws LangueageMessageNotFoundSystemExcetion {
