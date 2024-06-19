@@ -153,12 +153,12 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
      */
     private static String readAStringSavedInProperties(String key, Properties properties, PrivateKey privateKey) {
         String value = null;
-        if (properties.getProperty(key).contains(SAVED_PRIVATE_VALUE_TAG)) {
+        if (properties != null) {
             if (privateKey != null) {
                 value = decryptWithPrivateKey(properties.getProperty(key), privateKey);
+            } else {
+                value = properties.getProperty(key);
             }
-        } else if (properties.getProperty(key).contains(SAVED_PUBLIC_VALUE_TAG)) {
-            value = properties.getProperty(key);
         }
 
         return value;
@@ -173,13 +173,25 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
      * @return the object value saved in the properties.
      */
     public static Object readAObjectSavedInProperties(String key, Properties properties, PrivateKey privateKey) {
+        if (privateKey == null) {
+            key = SAVED_PUBLIC_VALUE_TAG + key;
+        } else {
+            key = SAVED_PRIVATE_VALUE_TAG + key;
+        }
         Object object = null;
+        System.out.println(key);
+        System.out.println(properties);
+
         String strResult = readAStringSavedInProperties(key, properties, privateKey);
+        System.out.println("str result   " + strResult);
         if (key.contains(SAVED_DIC_TAG)) {
             object = stringToObjectHashMap(strResult);
         } else if (key.contains(SAVED_LIST_TAG)) {
             object = stringToObjectArrayList(strResult);
+        } else {
+            object = strResult;
         }
+
         return object;
     }
 
