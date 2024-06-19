@@ -5,7 +5,7 @@ import java.util.Properties;
 import exception.system.SystemException;
 import exception.system.util.data.PropertieReadingSystemException;
 import exception.system.util.language.LangueageMessageNotFoundSystemExcetion;
-import util.DataManager;
+import util.data.DataManager;
 
 public abstract class ExceptionMessage {
     public static Properties messages;
