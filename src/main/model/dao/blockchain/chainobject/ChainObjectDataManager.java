@@ -172,7 +172,7 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
      *                   null.
      * @return the object value saved in the properties.
      */
-    public static Object readAObjectSavedInPropertes(String key, Properties properties, PrivateKey privateKey) {
+    public static Object readAObjectSavedInProperties(String key, Properties properties, PrivateKey privateKey) {
         Object object = null;
         String strResult = readAStringSavedInProperties(key, properties, privateKey);
         if (key.contains(SAVED_DIC_TAG)) {
