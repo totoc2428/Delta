@@ -1,5 +1,7 @@
 package util.tool;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import exception.system.util.data.PropertieReadingSystemException;
@@ -33,9 +35,25 @@ public abstract class Primary {
     }
 
     private static boolean isLanguageAviable(String systemLanguageCode) {
-        boolean aviable = false;
+        return checkAFolderLanguage(DataManager.folderNameToAStringArrayList(ERROR_MESSAGE_FOLDER_PATH),
+                systemLanguageCode)
+                && checkAFolderLanguage(DataManager.folderNameToAStringArrayList(INFORMATION_MESSAGE_FOLDER_PATH),
+                        systemLanguageCode)
+                && checkAFolderLanguage(DataManager.folderNameToAStringArrayList(WARNING_MESSAGE_FOLDER_PATH),
+                        systemLanguageCode)
+                && checkAFolderLanguage(DataManager.folderNameToAStringArrayList(NEUTRAL_MESSAGE_FOLDER_PATH),
+                        systemLanguageCode);
+    }
 
-        return aviable;
+    private static boolean checkAFolderLanguage(ArrayList<String> aviable, String systemLanguageCode) {
+        boolean value = false;
+        int i = 0;
+
+        while (!value && i < aviable.size()) {
+            value = aviable.get(i).toLowerCase().equals(systemLanguageCode.toLowerCase());
+        }
+
+        return value;
     }
 
     public static String getSystemlanguageValue() {
