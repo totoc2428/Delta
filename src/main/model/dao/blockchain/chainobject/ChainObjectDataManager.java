@@ -201,12 +201,12 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
      * @return chainObject corresponding to the file.
      */
     public static ChainObject chainObjectReadFromFile(File file, PrivateKey privateKey) {
-        return chainObjectReadFromProperties(DataManager.read(file), privateKey);
+        return readChainObjectSavedInAProperties(DataManager.read(file), privateKey);
     }
 
-    public static ChainObject chainObjectReadFromProperties(Properties properties, PrivateKey privateKey) {
+    public static ChainObject readChainObjectSavedInAProperties(Properties properties, PrivateKey privateKey) {
         ChainObject chainObject = null;
-        if (isAChainObject(properties)) {
+        if (propertieIsAChainObject(properties)) {
             PublicKey publicKey = null;
             try {
                 publicKey = stringToPublicKey(properties.getProperty(SAVED_PUBLIC_VALUE_TAG + "publicKey"));
@@ -216,7 +216,6 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
             try {
                 chainObject = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, false, null, null);
             } catch (ChainObjectException e) {
-                // TODO: handle exception
                 TerminalStyle.showError(e.getMessage());
             }
 
@@ -231,7 +230,8 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
      * @return true if containing the
      *         {@link ChainObjectDataManager#SAVED_CHAINOBJECT_TAG}
      */
-    public static boolean isAChainObject(Properties properties) {
+    public static boolean propertieIsAChainObject(Properties properties) {
+        System.out.println(properties);
         return properties.getProperty(OBJECT_TYPE_KEY).contains(SAVED_CHAINOBJECT_TAG);
     }
 

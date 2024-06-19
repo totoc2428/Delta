@@ -179,4 +179,52 @@ public class ChainObjectDataManagerTest {
         }
 
     }
+
+    @Test
+    public void testPropertieIsAChainObject() {
+        try {
+
+            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString("test_private_key");
+            PublicKey publicKey = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
+
+            String key = "test_key";
+            ChainObject value = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, false, null,
+                    null);
+
+            Properties properties = ChainObjectDataManager.chainObjectToAProperties(value, "");
+
+            assertTrue(ChainObjectDataManager.propertieIsAChainObject(properties));
+            assertFalse(ChainObjectDataManager.propertieIsAChainObject(new Properties()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testReadChainObjectSavedInAProperties() {
+        try {
+            Properties properties = new Properties();
+
+            PrivateKey privateKey = BlockchainDataManager.generatePrivateKeyFromString("test_private_key");
+            PublicKey publicKey = BlockchainDataManager.getPublicKeyFromPrivateKey(privateKey);
+
+            String key = "test_key";
+            ChainObject value = (ChainObject) new PhysicalPerson(privateKey, publicKey, null, null, false, null,
+                    null);
+
+            ChainObjectDataManager.saveAnObjectInAProperties(key, properties, value, null);
+
+            assertNotNull(properties);
+            assertFalse(properties.isEmpty());
+
+            ChainObject chainObject = ChainObjectDataManager.readChainObjectSavedInAProperties(properties, privateKey);
+
+            assertNotNull(chainObject);
+            assertEquals(chainObject.getPrivateKey(), value.getPrivateKey());
+            assertEquals(chainObject.getPublicKey(), value.getPublicKey());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
