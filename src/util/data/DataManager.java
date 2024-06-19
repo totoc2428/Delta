@@ -5,11 +5,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import exception.system.util.data.PropertieReadingSystemException;
 
 public abstract class DataManager {
+
+    public static ArrayList<String> folderNameToAStringArrayList() {
+        return null;
+    }
+
     public static Properties readAFile(File fileName) throws PropertieReadingSystemException {
         try {
             Properties properties = new Properties();
