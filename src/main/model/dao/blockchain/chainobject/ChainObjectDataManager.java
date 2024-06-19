@@ -88,16 +88,15 @@ public abstract class ChainObjectDataManager extends BlockchainDataManager {
                         encryptor);
             }
         } else if (object instanceof ArrayList) {
-
             @SuppressWarnings("unchecked")
             ArrayList<Object> oArrayList = (ArrayList<Object>) object;
-            saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties, objectCollectionToAString(oArrayList),
+            saveAnStringInAProperties(key, SAVED_LIST_TAG, properties, objectCollectionToAString(oArrayList),
                     encryptor);
 
         } else if (object instanceof HashMap) {
             @SuppressWarnings("unchecked")
             HashMap<Object, Object> oHashMap = (HashMap<Object, Object>) object;
-            saveAnStringInAProperties(key, SAVED_LIST_SPACE, properties, objectHashMapToString(oHashMap), encryptor);
+            saveAnStringInAProperties(key, SAVED_DIC_TAG, properties, objectHashMapToString(oHashMap), encryptor);
         } else if (object instanceof PrivateKey) {
             PrivateKey po = (PrivateKey) object;
             saveAnStringInAProperties(key, SAVED_PRIVATE_VALUE_TAG, properties, privateKeyToString(po), encryptor);

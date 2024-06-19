@@ -18,6 +18,7 @@ import java.util.Properties;
 import java.util.Scanner;
 
 import main.model.dao.blockchain.BlockchainDataManager;
+import main.model.dao.blockchain.chainobject.ChainObjectDataManager;
 import main.model.dto.blockchain.chainobject.ChainObject;
 import main.util.style.TerminalStyle;
 
@@ -234,6 +235,7 @@ public abstract class DataManager {
         for (Object object : objects) {
             if (object instanceof ChainObject) {
                 ChainObject chainObject = (ChainObject) object;
+                string += ChainObjectDataManager.SAVED_CHAINOBJECT_TAG;
 
                 if (chainObject.getPrivateKey() != null) {
                     string += SAVED_LIST_SPACE
