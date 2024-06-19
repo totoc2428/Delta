@@ -12,8 +12,24 @@ import exception.system.util.data.PropertieReadingSystemException;
 
 public abstract class DataManager {
 
-    public static ArrayList<String> folderNameToAStringArrayList() {
-        return null;
+    public static ArrayList<String> folderNameToAStringArrayList(File directoryPath) {
+        ArrayList<String> fileNames = new ArrayList<>();
+        if (directoryPath.exists() && !directoryPath.isFile() && directoryPath.isDirectory()) {
+            File[] files = directoryPath.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        fileNames.add(file.getName());
+                    }
+                }
+            }
+        }
+
+        return fileNames;
+    }
+
+    public static ArrayList<String> folderNameToAStringArrayList(String directoryPath) {
+        return folderNameToAStringArrayList(Paths.get(directoryPath).toFile());
     }
 
     public static Properties readAFile(File fileName) throws PropertieReadingSystemException {

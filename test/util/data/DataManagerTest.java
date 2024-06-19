@@ -33,7 +33,8 @@ public class DataManagerTest {
         foldersName.add("test2");
         foldersName.add("test3");
 
-        assertEquals(foldersName, DataManager.folderNameToAStringArrayList());
+        assertEquals(foldersName,
+                DataManager.folderNameToAStringArrayList("./test/testing_ressources_files/test_folder"));
 
     }
 
