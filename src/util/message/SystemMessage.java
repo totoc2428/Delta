@@ -7,6 +7,7 @@ import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.language.LangueageMessageNotFoundSystemException;
 import util.data.DataManager;
 import util.message.done.DoneSystemMessage;
+import util.message.error.ErrorSystemMessage;
 import util.message.information.InformationSystemMessage;
 import util.message.neutral.NeutralSystemMessage;
 import util.message.warning.WarningSystemMessage;
@@ -35,6 +36,7 @@ public abstract class SystemMessage {
 
     public static void load() throws LangueageMessageNotFoundSystemException {
         DoneSystemMessage.loadWithCode();
+        ErrorSystemMessage.loadWithCode();
         InformationSystemMessage.loadWithCode();
         NeutralSystemMessage.loadWithCode();
         WarningSystemMessage.loadWithCode();

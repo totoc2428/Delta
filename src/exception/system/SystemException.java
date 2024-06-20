@@ -1,15 +1,28 @@
 package exception.system;
 
-import exception.message.ExceptionMessage;
-import util.tool.terminal.TerminalStyle;
+import util.message.error.ErrorSystemMessage;
+import util.message.warning.WarningSystemMessage;
 
 public class SystemException extends Exception {
 
+    private String systemExceptionCode;
+    private ErrorSystemMessage errorSystemMessage;
+    private WarningSystemMessage warningSystemMessage;
+
     public SystemException(String systemExceptionCode) {
-        super(ExceptionMessage.getAnExceptionMessage(systemExceptionCode));
+        super();
+        this.systemExceptionCode = systemExceptionCode;
+        errorSystemMessage = new ErrorSystemMessage(systemExceptionCode);
+    }
+
+    protected void addWarning() {
+        warningSystemMessage = new WarningSystemMessage(systemExceptionCode);
     }
 
     public void show() {
-        TerminalStyle.showError(this.getMessage());
+        errorSystemMessage.show();
+        if (warningSystemMessage != null) {
+            warningSystemMessage.show();
+        }
     }
 }

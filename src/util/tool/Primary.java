@@ -3,7 +3,6 @@ package util.tool;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import exception.message.ExceptionMessage;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.language.LangueageMessageNotFoundSystemException;
 import util.data.DataManager;
@@ -80,8 +79,6 @@ public abstract class Primary {
             SystemMessage.reset();
             Primary.setSystemlanguageValue(INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE"));
             SystemMessage.load();
-
-            ExceptionMessage.load();
 
             new DoneSystemMessage("PrimaryLoad").show();
 
