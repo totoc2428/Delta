@@ -87,5 +87,11 @@ public abstract class DataManager {
 
     /* -WRITE_METHOD */
     /* --PROPERTIES */
+    public static void writeInAFile(Properties properties, File srcDestinaionPath) {
 
+    }
+
+    public static void writeInAFile(Properties properties, String srcDestinaionPath) {
+        writeInAFile(properties, Paths.get(srcDestinaionPath).toFile());
+    }
 }
