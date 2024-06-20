@@ -71,4 +71,24 @@ public class DataManagerTest {
             assertFalse(DataManager.getInit().isEmpty());
         });
     }
+
+    @Test
+    public void testDataManagerWriteInAFile() {
+        assertDoesNotThrow(() -> {
+            String destinationFile = "./test/testing_ressources_files/write_in_a_file_test.conf";
+            Properties properties = new Properties();
+
+            properties.put("key1", "value1");
+            properties.put("key2", "value2");
+
+            DataManager.writeInAFile(properties, destinationFile);
+
+            Properties properties2 = DataManager.readAFile(destinationFile);
+
+            assertNotNull(properties2);
+            assertFalse(properties2.isEmpty());
+            assertEquals(properties, properties2);
+        });
+
+    }
 }
