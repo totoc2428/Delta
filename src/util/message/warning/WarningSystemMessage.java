@@ -7,16 +7,18 @@ import util.tool.terminal.TerminalStyle;
 
 public class WarningSystemMessage extends SystemMessage {
 
+    private static final String SAVED_CODE = "WARNING";
+
     public WarningSystemMessage(String messageCode) {
-        super(messageCode);
+        super(SAVED_CODE, messageCode);
     }
 
     public void show() {
         TerminalStyle.showWarning(super.getMessage());
     }
 
-    public static void load() throws LangueageMessageNotFoundSystemException {
-        load(Primary.WARNING_MESSAGE_FOLDER_PATH);
+    public static void loadWithCode() throws LangueageMessageNotFoundSystemException {
+        load(SAVED_CODE, Primary.WARNING_MESSAGE_FOLDER_PATH);
     }
 
 }

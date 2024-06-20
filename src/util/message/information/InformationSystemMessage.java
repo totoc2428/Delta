@@ -6,16 +6,17 @@ import util.tool.Primary;
 import util.tool.terminal.TerminalStyle;
 
 public class InformationSystemMessage extends SystemMessage {
+    private static final String SAVED_CODE = "INFORMATION";
 
     public InformationSystemMessage(String messageCode) {
-        super(messageCode);
+        super(SAVED_CODE, messageCode);
     }
 
     public void show() {
         TerminalStyle.showInformation(getMessage());
     }
 
-    public static void load() throws LangueageMessageNotFoundSystemException {
-        load(Primary.INFORMATION_MESSAGE_FOLDER_PATH);
+    public static void loadWithCode() throws LangueageMessageNotFoundSystemException {
+        load(SAVED_CODE, Primary.INFORMATION_MESSAGE_FOLDER_PATH);
     }
 }
