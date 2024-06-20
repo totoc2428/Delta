@@ -51,6 +51,7 @@ public abstract class Primary {
 
         while (!value && i < aviable.size()) {
             value = aviable.get(i).toLowerCase().equals(systemLanguageCode.toLowerCase());
+            i += 1;
         }
 
         return value;
