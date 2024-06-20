@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import exception.system.util.data.PropertiesReadingSystemException;
-import exception.system.util.language.LangueageMessageNotFoundSystemException;
+import exception.system.util.message.LangueageMessageNotFoundSystemException;
+import exception.system.util.tool.PrimaryLoadException;
 import util.data.DataManager;
 import util.message.SystemMessage;
 import util.message.done.DoneSystemMessage;
@@ -12,7 +13,7 @@ import util.message.done.DoneSystemMessage;
 public abstract class Primary {
     private static final Properties INIT_PROPERTIES = initProperties();
 
-    private static String SystemlanguageValue = INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE");
+    private static String systemLanguageValue = INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE");
 
     public static final String DATA_MANAGER_INIT_PATH = INIT_PROPERTIES.getProperty("DATA_MANAGER_INIT_PATH");
 
@@ -30,7 +31,9 @@ public abstract class Primary {
     public static void setSystemlanguageValue(String systemlanguageValue)
             throws LangueageMessageNotFoundSystemException {
         if (isLanguageAviable(systemlanguageValue)) {
-            SystemlanguageValue = systemlanguageValue.toUpperCase();
+            systemLanguageValue = systemlanguageValue.toUpperCase();
+
+            new DoneSystemMessage("PrimarySetSystemlanguageValue").show();
         } else {
             throw new LangueageMessageNotFoundSystemException();
         }
@@ -61,30 +64,29 @@ public abstract class Primary {
     }
 
     public static String getSystemlanguageValue() {
-        return SystemlanguageValue.toLowerCase();
+        return systemLanguageValue.toLowerCase();
     }
 
     private static Properties initProperties() {
         try {
             return DataManager.readAFile("./ressources/init.conf");
-
         } catch (PropertiesReadingSystemException e) {
             e.show();
             return null;
         }
     }
 
-    public static void load() {
-        try {
+    public static void load() throws PrimaryLoadException {
+        if (isLanguageAviable(INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE"))) {
             SystemMessage.reset();
-            Primary.setSystemlanguageValue(INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE"));
-            SystemMessage.load();
-
+            try {
+                SystemMessage.load();
+            } catch (LangueageMessageNotFoundSystemException e) {
+                e.show();
+            }
             new DoneSystemMessage("PrimaryLoad").show();
-
-        } catch (LangueageMessageNotFoundSystemException e) {
-            e.printStackTrace();
-            e.show();
+        } else {
+            throw new PrimaryLoadException();
         }
     }
 }

@@ -10,15 +10,26 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.File;
 import java.nio.file.Paths;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import exception.system.util.language.LangueageMessageNotFoundSystemException;
+import exception.system.util.message.LangueageMessageNotFoundSystemException;
+import exception.system.util.tool.PrimaryLoadException;
 
 public class PrimaryTest {
 
+    @Before
+    public void initPrimaryTest() {
+        try {
+            Primary.load();
+        } catch (PrimaryLoadException e) {
+            e.show();
+        }
+
+    }
+
     @Test
     public void testAllPrimaryProprety() {
-        Primary.load();
 
         assertNotNull(Primary.DATA_MANAGER_INIT_PATH);
         assertFalse(Primary.DATA_MANAGER_INIT_PATH.isBlank());
@@ -100,9 +111,10 @@ public class PrimaryTest {
 
             assertEquals(language, Primary.getSystemlanguageValue());
         });
+    }
 
-        Primary.load();
-
+    @Test
+    public void testSetSystemlanguageValueException() {
         assertThrows(LangueageMessageNotFoundSystemException.class, () -> {
 
             String savedLanguage = Primary.getSystemlanguageValue();

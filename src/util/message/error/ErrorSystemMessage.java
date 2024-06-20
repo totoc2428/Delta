@@ -1,6 +1,6 @@
 package util.message.error;
 
-import exception.system.util.language.LangueageMessageNotFoundSystemException;
+import exception.system.util.message.LangueageMessageNotFoundSystemException;
 import util.message.SystemMessage;
 import util.tool.Primary;
 import util.tool.terminal.TerminalStyle;

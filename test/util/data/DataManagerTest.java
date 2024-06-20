@@ -9,12 +9,22 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import exception.system.util.data.PropertiesReadingSystemException;
+import exception.system.util.tool.PrimaryLoadException;
 import util.tool.Primary;
 
 public class DataManagerTest {
+    @Before
+    public void initDataMangerTest() {
+        try {
+            Primary.load();
+        } catch (PrimaryLoadException e) {
+            e.show();
+        }
+    }
 
     @Test
     public void testFolderNameToAStringArrayList() {
@@ -31,8 +41,6 @@ public class DataManagerTest {
 
     @Test
     public void testReadAFile() {
-        Primary.load();
-
         assertDoesNotThrow(() -> {
             String src = "./test/testing_ressources_files/test.conf";
             Properties properties = DataManager.readAFile(src);
@@ -40,7 +48,10 @@ public class DataManagerTest {
             assertNotNull(properties);
             assertEquals(properties.getProperty("test"), "test");
         });
+    }
 
+    @Test
+    public void testReadAFileException() {
         assertThrows(PropertiesReadingSystemException.class, () -> {
             String src = "";
 
@@ -48,6 +59,5 @@ public class DataManagerTest {
 
             assertNull(properties);
         });
-
     }
 }

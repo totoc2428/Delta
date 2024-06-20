@@ -1,4 +1,4 @@
-package exception.system.util.language;
+package exception.system.util.message;
 
 import exception.system.SystemException;
 
