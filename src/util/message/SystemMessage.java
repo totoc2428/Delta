@@ -3,7 +3,7 @@ package util.message;
 import java.util.Properties;
 
 import exception.system.util.data.PropertieReadingSystemException;
-import exception.system.util.language.LangueageMessageNotFoundSystemExcetion;
+import exception.system.util.language.LangueageMessageNotFoundSystemException;
 import util.data.DataManager;
 
 public abstract class SystemMessage {
@@ -18,11 +18,11 @@ public abstract class SystemMessage {
         return message;
     }
 
-    protected void load(String messageSrcPath) throws LangueageMessageNotFoundSystemExcetion {
+    protected void load(String messageSrcPath) throws LangueageMessageNotFoundSystemException {
         try {
             messageHub = DataManager.readAFile(messageSrcPath);
         } catch (PropertieReadingSystemException e) {
-            throw new LangueageMessageNotFoundSystemExcetion();
+            throw new LangueageMessageNotFoundSystemException();
         }
     }
 }

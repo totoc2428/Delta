@@ -5,7 +5,7 @@ import java.util.Properties;
 
 import exception.message.ExceptionMessage;
 import exception.system.util.data.PropertieReadingSystemException;
-import exception.system.util.language.LangueageMessageNotFoundSystemExcetion;
+import exception.system.util.language.LangueageMessageNotFoundSystemException;
 import util.data.DataManager;
 
 public abstract class Primary {
@@ -27,11 +27,11 @@ public abstract class Primary {
             .getProperty("WARNING_MESSAGE_FOLDER_PATH");
 
     public static void setSystemlanguageValue(String systemlanguageValue)
-            throws LangueageMessageNotFoundSystemExcetion {
+            throws LangueageMessageNotFoundSystemException {
         if (isLanguageAviable(systemlanguageValue)) {
             SystemlanguageValue = systemlanguageValue.toUpperCase();
         } else {
-            throw new LangueageMessageNotFoundSystemExcetion();
+            throw new LangueageMessageNotFoundSystemException();
         }
 
     }
@@ -76,7 +76,7 @@ public abstract class Primary {
     public static void load() {
         try {
             ExceptionMessage.load();
-        } catch (LangueageMessageNotFoundSystemExcetion e) {
+        } catch (LangueageMessageNotFoundSystemException e) {
             e.show();
             e.getMessage();
         }

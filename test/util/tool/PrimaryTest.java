@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.Test;
 
-import exception.system.util.language.LangueageMessageNotFoundSystemExcetion;
+import exception.system.util.language.LangueageMessageNotFoundSystemException;
 
 public class PrimaryTest {
 
