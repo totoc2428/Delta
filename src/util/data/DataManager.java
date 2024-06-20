@@ -2,7 +2,6 @@ package util.data;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -48,8 +47,6 @@ public abstract class DataManager {
             }
 
             return properties;
-        } catch (FileNotFoundException e) {
-            throw new PropertiesReadingSystemException();
         } catch (java.io.IOException e) {
             throw new PropertiesReadingSystemException();
         }

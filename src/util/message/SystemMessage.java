@@ -23,8 +23,6 @@ public abstract class SystemMessage {
         try {
             messageHub = DataManager
                     .readAFile(messageSrcPath + Primary.getSystemlanguageValue().toLowerCase() + "/messages.conf");
-
-            System.out.println(messageSrcPath + " : \n" + messageHub);
         } catch (PropertiesReadingSystemException e) {
             throw new LangueageMessageNotFoundSystemException();
         }

@@ -11,6 +11,9 @@ import java.util.Properties;
 
 import org.junit.Test;
 
+import exception.system.util.data.PropertiesReadingSystemException;
+import util.tool.Primary;
+
 public class DataManagerTest {
 
     @Test
@@ -28,6 +31,7 @@ public class DataManagerTest {
 
     @Test
     public void testReadAFile() {
+        Primary.load();
 
         assertDoesNotThrow(() -> {
             String src = "./test/testing_ressources_files/test.conf";
@@ -37,7 +41,7 @@ public class DataManagerTest {
             assertEquals(properties.getProperty("test"), "test");
         });
 
-        assertThrows(Exception.class, () -> {
+        assertThrows(PropertiesReadingSystemException.class, () -> {
             String src = "";
 
             Properties properties = DataManager.readAFile(src);

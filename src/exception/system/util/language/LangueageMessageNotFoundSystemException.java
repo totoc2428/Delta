@@ -7,6 +7,11 @@ public class LangueageMessageNotFoundSystemException extends SystemException {
     public LangueageMessageNotFoundSystemException() {
         super("LangueageMessageNotFoundSystemException");
 
+    }
+
+    @Override
+    public void show() {
+        super.show();
         new WarningSystemMessage("LangueageMessageNotFoundSystemException").show();
     }
 }
