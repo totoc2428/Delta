@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import exception.message.ExceptionMessage;
-import exception.system.util.data.PropertieReadingSystemException;
+import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.language.LangueageMessageNotFoundSystemException;
 import util.data.DataManager;
 import util.message.done.DoneSystemMessage;
@@ -71,7 +71,7 @@ public abstract class Primary {
         try {
             return DataManager.readAFile("./ressources/init.conf");
 
-        } catch (PropertieReadingSystemException e) {
+        } catch (PropertiesReadingSystemException e) {
             e.show();
             return null;
         }

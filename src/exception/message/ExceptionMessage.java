@@ -3,7 +3,7 @@ package exception.message;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Properties;
-import exception.system.util.data.PropertieReadingSystemException;
+import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.language.LangueageMessageNotFoundSystemException;
 import util.data.DataManager;
 import util.tool.Primary;
@@ -24,7 +24,7 @@ public abstract class ExceptionMessage {
 
             messages = DataManager
                     .readAFile(file);
-        } catch (PropertieReadingSystemException e) {
+        } catch (PropertiesReadingSystemException e) {
             throw new LangueageMessageNotFoundSystemException();
         }
     }

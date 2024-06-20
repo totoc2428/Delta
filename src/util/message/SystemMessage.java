@@ -2,7 +2,7 @@ package util.message;
 
 import java.util.Properties;
 
-import exception.system.util.data.PropertieReadingSystemException;
+import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.language.LangueageMessageNotFoundSystemException;
 import util.data.DataManager;
 import util.tool.Primary;
@@ -25,7 +25,7 @@ public abstract class SystemMessage {
                     .readAFile(messageSrcPath + Primary.getSystemlanguageValue().toLowerCase() + "/messages.conf");
 
             System.out.println(messageSrcPath + " : \n" + messageHub);
-        } catch (PropertieReadingSystemException e) {
+        } catch (PropertiesReadingSystemException e) {
             throw new LangueageMessageNotFoundSystemException();
         }
     }

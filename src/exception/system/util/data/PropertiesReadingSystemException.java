@@ -2,8 +2,8 @@ package exception.system.util.data;
 
 import exception.system.SystemException;
 
-public class PropertieReadingSystemException extends SystemException {
-    public PropertieReadingSystemException() {
+public class PropertiesReadingSystemException extends SystemException {
+    public PropertiesReadingSystemException() {
         super("PropertieReadingSystemException");
     }
 }

@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import exception.system.util.data.PropertieReadingSystemException;
+import exception.system.util.data.PropertiesReadingSystemException;
 
 public abstract class DataManager {
 
@@ -32,7 +32,7 @@ public abstract class DataManager {
         return folderNameToAStringArrayList(Paths.get(directoryPath).toFile());
     }
 
-    public static Properties readAFile(File fileName) throws PropertieReadingSystemException {
+    public static Properties readAFile(File fileName) throws PropertiesReadingSystemException {
         try {
             Properties properties = new Properties();
 
@@ -49,13 +49,13 @@ public abstract class DataManager {
 
             return properties;
         } catch (FileNotFoundException e) {
-            throw new PropertieReadingSystemException();
+            throw new PropertiesReadingSystemException();
         } catch (java.io.IOException e) {
-            throw new PropertieReadingSystemException();
+            throw new PropertiesReadingSystemException();
         }
     }
 
-    public static Properties readAFile(String file) throws PropertieReadingSystemException {
+    public static Properties readAFile(String file) throws PropertiesReadingSystemException {
         return readAFile(Paths.get(file).toFile());
     }
 }
