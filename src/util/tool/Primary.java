@@ -15,6 +15,8 @@ public abstract class Primary {
 
     public static final String DATA_MANAGER_INIT_PATH = INIT_PROPERTIES.getProperty("DATA_MANAGER_INIT_PATH");
 
+    public static final String DONE_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
+            .getProperty("DONE_MESSAGE_FOLDER_PATH");
     public static final String ERROR_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
             .getProperty("ERROR_MESSAGE_FOLDER_PATH");
     public static final String INFORMATION_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
