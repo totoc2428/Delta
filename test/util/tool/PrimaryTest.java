@@ -31,9 +31,9 @@ public class PrimaryTest {
     @Test
     public void testAllPrimaryProprety() {
 
-        assertNotNull(Primary.DATA_MANAGER_INIT_PATH);
-        assertFalse(Primary.DATA_MANAGER_INIT_PATH.isBlank());
-        assertFalse(Primary.DATA_MANAGER_INIT_PATH.isEmpty());
+        assertNotNull(Primary.getDataManagerInitPath());
+        assertFalse(Primary.getDataManagerInitPath().isBlank());
+        assertFalse(Primary.getDataManagerInitPath().isEmpty());
 
         assertNotNull(Primary.getSystemlanguageValue());
         assertFalse(Primary.getSystemlanguageValue().isBlank());
@@ -43,13 +43,13 @@ public class PrimaryTest {
 
     @Test
     public void testDoneMessagegePath() {
-        assertNotNull(Primary.DONE_MESSAGE_FOLDER_PATH);
+        assertNotNull(Primary.getDoneMessageInitPath());
 
-        assertFalse(Primary.DONE_MESSAGE_FOLDER_PATH.isBlank());
-        assertFalse(Primary.DONE_MESSAGE_FOLDER_PATH.isEmpty());
-        assertFalse(Primary.DONE_MESSAGE_FOLDER_PATH.isBlank());
+        assertFalse(Primary.getDoneMessageInitPath().isBlank());
+        assertFalse(Primary.getDoneMessageInitPath().isEmpty());
+        assertFalse(Primary.getDoneMessageInitPath().isBlank());
 
-        File erroPath = Paths.get(Primary.DONE_MESSAGE_FOLDER_PATH).toFile();
+        File erroPath = Paths.get(Primary.getDoneMessageInitPath()).toFile();
 
         assertTrue(erroPath.exists());
         assertTrue(erroPath.isDirectory());
@@ -58,13 +58,13 @@ public class PrimaryTest {
 
     @Test
     public void testErrorMessagePath() {
-        assertNotNull(Primary.ERROR_MESSAGE_FOLDER_PATH);
+        assertNotNull(Primary.getErrorMessageFolderPath());
 
-        assertFalse(Primary.ERROR_MESSAGE_FOLDER_PATH.isBlank());
-        assertFalse(Primary.ERROR_MESSAGE_FOLDER_PATH.isEmpty());
-        assertFalse(Primary.ERROR_MESSAGE_FOLDER_PATH.isBlank());
+        assertFalse(Primary.getErrorMessageFolderPath().isBlank());
+        assertFalse(Primary.getErrorMessageFolderPath().isEmpty());
+        assertFalse(Primary.getErrorMessageFolderPath().isBlank());
 
-        File erroPath = Paths.get(Primary.ERROR_MESSAGE_FOLDER_PATH).toFile();
+        File erroPath = Paths.get(Primary.getErrorMessageFolderPath()).toFile();
 
         assertTrue(erroPath.exists());
         assertTrue(erroPath.isDirectory());
@@ -73,13 +73,13 @@ public class PrimaryTest {
 
     @Test
     public void testInformationMessagePath() {
-        assertNotNull(Primary.INFORMATION_MESSAGE_FOLDER_PATH);
+        assertNotNull(Primary.getInformationMessageFolderPath());
 
-        assertFalse(Primary.INFORMATION_MESSAGE_FOLDER_PATH.isBlank());
-        assertFalse(Primary.INFORMATION_MESSAGE_FOLDER_PATH.isEmpty());
-        assertFalse(Primary.INFORMATION_MESSAGE_FOLDER_PATH.isBlank());
+        assertFalse(Primary.getInformationMessageFolderPath().isBlank());
+        assertFalse(Primary.getInformationMessageFolderPath().isEmpty());
+        assertFalse(Primary.getInformationMessageFolderPath().isBlank());
 
-        File erroPath = Paths.get(Primary.INFORMATION_MESSAGE_FOLDER_PATH).toFile();
+        File erroPath = Paths.get(Primary.getInformationMessageFolderPath()).toFile();
 
         assertTrue(erroPath.exists());
         assertTrue(erroPath.isDirectory());
@@ -88,17 +88,16 @@ public class PrimaryTest {
 
     @Test
     public void testWarningMessagePath() {
-        assertNotNull(Primary.WARNING_MESSAGE_FOLDER_PATH);
+        assertNotNull(Primary.getWarningMessageFolderPath());
 
-        assertFalse(Primary.WARNING_MESSAGE_FOLDER_PATH.isBlank());
-        assertFalse(Primary.WARNING_MESSAGE_FOLDER_PATH.isEmpty());
-        assertFalse(Primary.WARNING_MESSAGE_FOLDER_PATH.isBlank());
+        assertFalse(Primary.getWarningMessageFolderPath().isBlank());
+        assertFalse(Primary.getWarningMessageFolderPath().isEmpty());
+        assertFalse(Primary.getWarningMessageFolderPath().isBlank());
 
-        File erroPath = Paths.get(Primary.WARNING_MESSAGE_FOLDER_PATH).toFile();
+        File erroPath = Paths.get(Primary.getWarningMessageFolderPath()).toFile();
 
         assertTrue(erroPath.exists());
         assertTrue(erroPath.isDirectory());
-
     }
 
     @Test

@@ -15,6 +15,7 @@ public abstract class DataManager {
 
     private static Properties initDataProperties;
 
+    /* -LOADER */
     public static void load() throws DataManagerLoadException {
         File file = Paths.get(Primary.getDataManagerInitPath()).toFile();
         if (file.exists() && file.isFile()) {
@@ -30,10 +31,14 @@ public abstract class DataManager {
         }
     }
 
+    /* -INIT */
+    /* --GETTER */
     public static Properties getInit() {
         return initDataProperties;
     }
 
+    /* -READ_METHOD */
+    /* --FOLDER_LIST */
     public static ArrayList<String> folderNameToAStringArrayList(File directoryPath) {
         ArrayList<String> fileNames = new ArrayList<>();
         if (directoryPath.exists() && !directoryPath.isFile() && directoryPath.isDirectory()) {
@@ -54,6 +59,7 @@ public abstract class DataManager {
         return folderNameToAStringArrayList(Paths.get(directoryPath).toFile());
     }
 
+    /* --PROPERTIES */
     public static Properties readAFile(File fileName) throws PropertiesReadingSystemException {
         try {
             Properties properties = new Properties();
@@ -78,4 +84,8 @@ public abstract class DataManager {
     public static Properties readAFile(String file) throws PropertiesReadingSystemException {
         return readAFile(Paths.get(file).toFile());
     }
+
+    /* -WRITE_METHOD */
+    /* --PROPERTIES */
+
 }
