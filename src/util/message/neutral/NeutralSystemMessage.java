@@ -17,7 +17,7 @@ public class NeutralSystemMessage extends SystemMessage {
     }
 
     public static void loadWithCode() throws LangueageMessageNotFoundSystemException {
-        load(SAVED_CODE, Primary.NEUTRAL_MESSAGE_FOLDER_PATH);
+        load(SAVED_CODE, Primary.getNeutralMessageFolderPath());
     }
 
 }

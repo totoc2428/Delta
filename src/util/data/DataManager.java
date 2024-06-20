@@ -16,7 +16,7 @@ public abstract class DataManager {
     private static Properties initDataProperties;
 
     public static void load() throws DataManagerLoadException {
-        File file = Paths.get(Primary.DATA_MANAGER_INIT_PATH).toFile();
+        File file = Paths.get(Primary.getDataManagerInitPath()).toFile();
         if (file.exists() && file.isFile()) {
             try {
                 initDataProperties = DataManager.readAFile(file);

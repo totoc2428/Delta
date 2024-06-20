@@ -17,6 +17,6 @@ public class DoneSystemMessage extends SystemMessage {
     }
 
     public static void loadWithCode() throws LangueageMessageNotFoundSystemException {
-        load(SAVED_CODE, Primary.DONE_MESSAGE_FOLDER_PATH);
+        load(SAVED_CODE, Primary.getDoneMessageInitPath());
     }
 }

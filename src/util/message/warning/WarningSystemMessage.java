@@ -18,7 +18,7 @@ public class WarningSystemMessage extends SystemMessage {
     }
 
     public static void loadWithCode() throws LangueageMessageNotFoundSystemException {
-        load(SAVED_CODE, Primary.WARNING_MESSAGE_FOLDER_PATH);
+        load(SAVED_CODE, Primary.getWarningMessageFolderPath());
     }
 
 }

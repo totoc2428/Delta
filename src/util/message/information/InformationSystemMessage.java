@@ -17,6 +17,6 @@ public class InformationSystemMessage extends SystemMessage {
     }
 
     public static void loadWithCode() throws LangueageMessageNotFoundSystemException {
-        load(SAVED_CODE, Primary.INFORMATION_MESSAGE_FOLDER_PATH);
+        load(SAVED_CODE, Primary.getInformationMessageFolderPath());
     }
 }

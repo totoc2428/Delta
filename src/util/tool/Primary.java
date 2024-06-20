@@ -1,5 +1,7 @@
 package util.tool;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -16,19 +18,125 @@ public abstract class Primary {
 
     private static String systemLanguageValue = INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE");
 
-    public static final String DATA_MANAGER_INIT_PATH = INIT_PROPERTIES.getProperty("DATA_MANAGER_INIT_PATH");
+    private static String dataManagerInitPath = INIT_PROPERTIES.getProperty("DATA_MANAGER_INIT_PATH");
 
-    public static final String DONE_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
+    private static String doneMessageInitPath = INIT_PROPERTIES
             .getProperty("DONE_MESSAGE_FOLDER_PATH");
-    public static final String ERROR_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
+    private static String errorMessageFolderPath = INIT_PROPERTIES
             .getProperty("ERROR_MESSAGE_FOLDER_PATH");
-    public static final String INFORMATION_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
+    private static String informationMessageFolderPath = INIT_PROPERTIES
             .getProperty("INFORMATION_MESSAGE_FOLDER_PATH");
-    public static final String NEUTRAL_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
+    private static String neutralMessageFolderPath = INIT_PROPERTIES
             .getProperty("NEUTRAL_MESSAGE_FOLDER_PATH");
-    public static final String WARNING_MESSAGE_FOLDER_PATH = INIT_PROPERTIES
+    private static String warningMessageFolderPath = INIT_PROPERTIES
             .getProperty("WARNING_MESSAGE_FOLDER_PATH");
 
+    /* -INIT_PATH */
+    /* --GETTER */
+    public static String getDataManagerInitPath() {
+        return dataManagerInitPath;
+    }
+
+    /* -FOLDER_PATH */
+    /* --GETTER */
+    public static String getDoneMessageInitPath() {
+        return doneMessageInitPath;
+    }
+
+    public static String getErrorMessageFolderPath() {
+        return errorMessageFolderPath;
+    }
+
+    public static String getInformationMessageFolderPath() {
+        return informationMessageFolderPath;
+    }
+
+    public static String getNeutralMessageFolderPath() {
+        return neutralMessageFolderPath;
+    }
+
+    public static String getWarningMessageFolderPath() {
+        return warningMessageFolderPath;
+    }
+
+    /* --SETTER */
+    public static void setDoneMessageInitPath(String doneMessageInitPath)
+            throws PropertiesReadingSystemException, LangueageMessageNotFoundSystemException {
+        File file = Paths.get(doneMessageInitPath).toFile();
+        if (file.exists() && file.isDirectory()) {
+            if (checkAFolderLanguage(DataManager.folderNameToAStringArrayList(file), systemLanguageValue)) {
+                Primary.doneMessageInitPath = doneMessageInitPath;
+            } else {
+                throw new LangueageMessageNotFoundSystemException();
+            }
+        } else {
+            throw new PropertiesReadingSystemException();
+        }
+    }
+
+    public static void setErrorMessageInitPath(String errorMessageFolderPath)
+            throws PropertiesReadingSystemException, LangueageMessageNotFoundSystemException {
+        File file = Paths.get(errorMessageFolderPath).toFile();
+        if (file.exists() && file.isDirectory()) {
+            if (checkAFolderLanguage(DataManager.folderNameToAStringArrayList(file), systemLanguageValue)) {
+                Primary.errorMessageFolderPath = errorMessageFolderPath;
+            } else {
+                throw new LangueageMessageNotFoundSystemException();
+            }
+        } else {
+            throw new PropertiesReadingSystemException();
+        }
+    }
+
+    public static void setInformationMessageInitPath(String informationMessageFolderPath)
+            throws PropertiesReadingSystemException, LangueageMessageNotFoundSystemException {
+        File file = Paths.get(informationMessageFolderPath).toFile();
+        if (file.exists() && file.isDirectory()) {
+            if (checkAFolderLanguage(DataManager.folderNameToAStringArrayList(file), systemLanguageValue)) {
+                Primary.informationMessageFolderPath = informationMessageFolderPath;
+            } else {
+                throw new LangueageMessageNotFoundSystemException();
+            }
+        } else {
+            throw new PropertiesReadingSystemException();
+        }
+    }
+
+    public static void setNeutralMessageInitPath(String neutralMessageFolderPath)
+            throws PropertiesReadingSystemException, LangueageMessageNotFoundSystemException {
+        File file = Paths.get(neutralMessageFolderPath).toFile();
+        if (file.exists() && file.isDirectory()) {
+            if (checkAFolderLanguage(DataManager.folderNameToAStringArrayList(file), systemLanguageValue)) {
+                Primary.neutralMessageFolderPath = neutralMessageFolderPath;
+            } else {
+                throw new LangueageMessageNotFoundSystemException();
+            }
+        } else {
+            throw new PropertiesReadingSystemException();
+        }
+    }
+
+    public static void setWarningMessageInitPath(String warningMessageFolderPath)
+            throws PropertiesReadingSystemException, LangueageMessageNotFoundSystemException {
+        File file = Paths.get(warningMessageFolderPath).toFile();
+        if (file.exists() && file.isDirectory()) {
+            if (checkAFolderLanguage(DataManager.folderNameToAStringArrayList(file), systemLanguageValue)) {
+                Primary.warningMessageFolderPath = warningMessageFolderPath;
+            } else {
+                throw new LangueageMessageNotFoundSystemException();
+            }
+        } else {
+            throw new PropertiesReadingSystemException();
+        }
+    }
+
+    /* -LANGUAGE */
+    /* --GETTER */
+    public static String getSystemlanguageValue() {
+        return systemLanguageValue.toLowerCase();
+    }
+
+    /* --SETTER */
     public static void setSystemlanguageValue(String systemlanguageValue)
             throws LangueageMessageNotFoundSystemException {
         if (isLanguageAviable(systemlanguageValue)) {
@@ -41,14 +149,17 @@ public abstract class Primary {
 
     }
 
+    /* --CHECKER */
     private static boolean isLanguageAviable(String systemLanguageCode) {
-        return checkAFolderLanguage(DataManager.folderNameToAStringArrayList(ERROR_MESSAGE_FOLDER_PATH),
+        return checkAFolderLanguage(DataManager.folderNameToAStringArrayList(doneMessageInitPath),
                 systemLanguageCode)
-                && checkAFolderLanguage(DataManager.folderNameToAStringArrayList(INFORMATION_MESSAGE_FOLDER_PATH),
+                && checkAFolderLanguage(DataManager.folderNameToAStringArrayList(informationMessageFolderPath),
                         systemLanguageCode)
-                && checkAFolderLanguage(DataManager.folderNameToAStringArrayList(WARNING_MESSAGE_FOLDER_PATH),
+                && checkAFolderLanguage(DataManager.folderNameToAStringArrayList(errorMessageFolderPath),
                         systemLanguageCode)
-                && checkAFolderLanguage(DataManager.folderNameToAStringArrayList(NEUTRAL_MESSAGE_FOLDER_PATH),
+                && checkAFolderLanguage(DataManager.folderNameToAStringArrayList(neutralMessageFolderPath),
+                        systemLanguageCode)
+                && checkAFolderLanguage(DataManager.folderNameToAStringArrayList(warningMessageFolderPath),
                         systemLanguageCode);
     }
 
@@ -64,10 +175,8 @@ public abstract class Primary {
         return value;
     }
 
-    public static String getSystemlanguageValue() {
-        return systemLanguageValue.toLowerCase();
-    }
-
+    /* -INIT */
+    /* --PROPERTIES */
     private static Properties initProperties() {
         try {
             return DataManager.readAFile("./ressources/init.conf");
@@ -77,6 +186,7 @@ public abstract class Primary {
         }
     }
 
+    /* --LOADER */
     public static void load() throws PrimaryLoadException {
         if (isLanguageAviable(INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE"))) {
             SystemMessage.reset();
