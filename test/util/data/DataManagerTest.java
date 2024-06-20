@@ -1,6 +1,7 @@
 package util.data;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
@@ -58,6 +59,16 @@ public class DataManagerTest {
             Properties properties = DataManager.readAFile(src);
 
             assertNull(properties);
+        });
+    }
+
+    @Test
+    public void testDataManagerInit() {
+        assertDoesNotThrow(() -> {
+            DataManager.load();
+
+            assertNotNull(DataManager.getInit());
+            assertFalse(DataManager.getInit().isEmpty());
         });
     }
 }

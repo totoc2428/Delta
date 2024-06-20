@@ -7,9 +7,32 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import exception.system.util.data.DataManagerLoadException;
 import exception.system.util.data.PropertiesReadingSystemException;
+import util.tool.Primary;
 
 public abstract class DataManager {
+
+    private static Properties initDataProperties;
+
+    public static void load() throws DataManagerLoadException {
+        File file = Paths.get(Primary.DATA_MANAGER_INIT_PATH).toFile();
+        if (file.exists() && file.isFile()) {
+            try {
+                initDataProperties = DataManager.readAFile(file);
+
+            } catch (PropertiesReadingSystemException e) {
+                e.show();
+                throw new DataManagerLoadException();
+            }
+        } else {
+            throw new DataManagerLoadException();
+        }
+    }
+
+    public static Properties getInit() {
+        return initDataProperties;
+    }
 
     public static ArrayList<String> folderNameToAStringArrayList(File directoryPath) {
         ArrayList<String> fileNames = new ArrayList<>();

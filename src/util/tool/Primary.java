@@ -3,6 +3,7 @@ package util.tool;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import exception.system.util.data.DataManagerLoadException;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
 import exception.system.util.tool.PrimaryLoadException;
@@ -84,6 +85,13 @@ public abstract class Primary {
             } catch (LangueageMessageNotFoundSystemException e) {
                 e.show();
             }
+
+            try {
+                DataManager.load();
+            } catch (DataManagerLoadException e) {
+                e.show();
+            }
+
             new DoneSystemMessage("PrimaryLoad").show();
         } else {
             throw new PrimaryLoadException();
