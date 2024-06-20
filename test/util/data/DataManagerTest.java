@@ -16,6 +16,7 @@ import org.junit.Test;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.tool.PrimaryLoadException;
 import util.tool.Primary;
+import exception.system.util.data.WriteInAFileSystemException;
 
 public class DataManagerTest {
     @Before
@@ -90,5 +91,18 @@ public class DataManagerTest {
             assertEquals(properties, properties2);
         });
 
+    }
+
+    @Test
+    public void testDataManagerWriteInAFileException() {
+        assertThrows(WriteInAFileSystemException.class, () -> {
+            String destinationFile = null;
+            Properties properties = new Properties();
+
+            properties.put("key1", "value1");
+            properties.put("key2", "value2");
+
+            DataManager.writeInAFile(properties, destinationFile);
+        });
     }
 }
