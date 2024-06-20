@@ -22,9 +22,6 @@ public abstract class ExceptionMessage {
                             + "/messages.conf")
                     .toFile();
 
-            System.out.println(file.exists());
-            System.out.println(file);
-
             messages = DataManager
                     .readAFile(file);
         } catch (PropertieReadingSystemException e) {

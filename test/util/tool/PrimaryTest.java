@@ -101,7 +101,6 @@ public class PrimaryTest {
             assertEquals(language, Primary.getSystemlanguageValue());
         });
 
-        System.out.println("fjkdjfkj " + Primary.getSystemlanguageValue());
         Primary.load();
 
         assertThrows(LangueageMessageNotFoundSystemException.class, () -> {
