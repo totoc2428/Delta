@@ -7,6 +7,10 @@ import exception.message.ExceptionMessage;
 import exception.system.util.data.PropertieReadingSystemException;
 import exception.system.util.language.LangueageMessageNotFoundSystemException;
 import util.data.DataManager;
+import util.message.done.DoneSystemMessage;
+import util.message.information.InformationSystemMessage;
+import util.message.neutral.NeutralSystemMessage;
+import util.message.warning.WarningSystemMessage;
 
 public abstract class Primary {
     private static final Properties INIT_PROPERTIES = initProperties();
@@ -60,7 +64,7 @@ public abstract class Primary {
     }
 
     public static String getSystemlanguageValue() {
-        return SystemlanguageValue;
+        return SystemlanguageValue.toLowerCase();
     }
 
     private static Properties initProperties() {
@@ -75,10 +79,17 @@ public abstract class Primary {
 
     public static void load() {
         try {
+            Primary.setSystemlanguageValue(INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE"));
+
+            DoneSystemMessage.load();
             ExceptionMessage.load();
+            InformationSystemMessage.load();
+            NeutralSystemMessage.load();
+            WarningSystemMessage.load();
+
         } catch (LangueageMessageNotFoundSystemException e) {
+            e.printStackTrace();
             e.show();
-            e.getMessage();
         }
     }
 }
