@@ -2,6 +2,8 @@ package util.data;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -9,7 +11,9 @@ import java.util.Properties;
 
 import exception.system.util.data.DataManagerLoadException;
 import exception.system.util.data.PropertiesReadingSystemException;
+import io.jsonwebtoken.io.IOException;
 import util.tool.Primary;
+import java.io.OutputStream;
 
 public abstract class DataManager {
 
@@ -88,7 +92,18 @@ public abstract class DataManager {
     /* -WRITE_METHOD */
     /* --PROPERTIES */
     public static void writeInAFile(Properties properties, File srcDestinaionPath) {
-
+        if (!srcDestinaionPath.exists()) {
+            try {
+                srcDestinaionPath.createNewFile();
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try (OutputStream outputStream = new FileOutputStream(srcDestinaionPath)) {
+            properties.store(outputStream, "");
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void writeInAFile(Properties properties, String srcDestinaionPath) {
