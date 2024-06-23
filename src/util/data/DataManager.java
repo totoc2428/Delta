@@ -14,6 +14,7 @@ import java.util.Properties;
 import exception.system.util.data.DataManagerLoadException;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.data.WriteInAFileSystemException;
+import io.jsonwebtoken.lang.Arrays;
 import util.tool.Primary;
 import java.io.OutputStream;
 
@@ -181,7 +182,17 @@ public abstract class DataManager {
 
     /* ---To_A_DIC */
     public static Map<String, String> savingFormatToADic(String dicInSavedFormat) {
+
         HashMap<String, String> map = new HashMap<String, String>();
+        ArrayList<String> keys = new ArrayList<String>(
+                savingFormatToAList(dicInSavedFormat.split(getSavedDicSpace())[0]));
+
+        ArrayList<String> values = new ArrayList<String>(
+                savingFormatToAList(dicInSavedFormat.split(getSavedDicSpace())[1]));
+
+        for (int i = 0; i < keys.size(); i++) {
+            map.put((String) keys.get(i), (String) values.get(i));
+        }
 
         return map;
     }
