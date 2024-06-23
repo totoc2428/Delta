@@ -147,7 +147,8 @@ public abstract class DataManager {
     }
 
     /* -SAVING_FORMAT */
-    /* --LIST_TO_SAVED_FORMAT */
+    /* --LIST */
+    /* ---TO_SAVED_FORMAT */
     public static String listToSavingFormat(Collection<String> list) {
         String listInASavedFormat = "";
 
@@ -160,8 +161,19 @@ public abstract class DataManager {
         return listInASavedFormat;
     }
 
-    /* --DIC_TO_SAVED_FORMAT */
+    /* ---TO_A_LIST */
+    public static Collection<String> savingFormatToAList(String listInASavedFormat) {
+        return null;
+    }
+
+    /* --DIC */
+    /* ---TO_SAVED_FORMAT */
     public static String dicToSavingFormat(Map<String, String> dic) {
         return listToSavingFormat(dic.keySet()) + getSavedDicSpace() + listToSavingFormat(dic.values());
+    }
+
+    /* ---To_A_DIC */
+    public static String savingFormatToADic(String dicInSavedFormat) {
+        return null;
     }
 }

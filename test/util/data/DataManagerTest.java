@@ -8,6 +8,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -161,5 +162,19 @@ public class DataManagerTest {
                 + DataManager.getSavedDicSpace() + "value1" + DataManager.getSavedListSpace() + "value2"
                 + DataManager.getSavedListSpace() + "value3", dicInSavedFormat);
 
+    }
+
+    @Test
+    public void testsavingFormatToAList() {
+        String listInSavedFormat = "truc" + DataManager.getSavedListSpace() + "truc1" + DataManager.getSavedListSpace()
+                + "truc2";
+
+        Collection<String> listResult = DataManager.savingFormatToAList(listInSavedFormat);
+        Collection<String> listCheck = Arrays.asList(new String[] { "truc", "truc1", "truc2" });
+
+        assertNotNull(listResult);
+        assertFalse(listResult.isEmpty());
+
+        assertEquals(listResult, listCheck);
     }
 }
