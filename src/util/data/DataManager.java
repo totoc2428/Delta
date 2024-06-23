@@ -2,7 +2,6 @@ package util.data;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
@@ -11,7 +10,7 @@ import java.util.Properties;
 
 import exception.system.util.data.DataManagerLoadException;
 import exception.system.util.data.PropertiesReadingSystemException;
-import io.jsonwebtoken.io.IOException;
+import exception.system.util.data.WriteInAFileSystemException;
 import util.tool.Primary;
 import java.io.OutputStream;
 
@@ -91,22 +90,27 @@ public abstract class DataManager {
 
     /* -WRITE_METHOD */
     /* --PROPERTIES */
-    public static void writeInAFile(Properties properties, File srcDestinaionPath) {
+    public static void writeInAFile(Properties properties, File srcDestinaionPath) throws WriteInAFileSystemException {
         if (!srcDestinaionPath.exists()) {
             try {
                 srcDestinaionPath.createNewFile();
             } catch (java.io.IOException e) {
-                e.printStackTrace();
+                throw new WriteInAFileSystemException();
             }
         }
         try (OutputStream outputStream = new FileOutputStream(srcDestinaionPath)) {
             properties.store(outputStream, "");
         } catch (java.io.IOException e) {
-            e.printStackTrace();
+            throw new WriteInAFileSystemException();
         }
     }
 
-    public static void writeInAFile(Properties properties, String srcDestinaionPath) {
-        writeInAFile(properties, Paths.get(srcDestinaionPath).toFile());
+    public static void writeInAFile(Properties properties, String srcDestinaionPath)
+            throws WriteInAFileSystemException {
+        if (srcDestinaionPath != null) {
+            writeInAFile(properties, Paths.get(srcDestinaionPath).toFile());
+        } else {
+            throw new WriteInAFileSystemException();
+        }
     }
 }

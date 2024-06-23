@@ -20,9 +20,11 @@ public class SystemException extends Exception {
     }
 
     public void show() {
-        errorSystemMessage.show();
-        if (warningSystemMessage != null) {
-            warningSystemMessage.show();
+        if (errorSystemMessage != null) {
+            errorSystemMessage.show();
+            if (warningSystemMessage != null) {
+                warningSystemMessage.show();
+            }
         }
     }
 }
