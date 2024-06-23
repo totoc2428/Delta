@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import exception.system.util.data.DataManagerLoadException;
@@ -142,5 +143,19 @@ public abstract class DataManager {
 
     public static String getSavedDicSpace() {
         return savedDicSpace;
+    }
+
+    /* -SAVING_FORMAT */
+    /* --LIST_TO_SAVED_FORMAT */
+    public static String listToSavingFormat(List<String> list) {
+        String listInASavedFormat = "";
+
+        for (String string : list) {
+            listInASavedFormat += getSavedListSpace() + string;
+        }
+
+        listInASavedFormat = listInASavedFormat.substring(getSavedListSpace().length(), listInASavedFormat.length());
+
+        return listInASavedFormat;
     }
 }

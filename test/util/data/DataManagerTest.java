@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.tool.PrimaryLoadException;
+import io.jsonwebtoken.lang.Arrays;
 import util.tool.Primary;
 import exception.system.util.data.WriteInAFileSystemException;
 
@@ -123,6 +124,21 @@ public class DataManagerTest {
         assertFalse(DataManager.getSavedListSpace().isEmpty());
         assertFalse(DataManager.getSavedDicSpace().isBlank());
         assertFalse(DataManager.getSavedListSpace().isBlank());
+
+    }
+
+    @Test
+    public void testListToSavingFormat() {
+        String[] list = new String[] { "truc", "truc1", "truc2" };
+
+        String listInSavedFormat = DataManager.listToSavingFormat(Arrays.asList(list));
+
+        assertNotNull(listInSavedFormat);
+        assertFalse(listInSavedFormat.isEmpty());
+        assertFalse(listInSavedFormat.isBlank());
+
+        assertEquals("truc" + DataManager.getSavedListSpace() + "truc1" + DataManager.getSavedListSpace() + "truc2",
+                listInSavedFormat);
 
     }
 }
