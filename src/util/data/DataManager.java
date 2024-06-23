@@ -163,7 +163,13 @@ public abstract class DataManager {
 
     /* ---TO_A_LIST */
     public static Collection<String> savingFormatToAList(String listInASavedFormat) {
-        return null;
+        ArrayList<String> list = new ArrayList<String>();
+
+        for (String string : listInASavedFormat.split(getSavedListSpace())) {
+            list.add(string);
+        }
+
+        return list;
     }
 
     /* --DIC */
