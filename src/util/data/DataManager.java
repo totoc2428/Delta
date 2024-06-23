@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -179,7 +180,9 @@ public abstract class DataManager {
     }
 
     /* ---To_A_DIC */
-    public static String savingFormatToADic(String dicInSavedFormat) {
-        return null;
+    public static Map<String, String> savingFormatToADic(String dicInSavedFormat) {
+        HashMap<String, String> map = new HashMap<String, String>();
+
+        return map;
     }
 }

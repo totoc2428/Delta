@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.junit.Before;
@@ -165,7 +166,7 @@ public class DataManagerTest {
     }
 
     @Test
-    public void testsavingFormatToAList() {
+    public void testSavingFormatToAList() {
         String listInSavedFormat = "truc" + DataManager.getSavedListSpace() + "truc1" + DataManager.getSavedListSpace()
                 + "truc2";
 
@@ -176,5 +177,25 @@ public class DataManagerTest {
         assertFalse(listResult.isEmpty());
 
         assertEquals(listResult, listCheck);
+    }
+
+    @Test
+    public void testSavingFormatToADic() {
+        String dicInSavedFormat = "key1" + DataManager.getSavedListSpace() + "key2" + DataManager.getSavedListSpace()
+                + "key3" + DataManager.getSavedDicSpace() + "value1" + DataManager.getSavedListSpace() + "value2"
+                + DataManager.getSavedListSpace() + "value3";
+
+        Map<String, String> checkDic = (Map<String, String>) new HashMap<String, String>();
+        checkDic.put("key1", "value1");
+        checkDic.put("key2", "value2");
+        checkDic.put("key3", "value3");
+
+        Map<String, String> resultDic = DataManager.savingFormatToADic(dicInSavedFormat);
+
+        assertNotNull(resultDic);
+        assertFalse(resultDic.isEmpty());
+
+        assertEquals(resultDic, checkDic);
+
     }
 }
