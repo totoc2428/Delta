@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
 
@@ -148,7 +148,7 @@ public abstract class DataManager {
 
     /* -SAVING_FORMAT */
     /* --LIST_TO_SAVED_FORMAT */
-    public static String listToSavingFormat(List<String> list) {
+    public static String listToSavingFormat(Collection<String> list) {
         String listInASavedFormat = "";
 
         for (String string : list) {
@@ -162,6 +162,6 @@ public abstract class DataManager {
 
     /* --DIC_TO_SAVED_FORMAT */
     public static String dicToSavingFormat(Map<String, String> dic) {
-        return null;
+        return listToSavingFormat(dic.keySet()) + getSavedDicSpace() + listToSavingFormat(dic.values());
     }
 }

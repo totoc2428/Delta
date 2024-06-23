@@ -147,9 +147,9 @@ public class DataManagerTest {
     public void testDicToSavingFormat() {
         HashMap<String, String> dic = new HashMap<String, String>();
 
-        dic.put("key", "value");
-        dic.put("key1", "value2");
-        dic.put("key2", "value3");
+        dic.put("key1", "value1");
+        dic.put("key2", "value2");
+        dic.put("key3", "value3");
 
         String dicInSavedFormat = DataManager.dicToSavingFormat(dic);
 
@@ -157,9 +157,9 @@ public class DataManagerTest {
         assertFalse(dicInSavedFormat.isEmpty());
         assertFalse(dicInSavedFormat.isBlank());
 
-        assertEquals("key" + DataManager.getSavedListSpace() + "key1" + DataManager.getSavedListSpace() + "key2"
-                + DataManager.getSavedDicSpace() + "value" + DataManager.getSavedListSpace() + "value1"
-                + DataManager.getSavedListSpace() + "value2", dicInSavedFormat);
+        assertEquals("key1" + DataManager.getSavedListSpace() + "key2" + DataManager.getSavedListSpace() + "key3"
+                + DataManager.getSavedDicSpace() + "value1" + DataManager.getSavedListSpace() + "value2"
+                + DataManager.getSavedListSpace() + "value3", dicInSavedFormat);
 
     }
 }
