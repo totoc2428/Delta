@@ -18,6 +18,12 @@ public abstract class DataManager {
 
     private static Properties initDataProperties;
 
+    private static String savedListSpace;
+    private static String savedDicSpace;
+
+    private static String listTag;
+    private static String dicTag;
+
     /* -LOADER */
     public static void load() throws DataManagerLoadException {
         File file = Paths.get(Primary.getDataManagerInitPath()).toFile();
@@ -25,6 +31,11 @@ public abstract class DataManager {
             try {
                 initDataProperties = DataManager.readAFile(file);
 
+                savedListSpace = initDataProperties.getProperty("SAVED_LIST_SPACE");
+                savedDicSpace = initDataProperties.getProperty("SAVED_DIC_SPACE");
+
+                listTag = initDataProperties.getProperty("LIST_TAG");
+                dicTag = initDataProperties.getProperty("DIC_TAG");
             } catch (PropertiesReadingSystemException e) {
                 e.show();
                 throw new DataManagerLoadException();
@@ -112,5 +123,24 @@ public abstract class DataManager {
         } else {
             throw new WriteInAFileSystemException();
         }
+    }
+
+    /* -GETTER */
+    /* --TAG */
+    public static String getDicTag() {
+        return dicTag;
+    }
+
+    public static String getListTag() {
+        return listTag;
+    }
+
+    /* --SPACE */
+    public static String getSavedListSpace() {
+        return savedListSpace;
+    }
+
+    public static String getSavedDicSpace() {
+        return savedDicSpace;
     }
 }

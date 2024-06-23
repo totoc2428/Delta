@@ -105,4 +105,24 @@ public class DataManagerTest {
             DataManager.writeInAFile(properties, destinationFile);
         });
     }
+
+    @Test
+    public void testGetters() {
+        assertNotNull(DataManager.getDicTag());
+        assertNotNull(DataManager.getListTag());
+
+        assertNotNull(DataManager.getSavedListSpace());
+        assertNotNull(DataManager.getSavedDicSpace());
+
+        assertFalse(DataManager.getDicTag().isEmpty());
+        assertFalse(DataManager.getDicTag().isBlank());
+        assertFalse(DataManager.getListTag().isEmpty());
+        assertFalse(DataManager.getListTag().isBlank());
+
+        assertFalse(DataManager.getSavedDicSpace().isEmpty());
+        assertFalse(DataManager.getSavedListSpace().isEmpty());
+        assertFalse(DataManager.getSavedDicSpace().isBlank());
+        assertFalse(DataManager.getSavedListSpace().isBlank());
+
+    }
 }
