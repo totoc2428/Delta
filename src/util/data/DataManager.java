@@ -14,7 +14,6 @@ import java.util.Properties;
 import exception.system.util.data.DataManagerLoadException;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.data.WriteInAFileSystemException;
-import io.jsonwebtoken.lang.Arrays;
 import util.tool.Primary;
 import java.io.OutputStream;
 
