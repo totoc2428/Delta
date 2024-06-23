@@ -20,6 +20,8 @@ public abstract class Primary {
 
     private static String dataManagerInitPath = INIT_PROPERTIES.getProperty("DATA_MANAGER_INIT_PATH");
 
+    private static String blockchainManagerInitPath = INIT_PROPERTIES.getProperty("BLOCKCHAIN_MANAGER_INIT_PATH");
+
     private static String doneMessageInitPath = INIT_PROPERTIES
             .getProperty("DONE_MESSAGE_FOLDER_PATH");
     private static String errorMessageFolderPath = INIT_PROPERTIES
@@ -33,8 +35,14 @@ public abstract class Primary {
 
     /* -INIT_PATH */
     /* --GETTER */
+    /* ---DATA */
     public static String getDataManagerInitPath() {
         return dataManagerInitPath;
+    }
+
+    /* ---BLOCKCHAIN */
+    public static String getBlockchainManagerInitPath() {
+        return blockchainManagerInitPath;
     }
 
     /* -FOLDER_PATH */
