@@ -1,4 +1,4 @@
-package util.tool;
+package util.primary;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
 import exception.system.util.primary.PrimaryLoadException;
-import util.primary.Primary;
 
 public class PrimaryTest {
 
