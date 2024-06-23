@@ -17,10 +17,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exception.system.util.data.PropertiesReadingSystemException;
-import exception.system.util.tool.PrimaryLoadException;
 import io.jsonwebtoken.lang.Arrays;
-import util.tool.Primary;
+import util.primary.Primary;
 import exception.system.util.data.WriteInAFileSystemException;
+import exception.system.util.primary.PrimaryLoadException;
 
 public class DataManagerTest {
     @Before

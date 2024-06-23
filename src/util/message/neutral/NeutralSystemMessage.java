@@ -2,7 +2,7 @@ package util.message.neutral;
 
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
 import util.message.SystemMessage;
-import util.tool.Primary;
+import util.primary.Primary;
 import util.tool.terminal.TerminalStyle;
 
 public class NeutralSystemMessage extends SystemMessage {

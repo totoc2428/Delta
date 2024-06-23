@@ -11,7 +11,7 @@ import util.message.error.ErrorSystemMessage;
 import util.message.information.InformationSystemMessage;
 import util.message.neutral.NeutralSystemMessage;
 import util.message.warning.WarningSystemMessage;
-import util.tool.Primary;
+import util.primary.Primary;
 
 public abstract class SystemMessage {
     private String message;

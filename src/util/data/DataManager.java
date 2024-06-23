@@ -14,7 +14,8 @@ import java.util.Properties;
 import exception.system.util.data.DataManagerLoadException;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.data.WriteInAFileSystemException;
-import util.tool.Primary;
+import util.primary.Primary;
+
 import java.io.OutputStream;
 
 public abstract class DataManager {

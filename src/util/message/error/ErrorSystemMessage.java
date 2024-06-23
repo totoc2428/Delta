@@ -2,7 +2,7 @@ package util.message.error;
 
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
 import util.message.SystemMessage;
-import util.tool.Primary;
+import util.primary.Primary;
 import util.tool.terminal.TerminalStyle;
 
 public class ErrorSystemMessage extends SystemMessage {

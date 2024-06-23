@@ -14,7 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
-import exception.system.util.tool.PrimaryLoadException;
+import exception.system.util.primary.PrimaryLoadException;
+import util.primary.Primary;
 
 public class PrimaryTest {
 

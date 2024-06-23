@@ -1,4 +1,4 @@
-package util.tool;
+package util.primary;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -8,7 +8,7 @@ import java.util.Properties;
 import exception.system.util.data.DataManagerLoadException;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
-import exception.system.util.tool.PrimaryLoadException;
+import exception.system.util.primary.PrimaryLoadException;
 import util.data.DataManager;
 import util.message.SystemMessage;
 import util.message.done.DoneSystemMessage;

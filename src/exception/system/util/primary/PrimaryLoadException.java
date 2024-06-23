@@ -1,4 +1,4 @@
-package exception.system.util.tool;
+package exception.system.util.primary;
 
 import exception.system.SystemException;
 
