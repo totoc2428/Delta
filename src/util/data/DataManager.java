@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import exception.system.util.data.DataManagerLoadException;
@@ -157,5 +158,10 @@ public abstract class DataManager {
         listInASavedFormat = listInASavedFormat.substring(getSavedListSpace().length(), listInASavedFormat.length());
 
         return listInASavedFormat;
+    }
+
+    /* --DIC_TO_SAVED_FORMAT */
+    public static String dicToSavingFormat(Map<String, String> dic) {
+        return null;
     }
 }

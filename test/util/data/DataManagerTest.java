@@ -8,6 +8,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.junit.Before;
@@ -139,6 +140,26 @@ public class DataManagerTest {
 
         assertEquals("truc" + DataManager.getSavedListSpace() + "truc1" + DataManager.getSavedListSpace() + "truc2",
                 listInSavedFormat);
+
+    }
+
+    @Test
+    public void testDicToSavingFormat() {
+        HashMap<String, String> dic = new HashMap<String, String>();
+
+        dic.put("key", "value");
+        dic.put("key1", "value2");
+        dic.put("key2", "value3");
+
+        String dicInSavedFormat = DataManager.dicToSavingFormat(dic);
+
+        assertNotNull(dicInSavedFormat);
+        assertFalse(dicInSavedFormat.isEmpty());
+        assertFalse(dicInSavedFormat.isBlank());
+
+        assertEquals("key" + DataManager.getSavedListSpace() + "key1" + DataManager.getSavedListSpace() + "key2"
+                + DataManager.getSavedDicSpace() + "value" + DataManager.getSavedListSpace() + "value1"
+                + DataManager.getSavedListSpace() + "value2", dicInSavedFormat);
 
     }
 }
