@@ -10,6 +10,7 @@ import java.util.Properties;
 
 import exception.system.util.blockchain.BlockchainManagerLoadException;
 import exception.system.util.blockchain.GeneratePrivateKeyFromStringSystemException;
+import exception.system.util.blockchain.GeneratePublicKeyWithPrivateKeyException;
 import exception.system.util.data.PropertiesReadingSystemException;
 
 import java.math.BigInteger;
@@ -97,17 +98,18 @@ public abstract class BlockchainManager {
     }
 
     /* --PUBLIC_KEY */
-    public static PublicKey generatePublicKeyWithPrivateKey(PrivateKey privateKey) {
+    public static PublicKey generatePublicKeyWithPrivateKey(PrivateKey privateKey)
+            throws GeneratePublicKeyWithPrivateKeyException {
         try {
-            KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+            KeyFactory keyFactory = KeyFactory.getInstance(keyAlgorithm);
             RSAPrivateKeySpec privateKeySpec = keyFactory.getKeySpec(privateKey, RSAPrivateKeySpec.class);
 
             RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(privateKeySpec.getModulus(),
-                    BigInteger.valueOf(KEY_EXPONANT));
+                    BigInteger.valueOf(keyExponant));
 
             return keyFactory.generatePublic(publicKeySpec);
         } catch (Exception e) {
-            throw new GetFromPrivatePublicKeyBlockchainDataManagerException();
+            throw new GeneratePublicKeyWithPrivateKeyException();
         }
     }
 }
