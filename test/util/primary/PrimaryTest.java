@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
+import exception.system.util.primary.InvalidMessagePrioritySystemException;
 import exception.system.util.primary.PrimaryLoadException;
 
 public class PrimaryTest {
@@ -39,6 +40,36 @@ public class PrimaryTest {
         assertFalse(Primary.getSystemlanguageValue().isBlank());
         assertFalse(Primary.getSystemlanguageValue().isEmpty());
 
+    }
+
+    @Test
+    public void testGetMessagePriority() {
+        assertNotNull(Primary.getMessagePriority());
+        assertTrue(Primary.getMessagePriority() > 0);
+    }
+
+    @Test
+    public void testSetMessagePriority() {
+        assertDoesNotThrow(() -> {
+            int value = 2;
+
+            Primary.setMessagePriority(value);
+
+            assertNotNull(value);
+            assertEquals(value, Primary.getMessagePriority());
+
+        });
+    }
+
+    @Test
+    public void testSetMessagePriorityException() {
+        assertThrows(InvalidMessagePrioritySystemException.class, () -> {
+            Primary.setMessagePriority(0);
+        });
+
+        assertThrows(InvalidMessagePrioritySystemException.class, () -> {
+            Primary.setMessagePriority(-1);
+        });
     }
 
     @Test
