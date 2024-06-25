@@ -112,4 +112,10 @@ public abstract class BlockchainManager {
             throw new GeneratePublicKeyWithPrivateKeyException();
         }
     }
+
+    /* -SAVING_FORMAT */
+    /* --PRIVATE_KEY */
+    public static String privateKeyToSavedFormat(PrivateKey privateKey) {
+        return null;
+    }
 }

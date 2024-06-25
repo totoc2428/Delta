@@ -77,4 +77,21 @@ public class BLockchainManagerTest {
             BlockchainManager.generatePublicKeyWithPrivateKey(null);
         });
     }
+
+    @Test
+    public void testPrivateKeyToSavedFormat() {
+        String inputForPrivateKey = "test_input_for_private_key";
+
+        assertDoesNotThrow(() -> {
+            PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(inputForPrivateKey);
+
+            String strPrivateKey = BlockchainManager.privateKeyToSavedFormat(privateKey);
+            String strPrivateKey2 = BlockchainManager.privateKeyToSavedFormat(privateKey);
+
+            assertNotNull(strPrivateKey);
+            assertNotNull(strPrivateKey2);
+
+            assertEquals(strPrivateKey, strPrivateKey2);
+        });
+    }
 }
