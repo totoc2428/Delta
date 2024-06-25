@@ -1,9 +1,12 @@
 package util.blockchain;
 
 import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
@@ -21,6 +24,7 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import util.data.DataManager;
 import util.primary.Primary;
+import util.tool.terminal.TerminalStyle;
 
 public abstract class BlockchainManager {
     private static Properties initBlockchainProperties;
@@ -131,6 +135,19 @@ public abstract class BlockchainManager {
     /* ---TO_PRIVATE_KEY */
     public static PrivateKey savedFormatToPrivateKey(String privateKeyInSavedFormat)
             throws SavedFormatToPrivateKeyException {
-        return null;
+        if (privateKeyInSavedFormat != null
+                && (!privateKeyInSavedFormat.isEmpty() && !privateKeyInSavedFormat.isBlank())) {
+            try {
+                byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyInSavedFormat);
+                PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+                KeyFactory keyFactory;
+                keyFactory = KeyFactory.getInstance(keyAlgorithm);
+                return keyFactory.generatePrivate(keySpec);
+            } catch (IllegalArgumentException | InvalidKeySpecException | NoSuchAlgorithmException e) {
+                throw new SavedFormatToPrivateKeyException();
+            }
+        } else {
+            throw new SavedFormatToPrivateKeyException();
+        }
     }
 }
