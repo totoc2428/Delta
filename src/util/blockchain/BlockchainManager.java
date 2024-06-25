@@ -26,6 +26,7 @@ import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import util.data.DataManager;
+import util.message.done.DoneSystemMessage;
 import util.primary.Primary;
 
 public abstract class BlockchainManager {
@@ -53,6 +54,8 @@ public abstract class BlockchainManager {
             keySize = Integer.parseInt(initBlockchainProperties.getProperty("KEY_SIZE"));
             keyExponant = Integer.parseInt(initBlockchainProperties.getProperty("KEY_EXPONANT"));
             savedKeyEncryptorSpace = initBlockchainProperties.getProperty("SAVED_KEY_ENCRYPTOR_SPACE");
+
+            new DoneSystemMessage("BlockchainManagerLoad").show();
 
         } catch (PropertiesReadingSystemException e) {
             e.show();
