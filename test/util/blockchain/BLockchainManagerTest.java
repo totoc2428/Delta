@@ -38,5 +38,13 @@ public class BLockchainManagerTest {
         assertThrows(GeneratePrivateKeyFromStringSystemException.class, () -> {
             BlockchainManager.generatePrivateKeyFromString(null);
         });
+
+        assertThrows(GeneratePrivateKeyFromStringSystemException.class, () -> {
+            BlockchainManager.generatePrivateKeyFromString("");
+        });
+
+        assertThrows(GeneratePrivateKeyFromStringSystemException.class, () -> {
+            BlockchainManager.generatePrivateKeyFromString("   ");
+        });
     }
 }
