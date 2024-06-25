@@ -1,8 +1,8 @@
 package exception.system.util.message;
 
-import exception.system.SystemException;
+import exception.system.util.UtilSystemException;
 
-public class LangueageMessageNotFoundSystemException extends SystemException {
+public class LangueageMessageNotFoundSystemException extends UtilSystemException {
     public LangueageMessageNotFoundSystemException() {
         super("LangueageMessageNotFoundSystemException");
         addWarning();

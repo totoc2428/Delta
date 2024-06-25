@@ -1,8 +1,8 @@
 package exception.system.util.blockchain;
 
-import exception.system.SystemException;
+import exception.system.util.UtilSystemException;
 
-public class GeneratePublicKeyWithPrivateKeySystemException extends SystemException {
+public class GeneratePublicKeyWithPrivateKeySystemException extends UtilSystemException {
 
     public GeneratePublicKeyWithPrivateKeySystemException() {
         super("GeneratePublicKeyWithPrivateKeySystemException");

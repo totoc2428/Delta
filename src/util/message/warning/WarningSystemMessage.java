@@ -9,8 +9,8 @@ public class WarningSystemMessage extends SystemMessage {
 
     private static final String SAVED_CODE = "WARNING";
 
-    public WarningSystemMessage(String messageCode) {
-        super(SAVED_CODE, messageCode);
+    public WarningSystemMessage(String messageCode, int priority) {
+        super(SAVED_CODE, messageCode, priority);
     }
 
     public void show() {

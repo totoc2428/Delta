@@ -8,8 +8,8 @@ import util.tool.terminal.TerminalStyle;
 public class ErrorSystemMessage extends SystemMessage {
     private static final String SAVED_CODE = "ERROR";
 
-    public ErrorSystemMessage(String messageCode) {
-        super(SAVED_CODE, messageCode);
+    public ErrorSystemMessage(String messageCode, int priority) {
+        super(SAVED_CODE, messageCode, priority);
     }
 
     public void show() {

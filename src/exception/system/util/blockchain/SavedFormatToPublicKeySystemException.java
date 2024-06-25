@@ -1,8 +1,8 @@
 package exception.system.util.blockchain;
 
-import exception.system.SystemException;
+import exception.system.util.UtilSystemException;
 
-public class SavedFormatToPublicKeySystemException extends SystemException {
+public class SavedFormatToPublicKeySystemException extends UtilSystemException {
 
     public SavedFormatToPublicKeySystemException() {
         super("SavedFormatToPublicKeySystemException");

@@ -8,8 +8,8 @@ import util.tool.terminal.TerminalStyle;
 public class NeutralSystemMessage extends SystemMessage {
     private static final String SAVED_CODE = "NEUTRAL";
 
-    public NeutralSystemMessage(String messageCode) {
-        super(SAVED_CODE, messageCode);
+    public NeutralSystemMessage(String messageCode, int priority) {
+        super(SAVED_CODE, messageCode, priority);
     }
 
     public void show() {

@@ -15,14 +15,20 @@ import util.primary.Primary;
 
 public abstract class SystemMessage {
     private String message;
+    private int priority;
     private static HashMap<String, Properties> messageHub = new HashMap<String, Properties>();
 
-    public SystemMessage(String code, String messageCode) {
+    public SystemMessage(String code, String messageCode, int priority) {
         this.message = messageHub.get(code).getProperty(messageCode);
+        this.priority = priority > 0 ? priority : 1;
     }
 
     public String getMessage() {
         return message != null ? message : "";
+    }
+
+    public int getPriority() {
+        return priority;
     }
 
     protected static void load(String savedCode, String messageSrcPath) throws LangueageMessageNotFoundSystemException {

@@ -1,8 +1,8 @@
 package exception.system.util.data;
 
-import exception.system.SystemException;
+import exception.system.util.UtilSystemException;
 
-public class DataManagerLoadException extends SystemException {
+public class DataManagerLoadException extends UtilSystemException {
 
     public DataManagerLoadException() {
         super("DataManagerLoadException");
