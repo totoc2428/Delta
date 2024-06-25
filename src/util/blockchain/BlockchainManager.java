@@ -154,6 +154,12 @@ public abstract class BlockchainManager {
     /* --PUBLIC_KEY */
     /* ---To_SAVED_FORMAT */
     public static String publicKeyToSavedFormat(PublicKey publicKey) throws PublicKeyToSavedFormatSystemException {
-        return null;
+        if (publicKey != null) {
+            byte[] publicKeyBytes = publicKey.getEncoded();
+
+            return Base64.getEncoder().encodeToString(publicKeyBytes);
+        } else {
+            throw new PublicKeyToSavedFormatSystemException();
+        }
     }
 }
