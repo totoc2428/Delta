@@ -1,8 +1,8 @@
 package exception.system.util.data;
 
-import exception.system.SystemException;
+import exception.system.util.UtilSystemException;
 
-public class WriteInAFileSystemException extends SystemException {
+public class WriteInAFileSystemException extends UtilSystemException {
 
     public WriteInAFileSystemException() {
         super("WriteInAFileSystemException");

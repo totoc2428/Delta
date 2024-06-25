@@ -1,8 +1,8 @@
 package exception.system.util.primary;
 
-import exception.system.SystemException;
+import exception.system.util.UtilSystemException;
 
-public class PrimaryLoadException extends SystemException {
+public class PrimaryLoadException extends UtilSystemException {
 
     public PrimaryLoadException() {
         super("PrimaryLoadException");

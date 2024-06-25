@@ -9,6 +9,7 @@ import exception.system.util.blockchain.BlockchainManagerLoadException;
 import exception.system.util.data.DataManagerLoadException;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
+import exception.system.util.primary.InvalidMessagePrioritySystemException;
 import exception.system.util.primary.PrimaryLoadException;
 import util.blockchain.BlockchainManager;
 import util.data.DataManager;
@@ -34,6 +35,8 @@ public abstract class Primary {
             .getProperty("NEUTRAL_MESSAGE_FOLDER_PATH");
     private static String warningMessageFolderPath = INIT_PROPERTIES
             .getProperty("WARNING_MESSAGE_FOLDER_PATH");
+
+    private static int messagePriority = Integer.parseInt(INIT_PROPERTIES.getProperty("MESSAGE_PRIORITY"));
 
     /* -INIT_PATH */
     /* --GETTER */
@@ -140,6 +143,21 @@ public abstract class Primary {
         }
     }
 
+    /* -MESSAGE */
+    /* --GETTER */
+    public static int getMessagePriority() {
+        return messagePriority;
+    }
+
+    /* --SETTER */
+    public static void setMessagePriority(int messagePriority) throws InvalidMessagePrioritySystemException {
+        if (messagePriority > 0) {
+            Primary.messagePriority = messagePriority;
+        } else {
+            throw new InvalidMessagePrioritySystemException();
+        }
+    }
+
     /* -LANGUAGE */
     /* --GETTER */
     public static String getSystemlanguageValue() {
@@ -152,7 +170,7 @@ public abstract class Primary {
         if (isLanguageAviable(systemlanguageValue)) {
             systemLanguageValue = systemlanguageValue.toUpperCase();
 
-            new DoneSystemMessage("PrimarySetSystemlanguageValue").show();
+            new DoneSystemMessage("PrimarySetSystemlanguageValue", 1).show();
         } else {
             throw new LangueageMessageNotFoundSystemException();
         }
@@ -218,7 +236,7 @@ public abstract class Primary {
                 e.show();
             }
 
-            new DoneSystemMessage("PrimaryLoad").show();
+            new DoneSystemMessage("PrimaryLoad", 1).show();
         } else {
             throw new PrimaryLoadException();
         }

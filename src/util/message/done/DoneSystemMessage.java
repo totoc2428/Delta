@@ -8,8 +8,8 @@ import util.tool.terminal.TerminalStyle;
 public class DoneSystemMessage extends SystemMessage {
     private static final String SAVED_CODE = "DONE";
 
-    public DoneSystemMessage(String messageCode) {
-        super(SAVED_CODE, messageCode);
+    public DoneSystemMessage(String messageCode, int priority) {
+        super(SAVED_CODE, messageCode, priority);
     }
 
     public void show() {
