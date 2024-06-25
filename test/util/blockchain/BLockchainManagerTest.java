@@ -9,15 +9,16 @@ import java.security.PrivateKey;
 import org.junit.Before;
 import org.junit.Test;
 
-import exception.system.util.blockchain.BlockchainManagerLoadException;
+import exception.system.SystemException;
 import exception.system.util.blockchain.GeneratePrivateKeyFromStringSystemException;
+import util.primary.Primary;
 
 public class BLockchainManagerTest {
     @Before
     public void initBlockchainManagerTest() {
         try {
-            BlockchainManager.load();
-        } catch (BlockchainManagerLoadException e) {
+            Primary.load();
+        } catch (SystemException e) {
             e.show();
         }
     }

@@ -68,19 +68,24 @@ public abstract class BlockchainManager {
     /* --PRIVATE_KEY */
     public static PrivateKey generatePrivateKeyFromString(String input)
             throws GeneratePrivateKeyFromStringSystemException {
-        try {
-            SecureRandom random = SecureRandom.getInstance(KeyRandomGeneratorInstance);
-            random.setSeed(input.getBytes());
+        if (input != null && (!input.isEmpty() && !input.isBlank())) {
+            try {
+                SecureRandom random = SecureRandom.getInstance(KeyRandomGeneratorInstance);
+                random.setSeed(input.getBytes());
 
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(keyAlgorithm);
-            keyGen.initialize(keySize, random);
+                KeyPairGenerator keyGen = KeyPairGenerator.getInstance(keyAlgorithm);
+                keyGen.initialize(keySize, random);
 
-            KeyPair keyPair = keyGen.generateKeyPair();
+                KeyPair keyPair = keyGen.generateKeyPair();
 
-            return keyPair.getPrivate();
+                return keyPair.getPrivate();
 
-        } catch (Exception e) {
+            } catch (Exception e) {
+                throw new GeneratePrivateKeyFromStringSystemException();
+            }
+        } else {
             throw new GeneratePrivateKeyFromStringSystemException();
+
         }
 
     }

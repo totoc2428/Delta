@@ -5,10 +5,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import exception.system.util.blockchain.BlockchainManagerLoadException;
 import exception.system.util.data.DataManagerLoadException;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
 import exception.system.util.primary.PrimaryLoadException;
+import util.blockchain.BlockchainManager;
 import util.data.DataManager;
 import util.message.SystemMessage;
 import util.message.done.DoneSystemMessage;
@@ -207,6 +209,12 @@ public abstract class Primary {
             try {
                 DataManager.load();
             } catch (DataManagerLoadException e) {
+                e.show();
+            }
+
+            try {
+                BlockchainManager.load();
+            } catch (BlockchainManagerLoadException e) {
                 e.show();
             }
 
