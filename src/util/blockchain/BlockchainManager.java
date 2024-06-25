@@ -13,6 +13,7 @@ import exception.system.util.blockchain.BlockchainManagerLoadException;
 import exception.system.util.blockchain.GeneratePrivateKeyFromStringSystemException;
 import exception.system.util.blockchain.GeneratePublicKeyWithPrivateKeyException;
 import exception.system.util.blockchain.PrivateKeyToSavedFormatException;
+import exception.system.util.blockchain.SavedFormatToPrivateKeyException;
 import exception.system.util.data.PropertiesReadingSystemException;
 
 import java.math.BigInteger;
@@ -117,6 +118,7 @@ public abstract class BlockchainManager {
 
     /* -SAVING_FORMAT */
     /* --PRIVATE_KEY */
+    /* ---To_SAVED_FORMAT */
     public static String privateKeyToSavedFormat(PrivateKey privateKey) throws PrivateKeyToSavedFormatException {
         if (privateKey != null) {
             byte[] privateKeyBytes = privateKey.getEncoded();
@@ -124,5 +126,11 @@ public abstract class BlockchainManager {
         } else {
             throw new PrivateKeyToSavedFormatException();
         }
+    }
+
+    /* ---TO_PRIVATE_KEY */
+    public static PrivateKey savedFormatToPrivateKey(String privateKeyInSavedFormat)
+            throws SavedFormatToPrivateKeyException {
+        return null;
     }
 }
