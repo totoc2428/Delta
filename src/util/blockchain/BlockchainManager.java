@@ -2,12 +2,18 @@ package util.blockchain;
 
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 import java.util.Properties;
 
 import exception.system.util.blockchain.BlockchainManagerLoadException;
 import exception.system.util.blockchain.GeneratePrivateKeyFromStringSystemException;
 import exception.system.util.data.PropertiesReadingSystemException;
+
+import java.math.BigInteger;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import util.data.DataManager;
 import util.primary.Primary;
@@ -88,5 +94,20 @@ public abstract class BlockchainManager {
 
         }
 
+    }
+
+    /* --PUBLIC_KEY */
+    public static PublicKey generatePublicKeyWithPrivateKey(PrivateKey privateKey) {
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+            RSAPrivateKeySpec privateKeySpec = keyFactory.getKeySpec(privateKey, RSAPrivateKeySpec.class);
+
+            RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(privateKeySpec.getModulus(),
+                    BigInteger.valueOf(KEY_EXPONANT));
+
+            return keyFactory.generatePublic(publicKeySpec);
+        } catch (Exception e) {
+            throw new GetFromPrivatePublicKeyBlockchainDataManagerException();
+        }
     }
 }
