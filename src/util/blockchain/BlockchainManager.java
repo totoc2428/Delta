@@ -18,6 +18,7 @@ import exception.system.util.blockchain.GeneratePublicKeyWithPrivateKeySystemExc
 import exception.system.util.blockchain.PrivateKeyToSavedFormatSystemException;
 import exception.system.util.blockchain.PublicKeyToSavedFormatSystemException;
 import exception.system.util.blockchain.SavedFormatToPrivateKeySystemException;
+import exception.system.util.blockchain.SavedFormatToPublicKeySystemException;
 import exception.system.util.data.PropertiesReadingSystemException;
 
 import java.math.BigInteger;
@@ -161,5 +162,11 @@ public abstract class BlockchainManager {
         } else {
             throw new PublicKeyToSavedFormatSystemException();
         }
+    }
+
+    /* ---To_PUBLIC_KEY */
+    public static PublicKey savedFormatToPublicKey(String publicKeyInSavedFormat)
+            throws SavedFormatToPublicKeySystemException {
+        return null;
     }
 }

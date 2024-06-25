@@ -17,6 +17,7 @@ import exception.system.util.blockchain.GeneratePublicKeyWithPrivateKeySystemExc
 import exception.system.util.blockchain.PrivateKeyToSavedFormatSystemException;
 import exception.system.util.blockchain.PublicKeyToSavedFormatSystemException;
 import exception.system.util.blockchain.SavedFormatToPrivateKeySystemException;
+import exception.system.util.blockchain.SavedFormatToPublicKeySystemException;
 import util.primary.Primary;
 
 public class BLockchainManagerTest {
@@ -168,4 +169,42 @@ public class BLockchainManagerTest {
             BlockchainManager.publicKeyToSavedFormat(null);
         });
     }
+
+    @Test
+    public void testSavedFormatToPublicKey() {
+        assertDoesNotThrow(() -> {
+            String inputForPrivateKey = "test_input_for_private_key";
+
+            PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(inputForPrivateKey);
+
+            PublicKey publicKey = BlockchainManager.generatePublicKeyWithPrivateKey(privateKey);
+
+            String publicKeyInString = BlockchainManager.publicKeyToSavedFormat(publicKey);
+
+            PublicKey publicKeyResult = BlockchainManager.savedFormatToPublicKey(publicKeyInString);
+
+            assertNotNull(publicKeyResult);
+            assertEquals(publicKey, publicKeyResult);
+        });
+    }
+
+    @Test
+    public void testSavedFormatToPublicKeyException() {
+        assertThrows(SavedFormatToPublicKeySystemException.class, () -> {
+            BlockchainManager.savedFormatToPublicKey(null);
+        });
+
+        assertThrows(SavedFormatToPublicKeySystemException.class, () -> {
+            BlockchainManager.savedFormatToPublicKey("");
+        });
+
+        assertThrows(SavedFormatToPublicKeySystemException.class, () -> {
+            BlockchainManager.savedFormatToPublicKey("   ");
+        });
+
+        assertThrows(SavedFormatToPublicKeySystemException.class, () -> {
+            BlockchainManager.savedFormatToPublicKey("invalid_format");
+        });
+    }
+
 }
