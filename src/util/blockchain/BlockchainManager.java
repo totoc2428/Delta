@@ -9,6 +9,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Properties;
 
@@ -167,6 +168,20 @@ public abstract class BlockchainManager {
     /* ---To_PUBLIC_KEY */
     public static PublicKey savedFormatToPublicKey(String publicKeyInSavedFormat)
             throws SavedFormatToPublicKeySystemException {
-        return null;
+        if (publicKeyInSavedFormat != null
+                && (!publicKeyInSavedFormat.isBlank() && !publicKeyInSavedFormat.isEmpty())) {
+            try {
+                byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyInSavedFormat);
+                X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+                KeyFactory keyFactory;
+                keyFactory = KeyFactory.getInstance(keyAlgorithm);
+                return keyFactory.generatePublic(keySpec);
+            } catch (Exception e) {
+                throw new SavedFormatToPublicKeySystemException();
+            }
+        } else {
+            throw new SavedFormatToPublicKeySystemException();
+
+        }
     }
 }
