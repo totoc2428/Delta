@@ -13,9 +13,10 @@ import org.junit.Test;
 
 import exception.system.SystemException;
 import exception.system.util.blockchain.GeneratePrivateKeyFromStringSystemException;
-import exception.system.util.blockchain.GeneratePublicKeyWithPrivateKeyException;
-import exception.system.util.blockchain.PrivateKeyToSavedFormatException;
-import exception.system.util.blockchain.SavedFormatToPrivateKeyException;
+import exception.system.util.blockchain.GeneratePublicKeyWithPrivateKeySystemException;
+import exception.system.util.blockchain.PrivateKeyToSavedFormatSystemException;
+import exception.system.util.blockchain.PublicKeyToSavedFormatSystemException;
+import exception.system.util.blockchain.SavedFormatToPrivateKeySystemException;
 import util.primary.Primary;
 
 public class BLockchainManagerTest {
@@ -55,10 +56,11 @@ public class BLockchainManagerTest {
     }
 
     @Test
-    public void testGetPublicKeyFromPrivateKey() {
-        String inputForPrivateKey = "test_input_for_private_key";
+    public void testGeneratePublicKeyWithPrivateKey() {
 
         assertDoesNotThrow(() -> {
+
+            String inputForPrivateKey = "test_input_for_private_key";
             PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(inputForPrivateKey);
 
             PublicKey publicKey = BlockchainManager.generatePublicKeyWithPrivateKey(privateKey);
@@ -73,9 +75,9 @@ public class BLockchainManagerTest {
     }
 
     @Test
-    public void testGetPublicKeyFromPrivateKeyException() {
+    public void testGeneratePublicKeyWithPrivateKeyException() {
 
-        assertThrows(GeneratePublicKeyWithPrivateKeyException.class, () -> {
+        assertThrows(GeneratePublicKeyWithPrivateKeySystemException.class, () -> {
             BlockchainManager.generatePublicKeyWithPrivateKey(null);
         });
     }
@@ -99,7 +101,7 @@ public class BLockchainManagerTest {
 
     @Test
     public void testPrivateKeyToSavedFormatException() {
-        assertThrows(PrivateKeyToSavedFormatException.class, () -> {
+        assertThrows(PrivateKeyToSavedFormatSystemException.class, () -> {
             BlockchainManager.privateKeyToSavedFormat(null);
         });
     }
@@ -123,20 +125,47 @@ public class BLockchainManagerTest {
     @Test
     public void testSavedFormatToPrivateKeyException() {
 
-        assertThrows(SavedFormatToPrivateKeyException.class, () -> {
+        assertThrows(SavedFormatToPrivateKeySystemException.class, () -> {
             BlockchainManager.savedFormatToPrivateKey(null);
         });
 
-        assertThrows(SavedFormatToPrivateKeyException.class, () -> {
+        assertThrows(SavedFormatToPrivateKeySystemException.class, () -> {
             BlockchainManager.savedFormatToPrivateKey("");
         });
 
-        assertThrows(SavedFormatToPrivateKeyException.class, () -> {
+        assertThrows(SavedFormatToPrivateKeySystemException.class, () -> {
             BlockchainManager.savedFormatToPrivateKey("  ");
         });
 
-        assertThrows(SavedFormatToPrivateKeyException.class, () -> {
+        assertThrows(SavedFormatToPrivateKeySystemException.class, () -> {
             BlockchainManager.savedFormatToPrivateKey("invalid_format");
+        });
+    }
+
+    @Test
+    public void testPublicKeyToSavedFormat() {
+        assertDoesNotThrow(() -> {
+            String inputForPrivateKey = "test_input_for_private_key";
+
+            PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(inputForPrivateKey);
+
+            PublicKey publicKey = BlockchainManager.generatePublicKeyWithPrivateKey(privateKey);
+
+            String publicKeyResult1 = BlockchainManager.publicKeyToSavedFormat(publicKey);
+            String publicKeyResult2 = BlockchainManager.publicKeyToSavedFormat(publicKey);
+
+            assertNotNull(publicKeyResult1);
+            assertNotNull(publicKeyResult2);
+
+            assertEquals(publicKeyResult1, publicKeyResult2);
+
+        });
+    }
+
+    @Test
+    public void testPublicKeyToSavedFormatException() {
+        assertThrows(PublicKeyToSavedFormatSystemException.class, () -> {
+            BlockchainManager.publicKeyToSavedFormat(null);
         });
     }
 }
