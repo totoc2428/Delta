@@ -6,11 +6,13 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.Base64;
 import java.util.Properties;
 
 import exception.system.util.blockchain.BlockchainManagerLoadException;
 import exception.system.util.blockchain.GeneratePrivateKeyFromStringSystemException;
 import exception.system.util.blockchain.GeneratePublicKeyWithPrivateKeyException;
+import exception.system.util.blockchain.PrivateKeyToSavedFormatException;
 import exception.system.util.data.PropertiesReadingSystemException;
 
 import java.math.BigInteger;
@@ -115,7 +117,12 @@ public abstract class BlockchainManager {
 
     /* -SAVING_FORMAT */
     /* --PRIVATE_KEY */
-    public static String privateKeyToSavedFormat(PrivateKey privateKey) {
-        return null;
+    public static String privateKeyToSavedFormat(PrivateKey privateKey) throws PrivateKeyToSavedFormatException {
+        if (privateKey != null) {
+            byte[] privateKeyBytes = privateKey.getEncoded();
+            return Base64.getEncoder().encodeToString(privateKeyBytes);
+        } else {
+            throw new PrivateKeyToSavedFormatException();
+        }
     }
 }

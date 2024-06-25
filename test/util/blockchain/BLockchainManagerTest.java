@@ -14,6 +14,7 @@ import org.junit.Test;
 import exception.system.SystemException;
 import exception.system.util.blockchain.GeneratePrivateKeyFromStringSystemException;
 import exception.system.util.blockchain.GeneratePublicKeyWithPrivateKeyException;
+import exception.system.util.blockchain.PrivateKeyToSavedFormatException;
 import util.primary.Primary;
 
 public class BLockchainManagerTest {
@@ -80,9 +81,9 @@ public class BLockchainManagerTest {
 
     @Test
     public void testPrivateKeyToSavedFormat() {
-        String inputForPrivateKey = "test_input_for_private_key";
 
         assertDoesNotThrow(() -> {
+            String inputForPrivateKey = "test_input_for_private_key";
             PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(inputForPrivateKey);
 
             String strPrivateKey = BlockchainManager.privateKeyToSavedFormat(privateKey);
@@ -92,6 +93,13 @@ public class BLockchainManagerTest {
             assertNotNull(strPrivateKey2);
 
             assertEquals(strPrivateKey, strPrivateKey2);
+        });
+    }
+
+    @Test
+    public void testPrivateKeyToSavedFormatException() {
+        assertThrows(PrivateKeyToSavedFormatException.class, () -> {
+            BlockchainManager.privateKeyToSavedFormat(null);
         });
     }
 }
