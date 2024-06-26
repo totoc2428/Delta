@@ -19,4 +19,8 @@ public class DoneSystemMessage extends SystemMessage {
     public static void loadWithCode() throws LangueageMessageNotFoundSystemException {
         load(SAVED_CODE, Primary.getDoneMessageInitPath());
     }
+
+    public static void show(String messageCode, int priority) {
+        new DoneSystemMessage(messageCode, priority).show();
+    }
 }

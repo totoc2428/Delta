@@ -47,7 +47,7 @@ public abstract class BlockchainManager {
             keySize = Integer.parseInt(initBlockchainProperties.getProperty("KEY_SIZE"));
             keyExponant = Integer.parseInt(initBlockchainProperties.getProperty("KEY_EXPONANT"));
 
-            new DoneSystemMessage("BlockchainManagerLoad", 1).show();
+            DoneSystemMessage.show("BlockchainManagerLoad", 1);
 
         } catch (PropertiesReadingSystemException e) {
             e.show();
@@ -76,7 +76,7 @@ public abstract class BlockchainManager {
 
                 KeyPair keyPair = keyGen.generateKeyPair();
 
-                new DoneSystemMessage("BlockchainManagerGeneratePrivateKeyFromString", 1).show();
+                DoneSystemMessage.show("BlockchainManagerGeneratePrivateKeyFromString", 1);
                 return keyPair.getPrivate();
 
             } catch (Exception e) {
@@ -99,7 +99,7 @@ public abstract class BlockchainManager {
             RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(privateKeySpec.getModulus(),
                     BigInteger.valueOf(keyExponant));
 
-            new DoneSystemMessage("BlockchainManagerGeneratePublicKeyWithPrivateKey", 1).show();
+            DoneSystemMessage.show("BlockchainManagerGeneratePublicKeyWithPrivateKey", 1);
             return keyFactory.generatePublic(publicKeySpec);
         } catch (Exception e) {
             throw new GeneratePublicKeyWithPrivateKeySystemException();
@@ -112,8 +112,8 @@ public abstract class BlockchainManager {
     public static String privateKeyToSavedFormat(PrivateKey privateKey) throws PrivateKeyToSavedFormatSystemException {
         if (privateKey != null) {
             byte[] privateKeyBytes = privateKey.getEncoded();
-            new DoneSystemMessage("BlockchainManagerPrivateKeyToSavedFormat", 1).show();
 
+            DoneSystemMessage.show("BlockchainManagerPrivateKeyToSavedFormat", 1);
             return Base64.getEncoder().encodeToString(privateKeyBytes);
         } else {
             throw new PrivateKeyToSavedFormatSystemException();
@@ -131,8 +131,7 @@ public abstract class BlockchainManager {
                 KeyFactory keyFactory;
                 keyFactory = KeyFactory.getInstance(keyAlgorithm);
 
-                new DoneSystemMessage("BlockchainManagerSavedFormatToPrivateKey", 1).show();
-
+                DoneSystemMessage.show("BlockchainManagerSavedFormatToPrivateKey", 1);
                 return keyFactory.generatePrivate(keySpec);
             } catch (IllegalArgumentException | InvalidKeySpecException | NoSuchAlgorithmException e) {
                 throw new SavedFormatToPrivateKeySystemException();
@@ -148,8 +147,7 @@ public abstract class BlockchainManager {
         if (publicKey != null) {
             byte[] publicKeyBytes = publicKey.getEncoded();
 
-            new DoneSystemMessage("BlockchainManagerPublicKeyToSavedFormat ", 1).show();
-
+            DoneSystemMessage.show("BlockchainManagerPublicKeyToSavedFormat ", 1);
             return Base64.getEncoder().encodeToString(publicKeyBytes);
         } else {
             throw new PublicKeyToSavedFormatSystemException();
@@ -167,8 +165,7 @@ public abstract class BlockchainManager {
                 KeyFactory keyFactory;
                 keyFactory = KeyFactory.getInstance(keyAlgorithm);
 
-                new DoneSystemMessage("BlockchainManagerSavedFormatToPublicKey ", 1).show();
-
+                DoneSystemMessage.show("BlockchainManagerSavedFormatToPublicKey ", 1);
                 return keyFactory.generatePublic(keySpec);
             } catch (Exception e) {
                 throw new SavedFormatToPublicKeySystemException();
