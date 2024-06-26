@@ -14,6 +14,8 @@ import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.security.DecryptSecurityManagerSystemException;
 import exception.system.util.security.EncryptSecurityManagerSystemException;
 import exception.system.util.security.SecurityManagerLoadSystemException;
+import exception.system.util.security.SignSecurityManagerSystemException;
+import exception.system.util.security.VerifySignatureSecurityManagerSystemException;
 import util.blockchain.BlockchainManager;
 import util.data.DataManager;
 import util.primary.Primary;
@@ -86,5 +88,17 @@ public abstract class SecurityManager {
         } catch (Exception e) {
             throw new DecryptSecurityManagerSystemException();
         }
+    }
+
+    /* --SIGNATURE */
+    /* ---SIGN */
+    public static String sign(String message, PrivateKey privateKey) throws SignSecurityManagerSystemException {
+        return null;
+    }
+
+    /* ---VERIFY */
+    public static boolean verifySignature(String signature, String message, PublicKey publicKey)
+            throws VerifySignatureSecurityManagerSystemException {
+        return false;
     }
 }
