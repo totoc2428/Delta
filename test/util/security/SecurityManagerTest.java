@@ -9,12 +9,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import exception.system.util.primary.PrimaryLoadException;
+import exception.system.util.security.DecryptSecurityManagerSystemException;
 import exception.system.util.security.EncryptSecurityManagerSystemException;
 import util.blockchain.BlockchainManager;
+import util.primary.Primary;
 
 public class SecurityManagerTest {
+    @Before
+    public void initSecurityManagerTest() {
+        try {
+            Primary.load();
+        } catch (PrimaryLoadException e) {
+            e.show();
+        }
+    }
 
     @Test
     public void testEncryptAndDecrypt() {
@@ -53,7 +65,7 @@ public class SecurityManagerTest {
 
             PublicKey publicKey = BlockchainManager.generatePublicKeyWithPrivateKey(privateKey);
 
-            assertThrows(EncryptSecurityManagerSystemException.class, () -> {
+            assertThrows(DecryptSecurityManagerSystemException.class, () -> {
                 SecurityManager.decrypt(null, privateKey);
             });
 
@@ -61,7 +73,7 @@ public class SecurityManagerTest {
                 SecurityManager.encrypt(inputForPrivateKey, null);
             });
 
-            assertThrows(EncryptSecurityManagerSystemException.class, () -> {
+            assertThrows(DecryptSecurityManagerSystemException.class, () -> {
                 SecurityManager.decrypt(null, null);
             });
 
@@ -69,12 +81,12 @@ public class SecurityManagerTest {
                 SecurityManager.encrypt(null, null);
             });
 
-            assertThrows(EncryptSecurityManagerSystemException.class, () -> {
+            assertThrows(DecryptSecurityManagerSystemException.class, () -> {
                 String eResult = SecurityManager.encrypt(inputForPrivateKey, publicKey);
                 SecurityManager.decrypt(eResult, privateKey2);
             });
 
-            assertThrows(EncryptSecurityManagerSystemException.class, () -> {
+            assertThrows(DecryptSecurityManagerSystemException.class, () -> {
                 SecurityManager.decrypt(inputForPrivateKey, privateKey);
             });
         });

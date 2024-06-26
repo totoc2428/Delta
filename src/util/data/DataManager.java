@@ -49,12 +49,6 @@ public abstract class DataManager {
         }
     }
 
-    /* -INIT */
-    /* --GETTER */
-    public static Properties getInit() {
-        return initDataProperties;
-    }
-
     /* -READ_METHOD */
     /* --FOLDER_LIST */
     public static ArrayList<String> folderNameToAStringArrayList(File directoryPath) {

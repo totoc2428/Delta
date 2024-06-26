@@ -38,6 +38,25 @@ public abstract class Primary {
 
     private static int messagePriority = Integer.parseInt(INIT_PROPERTIES.getProperty("MESSAGE_PRIORITY"));
 
+    /* -LOADER */
+    public static void load() throws PrimaryLoadException {
+        if (isLanguageAviable(INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE"))) {
+            SystemMessage.reset();
+            try {
+                SystemMessage.load();
+                DataManager.load();
+                BlockchainManager.load();
+                SecurityManager.load();
+            } catch (SystemException e) {
+                e.show();
+            }
+
+            new DoneSystemMessage("PrimaryLoad", 1).show();
+        } else {
+            throw new PrimaryLoadException();
+        }
+    }
+
     /* -INIT_PATH */
     /* --GETTER */
     /* ---DATA */
@@ -230,22 +249,4 @@ public abstract class Primary {
         }
     }
 
-    /* --LOADER */
-    public static void load() throws PrimaryLoadException {
-        if (isLanguageAviable(INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE"))) {
-            SystemMessage.reset();
-            try {
-                SystemMessage.load();
-                DataManager.load();
-                BlockchainManager.load();
-                SecurityManager.load();
-            } catch (SystemException e) {
-                e.show();
-            }
-
-            new DoneSystemMessage("PrimaryLoad", 1).show();
-        } else {
-            throw new PrimaryLoadException();
-        }
-    }
 }
