@@ -36,13 +36,6 @@ public abstract class BlockchainManager {
     private static String KeyRandomGeneratorInstance;
     private static int keySize;
     private static int keyExponant;
-    private static String savedKeyEncryptorSpace;
-
-    /* -Attribut */
-    /* --GETTER */
-    public static String getSavedKeyEncryptorSpace() {
-        return savedKeyEncryptorSpace;
-    }
 
     /* -LOADER */
     public static void load() throws BlockchainManagerLoadException {
@@ -53,7 +46,6 @@ public abstract class BlockchainManager {
             KeyRandomGeneratorInstance = initBlockchainProperties.getProperty("KEY_RANDOM_GENERATOR_INSTANCE");
             keySize = Integer.parseInt(initBlockchainProperties.getProperty("KEY_SIZE"));
             keyExponant = Integer.parseInt(initBlockchainProperties.getProperty("KEY_EXPONANT"));
-            savedKeyEncryptorSpace = initBlockchainProperties.getProperty("SAVED_KEY_ENCRYPTOR_SPACE");
 
             new DoneSystemMessage("BlockchainManagerLoad", 1).show();
 
@@ -64,10 +56,10 @@ public abstract class BlockchainManager {
         }
     }
 
-    /* -INIT */
-    /* --GETTER */
-    public static Properties getInit() {
-        return initBlockchainProperties;
+    /* -KEY */
+    /* --Algorithm */
+    public static String getKeyAlgorithm() {
+        return keyAlgorithm;
     }
 
     /* -GENERATOR */

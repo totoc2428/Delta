@@ -68,16 +68,6 @@ public class DataManagerTest {
     }
 
     @Test
-    public void testDataManagerInit() {
-        assertDoesNotThrow(() -> {
-            DataManager.load();
-
-            assertNotNull(DataManager.getInit());
-            assertFalse(DataManager.getInit().isEmpty());
-        });
-    }
-
-    @Test
     public void testDataManagerWriteInAFile() {
         assertDoesNotThrow(() -> {
             String destinationFile = "./test/testing_ressources_files/write_in_a_file_test.conf";
