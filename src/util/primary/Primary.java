@@ -5,8 +5,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import exception.system.util.blockchain.BlockchainManagerLoadException;
-import exception.system.util.data.DataManagerLoadException;
+import exception.system.SystemException;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
 import exception.system.util.primary.InvalidMessagePrioritySystemException;
@@ -15,6 +14,7 @@ import util.blockchain.BlockchainManager;
 import util.data.DataManager;
 import util.message.SystemMessage;
 import util.message.done.DoneSystemMessage;
+import util.security.SecurityManager;
 
 public abstract class Primary {
     private static final Properties INIT_PROPERTIES = initProperties();
@@ -22,8 +22,8 @@ public abstract class Primary {
     private static String systemLanguageValue = INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE");
 
     private static String dataManagerInitPath = INIT_PROPERTIES.getProperty("DATA_MANAGER_INIT_PATH");
-
     private static String blockchainManagerInitPath = INIT_PROPERTIES.getProperty("BLOCKCHAIN_MANAGER_INIT_PATH");
+    private static String securityManagerInitPath = INIT_PROPERTIES.getProperty("SECURITY_MANAGER_INIT_PATH");
 
     private static String doneMessageInitPath = INIT_PROPERTIES
             .getProperty("DONE_MESSAGE_FOLDER_PATH");
@@ -48,6 +48,11 @@ public abstract class Primary {
     /* ---BLOCKCHAIN */
     public static String getBlockchainManagerInitPath() {
         return blockchainManagerInitPath;
+    }
+
+    /* ---SECURITY */
+    public static String getSecurityManagerInitPath() {
+        return securityManagerInitPath;
     }
 
     /* -FOLDER_PATH */
@@ -231,19 +236,10 @@ public abstract class Primary {
             SystemMessage.reset();
             try {
                 SystemMessage.load();
-            } catch (LangueageMessageNotFoundSystemException e) {
-                e.show();
-            }
-
-            try {
                 DataManager.load();
-            } catch (DataManagerLoadException e) {
-                e.show();
-            }
-
-            try {
                 BlockchainManager.load();
-            } catch (BlockchainManagerLoadException e) {
+                SecurityManager.load();
+            } catch (SystemException e) {
                 e.show();
             }
 
