@@ -13,9 +13,11 @@ import java.nio.file.Paths;
 import org.junit.Before;
 import org.junit.Test;
 
+import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
 import exception.system.util.primary.InvalidMessagePrioritySystemException;
 import exception.system.util.primary.PrimaryLoadException;
+import exception.system.util.primary.PrimarySetInitFilePathSystemException;
 
 public class PrimaryTest {
 
@@ -30,11 +32,44 @@ public class PrimaryTest {
     }
 
     @Test
+    public void testPrimaryLoad() {
+        assertDoesNotThrow(() -> {
+            Primary.setInitFilePath("./ressources/init.conf");
+            Primary.load();
+        });
+    }
+
+    @Test
+    public void testPrimaryLoadException() {
+        assertThrows(PrimaryLoadException.class, () -> {
+            Primary.setInitFilePath("./test/testing_ressources_files/test.conf");
+
+            Primary.load();
+        });
+
+        assertThrows(PrimarySetInitFilePathSystemException.class, () -> {
+            Primary.setInitFilePath("./non_existing_file.conf");
+        });
+
+        assertThrows(PrimarySetInitFilePathSystemException.class, () -> {
+            Primary.setInitFilePath("");
+        });
+    }
+
+    @Test
     public void testAllPrimaryProprety() {
 
         assertNotNull(Primary.getDataManagerInitPath());
         assertFalse(Primary.getDataManagerInitPath().isBlank());
         assertFalse(Primary.getDataManagerInitPath().isEmpty());
+
+        assertNotNull(Primary.getBlockchainManagerInitPath());
+        assertFalse(Primary.getBlockchainManagerInitPath().isBlank());
+        assertFalse(Primary.getBlockchainManagerInitPath().isEmpty());
+
+        assertNotNull(Primary.getSecurityManagerInitPath());
+        assertFalse(Primary.getSecurityManagerInitPath().isBlank());
+        assertFalse(Primary.getSecurityManagerInitPath().isEmpty());
 
         assertNotNull(Primary.getSystemlanguageValue());
         assertFalse(Primary.getSystemlanguageValue().isBlank());
@@ -62,6 +97,81 @@ public class PrimaryTest {
     }
 
     @Test
+    public void testSetDoneMessageInitPath() {
+        assertDoesNotThrow(() -> {
+            Primary.setDoneMessageInitPath("./ressources/messages/done/");
+        });
+
+        assertThrows(LangueageMessageNotFoundSystemException.class, () -> {
+            Primary.setDoneMessageInitPath("./ressources/messages/");
+        });
+
+        assertThrows(PropertiesReadingSystemException.class, () -> {
+            Primary.setDoneMessageInitPath("./ressources/messages/not_existing_language/");
+        });
+    }
+
+    @Test
+    public void testSetErrorMessageInitPath() {
+        assertDoesNotThrow(() -> {
+            Primary.setErrorMessageInitPath("./ressources/messages/error/");
+        });
+
+        assertThrows(LangueageMessageNotFoundSystemException.class, () -> {
+            Primary.setErrorMessageInitPath("./ressources/messages/");
+        });
+
+        assertThrows(PropertiesReadingSystemException.class, () -> {
+            Primary.setErrorMessageInitPath("./ressources/messages/not_existing_language/");
+        });
+    }
+
+    @Test
+    public void testSetInformationMessageInitPath() {
+        assertDoesNotThrow(() -> {
+            Primary.setDoneMessageInitPath("./ressources/messages/information/");
+        });
+
+        assertThrows(LangueageMessageNotFoundSystemException.class, () -> {
+            Primary.setInformationMessageInitPath("./ressources/messages/");
+        });
+
+        assertThrows(PropertiesReadingSystemException.class, () -> {
+            Primary.setInformationMessageInitPath("./ressources/messages/not_existing_language/");
+        });
+    }
+
+    @Test
+    public void testSetNeutralMessageInitPath() {
+        assertDoesNotThrow(() -> {
+            Primary.setDoneMessageInitPath("./ressources/messages/neutral/");
+        });
+
+        assertThrows(LangueageMessageNotFoundSystemException.class, () -> {
+            Primary.setNeutralMessageInitPath("./ressources/messages/");
+        });
+
+        assertThrows(PropertiesReadingSystemException.class, () -> {
+            Primary.setNeutralMessageInitPath("./ressources/messages/not_existing_language/");
+        });
+    }
+
+    @Test
+    public void testSetWarningMessageInitPath() {
+        assertDoesNotThrow(() -> {
+            Primary.setWarningMessageInitPath("./ressources/messages/warning/");
+        });
+
+        assertThrows(LangueageMessageNotFoundSystemException.class, () -> {
+            Primary.setWarningMessageInitPath("./ressources/messages/");
+        });
+
+        assertThrows(PropertiesReadingSystemException.class, () -> {
+            Primary.setWarningMessageInitPath("./ressources/messages/not_existing_language/");
+        });
+    }
+
+    @Test
     public void testSetMessagePriorityException() {
         assertThrows(InvalidMessagePrioritySystemException.class, () -> {
             Primary.setMessagePriority(0);
@@ -70,6 +180,7 @@ public class PrimaryTest {
         assertThrows(InvalidMessagePrioritySystemException.class, () -> {
             Primary.setMessagePriority(-1);
         });
+
     }
 
     @Test

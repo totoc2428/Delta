@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import exception.system.util.data.DataManagerLoadException;
+import exception.system.util.data.DataManagerSetInitFilePathSystemException;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.data.WriteInAFileSystemException;
 import util.message.done.DoneSystemMessage;
@@ -31,25 +32,47 @@ public abstract class DataManager {
 
     /* -LOADER */
     public static void load() throws DataManagerLoadException {
-        File file = Paths.get(Primary.getDataManagerInitPath()).toFile();
-        if (file.exists() && file.isFile()) {
+        if (initDataProperties == null) {
             try {
-                initDataProperties = DataManager.readAFile(file);
-
-                savedListSpace = initDataProperties.getProperty("SAVED_LIST_SPACE");
-                savedDicSpace = initDataProperties.getProperty("SAVED_DIC_SPACE");
-
-                listTag = initDataProperties.getProperty("LIST_TAG");
-                dicTag = initDataProperties.getProperty("DIC_TAG");
-
-                DoneSystemMessage.show("DataManagerLoad", 1);
-            } catch (PropertiesReadingSystemException e) {
-                e.show();
+                setInitFilePath(Primary.getDataManagerInitPath());
+            } catch (DataManagerSetInitFilePathSystemException e) {
                 throw new DataManagerLoadException();
             }
+        }
+        if (initPrimaryPropertiesCheck()) {
+            savedListSpace = initDataProperties.getProperty("SAVED_LIST_SPACE");
+            savedDicSpace = initDataProperties.getProperty("SAVED_DIC_SPACE");
+
+            listTag = initDataProperties.getProperty("LIST_TAG");
+            dicTag = initDataProperties.getProperty("DIC_TAG");
+
+            DoneSystemMessage.show("DataManagerLoad", 1);
         } else {
             throw new DataManagerLoadException();
         }
+    }
+
+    /* -INIT */
+    /* --SETTER */
+    public static void setInitFilePath(String filePath) throws DataManagerSetInitFilePathSystemException {
+        try {
+            initDataProperties = DataManager.readAFile(filePath);
+        } catch (PropertiesReadingSystemException e) {
+            throw new DataManagerSetInitFilePathSystemException();
+        }
+    }
+
+    /* --CHECKER */
+    private static boolean initPrimaryPropertiesCheck() {
+        return checkAPrimaryProperty("SAVED_LIST_SPACE") && checkAPrimaryProperty("SAVED_DIC_SPACE")
+                && checkAPrimaryProperty("LIST_TAG") && checkAPrimaryProperty("DIC_TAG");
+    }
+
+    private static boolean checkAPrimaryProperty(String primaryCode) {
+        return (initDataProperties.getProperty(primaryCode) != null && (!initDataProperties
+                .getProperty(
+                        primaryCode)
+                .isBlank() && !initDataProperties.getProperty(primaryCode).isEmpty()));
     }
 
     /* -READ_METHOD */

@@ -16,6 +16,8 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
+import exception.system.util.data.DataManagerLoadException;
+import exception.system.util.data.DataManagerSetInitFilePathSystemException;
 import exception.system.util.data.PropertiesReadingSystemException;
 import io.jsonwebtoken.lang.Arrays;
 import util.primary.Primary;
@@ -30,6 +32,27 @@ public class DataManagerTest {
         } catch (PrimaryLoadException e) {
             e.show();
         }
+    }
+
+    @Test
+    public void testLoad() {
+        assertDoesNotThrow(() -> {
+            DataManager.load();
+        });
+
+        assertThrows(DataManagerLoadException.class, () -> {
+            DataManager.setInitFilePath("./test/testing_ressources_files/test.conf");
+
+            DataManager.load();
+        });
+
+        assertThrows(DataManagerSetInitFilePathSystemException.class, () -> {
+            DataManager.setInitFilePath("./non_existing_file.conf");
+        });
+
+        assertThrows(DataManagerSetInitFilePathSystemException.class, () -> {
+            DataManager.setInitFilePath("");
+        });
     }
 
     @Test

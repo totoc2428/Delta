@@ -10,6 +10,7 @@ import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.message.LangueageMessageNotFoundSystemException;
 import exception.system.util.primary.InvalidMessagePrioritySystemException;
 import exception.system.util.primary.PrimaryLoadException;
+import exception.system.util.primary.PrimarySetInitFilePathSystemException;
 import util.blockchain.BlockchainManager;
 import util.data.DataManager;
 import util.message.SystemMessage;
@@ -17,44 +18,90 @@ import util.message.done.DoneSystemMessage;
 import util.security.SecurityManager;
 
 public abstract class Primary {
-    private static final Properties INIT_PROPERTIES = initProperties();
+    private static Properties initPrimaryProperties;
 
-    private static String systemLanguageValue = INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE");
+    private static String systemLanguageValue;
 
-    private static String dataManagerInitPath = INIT_PROPERTIES.getProperty("DATA_MANAGER_INIT_PATH");
-    private static String blockchainManagerInitPath = INIT_PROPERTIES.getProperty("BLOCKCHAIN_MANAGER_INIT_PATH");
-    private static String securityManagerInitPath = INIT_PROPERTIES.getProperty("SECURITY_MANAGER_INIT_PATH");
+    private static String dataManagerInitPath;
+    private static String blockchainManagerInitPath;
+    private static String securityManagerInitPath;
+    private static String doneMessageInitPath;
+    private static String errorMessageFolderPath;
+    private static String informationMessageFolderPath;
+    private static String neutralMessageFolderPath;
+    private static String warningMessageFolderPath;
 
-    private static String doneMessageInitPath = INIT_PROPERTIES
-            .getProperty("DONE_MESSAGE_FOLDER_PATH");
-    private static String errorMessageFolderPath = INIT_PROPERTIES
-            .getProperty("ERROR_MESSAGE_FOLDER_PATH");
-    private static String informationMessageFolderPath = INIT_PROPERTIES
-            .getProperty("INFORMATION_MESSAGE_FOLDER_PATH");
-    private static String neutralMessageFolderPath = INIT_PROPERTIES
-            .getProperty("NEUTRAL_MESSAGE_FOLDER_PATH");
-    private static String warningMessageFolderPath = INIT_PROPERTIES
-            .getProperty("WARNING_MESSAGE_FOLDER_PATH");
-
-    private static int messagePriority = Integer.parseInt(INIT_PROPERTIES.getProperty("MESSAGE_PRIORITY"));
+    private static int messagePriority;
 
     /* -LOADER */
     public static void load() throws PrimaryLoadException {
-        if (isLanguageAviable(INIT_PROPERTIES.getProperty("SYSTEM_LANGUAGE"))) {
-            SystemMessage.reset();
-            try {
-                SystemMessage.load();
-                DataManager.load();
-                BlockchainManager.load();
-                SecurityManager.load();
-            } catch (SystemException e) {
-                e.show();
+        try {
+            if (initPrimaryProperties == null) {
+                setInitFilePath("./ressources/init.conf");
             }
+            if (initPrimaryPropertiesCheck()) {
 
-            DoneSystemMessage.show("PrimaryLoad", 1);
-        } else {
+                systemLanguageValue = initPrimaryProperties.getProperty("SYSTEM_LANGUAGE");
+                dataManagerInitPath = initPrimaryProperties.getProperty("DATA_MANAGER_INIT_PATH");
+                blockchainManagerInitPath = initPrimaryProperties.getProperty("BLOCKCHAIN_MANAGER_INIT_PATH");
+                securityManagerInitPath = initPrimaryProperties.getProperty("SECURITY_MANAGER_INIT_PATH");
+                doneMessageInitPath = initPrimaryProperties.getProperty("DONE_MESSAGE_FOLDER_PATH");
+                errorMessageFolderPath = initPrimaryProperties.getProperty("ERROR_MESSAGE_FOLDER_PATH");
+                informationMessageFolderPath = initPrimaryProperties.getProperty("INFORMATION_MESSAGE_FOLDER_PATH");
+                neutralMessageFolderPath = initPrimaryProperties.getProperty("NEUTRAL_MESSAGE_FOLDER_PATH");
+                warningMessageFolderPath = initPrimaryProperties.getProperty("WARNING_MESSAGE_FOLDER_PATH");
+
+                messagePriority = Integer.parseInt(initPrimaryProperties.getProperty("MESSAGE_PRIORITY"));
+
+                if (isLanguageAviable(initPrimaryProperties.getProperty("SYSTEM_LANGUAGE"))) {
+                    SystemMessage.reset();
+                    SystemMessage.load();
+                    DataManager.load();
+                    BlockchainManager.load();
+                    SecurityManager.load();
+
+                    DoneSystemMessage.show("PrimaryLoad", 1);
+                } else {
+                    throw new PrimaryLoadException();
+                }
+            } else {
+                throw new PrimaryLoadException();
+            }
+        } catch (SystemException e) {
             throw new PrimaryLoadException();
         }
+
+    }
+
+    /* -INIT */
+    /* --SETTER */
+    public static void setInitFilePath(String filePath) throws PrimarySetInitFilePathSystemException {
+        try {
+            initPrimaryProperties = DataManager.readAFile(filePath);
+        } catch (PropertiesReadingSystemException e) {
+            e.show();
+            throw new PrimarySetInitFilePathSystemException();
+        }
+    }
+
+    /* --CHEKER */
+    private static boolean initPrimaryPropertiesCheck() {
+        return checkAPrimaryProperty("SYSTEM_LANGUAGE") && checkAPrimaryProperty("DATA_MANAGER_INIT_PATH")
+                && checkAPrimaryProperty("BLOCKCHAIN_MANAGER_INIT_PATH")
+                && checkAPrimaryProperty("SECURITY_MANAGER_INIT_PATH")
+                && checkAPrimaryProperty("DONE_MESSAGE_FOLDER_PATH")
+                && checkAPrimaryProperty("ERROR_MESSAGE_FOLDER_PATH")
+                && checkAPrimaryProperty("INFORMATION_MESSAGE_FOLDER_PATH")
+                && checkAPrimaryProperty("NEUTRAL_MESSAGE_FOLDER_PATH")
+                && checkAPrimaryProperty("WARNING_MESSAGE_FOLDER_PATH")
+                && checkAPrimaryProperty("MESSAGE_PRIORITY");
+    }
+
+    private static boolean checkAPrimaryProperty(String primaryCode) {
+        return (initPrimaryProperties.getProperty(primaryCode) != null && (!initPrimaryProperties
+                .getProperty(
+                        primaryCode)
+                .isBlank() && !initPrimaryProperties.getProperty(primaryCode).isEmpty()));
     }
 
     /* -INIT_PATH */
@@ -236,17 +283,6 @@ public abstract class Primary {
         }
 
         return value;
-    }
-
-    /* -INIT */
-    /* --PROPERTIES */
-    private static Properties initProperties() {
-        try {
-            return DataManager.readAFile("./ressources/init.conf");
-        } catch (PropertiesReadingSystemException e) {
-            e.show();
-            return null;
-        }
     }
 
 }
