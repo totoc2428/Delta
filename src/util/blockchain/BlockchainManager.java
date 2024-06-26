@@ -48,7 +48,6 @@ public abstract class BlockchainManager {
             keyExponant = Integer.parseInt(initBlockchainProperties.getProperty("KEY_EXPONANT"));
 
             DoneSystemMessage.show("BlockchainManagerLoad", 1);
-
         } catch (PropertiesReadingSystemException e) {
             e.show();
 

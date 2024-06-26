@@ -22,6 +22,7 @@ import exception.system.util.security.VerifySignatureSecurityManagerSystemExcept
 import io.jsonwebtoken.security.InvalidKeyException;
 import util.blockchain.BlockchainManager;
 import util.data.DataManager;
+import util.message.done.DoneSystemMessage;
 import util.primary.Primary;
 
 public abstract class SecurityManager {
@@ -42,6 +43,7 @@ public abstract class SecurityManager {
 
             signatureAgorithm = initSecurityProperties.getProperty("SIGNATURE_ALGORITHM");
 
+            DoneSystemMessage.show("SecurityManagerLoad", 1);
         } catch (PropertiesReadingSystemException e) {
             throw new SecurityManagerLoadSystemException();
         }
@@ -66,8 +68,8 @@ public abstract class SecurityManager {
             String encryptedDataBase64 = Base64.getEncoder().encodeToString(encryptedData);
             String encryptedAESKeyBase64 = Base64.getEncoder().encodeToString(encryptedAESKey);
 
+            DoneSystemMessage.show("SecurityManagerEncrypt", 1);
             return encryptedDataBase64 + savedKeyEncryptorSpace + encryptedAESKeyBase64;
-
         } catch (Exception e) {
             throw new EncryptSecurityManagerSystemException();
         }
@@ -91,8 +93,8 @@ public abstract class SecurityManager {
             aesCipher.init(Cipher.DECRYPT_MODE, aesKey);
             byte[] decryptedDataBytes = aesCipher.doFinal(encryptedDataBytes);
 
+            DoneSystemMessage.show("SecurityManagerDecrypt", 1);
             return new String(decryptedDataBytes);
-
         } catch (Exception e) {
             throw new DecryptSecurityManagerSystemException();
         }
@@ -108,8 +110,8 @@ public abstract class SecurityManager {
                 signature.update(message.getBytes());
                 byte[] signatureBytes = signature.sign();
 
+                DoneSystemMessage.show("SecurityManagerSign", 1);
                 return Base64.getEncoder().encodeToString(signatureBytes);
-
             } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException
                     | java.security.InvalidKeyException e) {
                 throw new SignSecurityManagerSystemException();
@@ -129,8 +131,8 @@ public abstract class SecurityManager {
                 sig.update(message.getBytes());
                 byte[] signatureBytes = Base64.getDecoder().decode(signature);
 
+                DoneSystemMessage.show("SecurityManagerVerifySignature", 1);
                 return sig.verify(signatureBytes);
-
             } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException
                     | java.security.InvalidKeyException e) {
                 throw new VerifySignatureSecurityManagerSystemException();

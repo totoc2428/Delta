@@ -51,7 +51,7 @@ public abstract class Primary {
                 e.show();
             }
 
-            new DoneSystemMessage("PrimaryLoad", 1).show();
+            DoneSystemMessage.show("PrimaryLoad", 1);
         } else {
             throw new PrimaryLoadException();
         }
@@ -104,7 +104,7 @@ public abstract class Primary {
             if (checkAFolderLanguage(DataManager.folderNameToAStringArrayList(file), systemLanguageValue)) {
                 Primary.doneMessageInitPath = doneMessageInitPath;
 
-                new DoneSystemMessage("PrimarySetDoneMessageInitPath", 1).show();
+                DoneSystemMessage.show("PrimarySetDoneMessageInitPath", 1);
             } else {
                 throw new LangueageMessageNotFoundSystemException();
             }
@@ -120,7 +120,7 @@ public abstract class Primary {
             if (checkAFolderLanguage(DataManager.folderNameToAStringArrayList(file), systemLanguageValue)) {
                 Primary.errorMessageFolderPath = errorMessageFolderPath;
 
-                new DoneSystemMessage("PrimarySetErrorMessageInitPath", 1).show();
+                DoneSystemMessage.show("PrimarySetErrorMessageInitPath", 1);
             } else {
                 throw new LangueageMessageNotFoundSystemException();
             }
@@ -136,7 +136,7 @@ public abstract class Primary {
             if (checkAFolderLanguage(DataManager.folderNameToAStringArrayList(file), systemLanguageValue)) {
                 Primary.informationMessageFolderPath = informationMessageFolderPath;
 
-                new DoneSystemMessage("PrimarySetInformationMessageInitPath", 1).show();
+                DoneSystemMessage.show("PrimarySetInformationMessageInitPath", 1);
             } else {
                 throw new LangueageMessageNotFoundSystemException();
             }
@@ -152,7 +152,7 @@ public abstract class Primary {
             if (checkAFolderLanguage(DataManager.folderNameToAStringArrayList(file), systemLanguageValue)) {
                 Primary.neutralMessageFolderPath = neutralMessageFolderPath;
 
-                new DoneSystemMessage("PrimarySetNeutralMessageInitPath", 1).show();
+                DoneSystemMessage.show("PrimarySetNeutralMessageInitPath", 1);
             } else {
                 throw new LangueageMessageNotFoundSystemException();
             }
@@ -168,7 +168,7 @@ public abstract class Primary {
             if (checkAFolderLanguage(DataManager.folderNameToAStringArrayList(file), systemLanguageValue)) {
                 Primary.warningMessageFolderPath = warningMessageFolderPath;
 
-                new DoneSystemMessage("PrimarySetWarningMessageInitPath", 1).show();
+                DoneSystemMessage.show("PrimarySetWarningMessageInitPath", 1);
             } else {
                 throw new LangueageMessageNotFoundSystemException();
             }
@@ -187,7 +187,7 @@ public abstract class Primary {
     public static void setMessagePriority(int messagePriority) throws InvalidMessagePrioritySystemException {
         if (messagePriority > 0) {
             Primary.messagePriority = messagePriority;
-            new DoneSystemMessage("PrimarySetMessagePriority", 1).show();
+            DoneSystemMessage.show("PrimarySetMessagePriority", 1);
         } else {
             throw new InvalidMessagePrioritySystemException();
         }
@@ -205,7 +205,7 @@ public abstract class Primary {
         if (isLanguageAviable(systemlanguageValue)) {
             systemLanguageValue = systemlanguageValue.toUpperCase();
 
-            new DoneSystemMessage("PrimarySetSystemlanguageValue", 1).show();
+            DoneSystemMessage.show("PrimarySetSystemlanguageValue", 1);
         } else {
             throw new LangueageMessageNotFoundSystemException();
         }

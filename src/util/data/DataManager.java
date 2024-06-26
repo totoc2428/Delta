@@ -14,6 +14,7 @@ import java.util.Properties;
 import exception.system.util.data.DataManagerLoadException;
 import exception.system.util.data.PropertiesReadingSystemException;
 import exception.system.util.data.WriteInAFileSystemException;
+import util.message.done.DoneSystemMessage;
 import util.primary.Primary;
 
 import java.io.OutputStream;
@@ -40,6 +41,8 @@ public abstract class DataManager {
 
                 listTag = initDataProperties.getProperty("LIST_TAG");
                 dicTag = initDataProperties.getProperty("DIC_TAG");
+
+                DoneSystemMessage.show("DataManagerLoad", 1);
             } catch (PropertiesReadingSystemException e) {
                 e.show();
                 throw new DataManagerLoadException();
@@ -109,6 +112,7 @@ public abstract class DataManager {
         }
         try (OutputStream outputStream = new FileOutputStream(srcDestinaionPath)) {
             properties.store(outputStream, "");
+            DoneSystemMessage.show("DataManagerWriteInAFile", 1);
         } catch (java.io.IOException e) {
             throw new WriteInAFileSystemException();
         }
