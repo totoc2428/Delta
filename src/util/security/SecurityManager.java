@@ -1,7 +1,10 @@
 package util.security;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.util.Base64;
 import java.util.Properties;
 
@@ -16,6 +19,7 @@ import exception.system.util.security.EncryptSecurityManagerSystemException;
 import exception.system.util.security.SecurityManagerLoadSystemException;
 import exception.system.util.security.SignSecurityManagerSystemException;
 import exception.system.util.security.VerifySignatureSecurityManagerSystemException;
+import io.jsonwebtoken.security.InvalidKeyException;
 import util.blockchain.BlockchainManager;
 import util.data.DataManager;
 import util.primary.Primary;
@@ -26,6 +30,8 @@ public abstract class SecurityManager {
     private static String encryptorAlgoritm;
     private static String savedKeyEncryptorSpace;
 
+    private static String signatureAgorithm;
+
     /* -LOADER */
     public static void load() throws SecurityManagerLoadSystemException {
         try {
@@ -33,6 +39,8 @@ public abstract class SecurityManager {
 
             encryptorAlgoritm = initSecurityProperties.getProperty("ENCRYPTOR_ALGORITHM");
             savedKeyEncryptorSpace = initSecurityProperties.getProperty("SAVED_KEY_ENCRYPTOR_SPACE");
+
+            signatureAgorithm = initSecurityProperties.getProperty("SIGNATURE_ALGORITHM");
 
         } catch (PropertiesReadingSystemException e) {
             throw new SecurityManagerLoadSystemException();
@@ -93,12 +101,43 @@ public abstract class SecurityManager {
     /* --SIGNATURE */
     /* ---SIGN */
     public static String sign(String message, PrivateKey privateKey) throws SignSecurityManagerSystemException {
-        return null;
+        if (message != null && privateKey != null) {
+            try {
+                Signature signature = Signature.getInstance(signatureAgorithm);
+                signature.initSign(privateKey);
+                signature.update(message.getBytes());
+                byte[] signatureBytes = signature.sign();
+
+                return Base64.getEncoder().encodeToString(signatureBytes);
+
+            } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException
+                    | java.security.InvalidKeyException e) {
+                throw new SignSecurityManagerSystemException();
+            }
+        } else {
+            throw new SignSecurityManagerSystemException();
+        }
     }
 
     /* ---VERIFY */
     public static boolean verifySignature(String signature, String message, PublicKey publicKey)
             throws VerifySignatureSecurityManagerSystemException {
-        return false;
+        if (signature != null && message != null && publicKey != null) {
+            try {
+                Signature sig = Signature.getInstance(signatureAgorithm);
+                sig.initVerify(publicKey);
+                sig.update(message.getBytes());
+                byte[] signatureBytes = Base64.getDecoder().decode(signature);
+
+                return sig.verify(signatureBytes);
+
+            } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException
+                    | java.security.InvalidKeyException e) {
+                throw new VerifySignatureSecurityManagerSystemException();
+            }
+        } else {
+            throw new VerifySignatureSecurityManagerSystemException();
+        }
+
     }
 }
