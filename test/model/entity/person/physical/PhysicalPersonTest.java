@@ -1,5 +1,6 @@
 package model.entity.person.physical;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -46,7 +47,7 @@ public class PhysicalPersonTest {
     }
 
     @Test
-    public void testGetPerson() {
+    public void testGetForNames() {
         assertDoesNotThrow(() -> {
             String privateKeyPhrase = "pk_phrase";
             LocalDate birthDate = LocalDate.now();
@@ -61,6 +62,8 @@ public class PhysicalPersonTest {
                     Arrays.asList(names));
 
             assertNotNull(physicalPerson);
+
+            assertEquals(Arrays.asList(names), physicalPerson.getForNames());
         });
     }
 }

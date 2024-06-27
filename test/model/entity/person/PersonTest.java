@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exception.system.util.primary.PrimaryLoadException;
+import model.entity.person.physical.PhysicalPerson;
 import util.blockchain.BlockchainManager;
 import util.primary.Primary;
 
@@ -35,7 +36,8 @@ public class PersonTest {
             PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(privateKeyPhrase);
             PublicKey publicKey = BlockchainManager.generatePublicKeyWithPrivateKey(privateKey);
 
-            Person person = new Person(privateKey, publicKey, privateKeyPhrase, birthDate, isVerified);
+            Person person = (Person) new PhysicalPerson(privateKey, publicKey, privateKeyPhrase, birthDate, isVerified,
+                    null);
 
             assertNotNull(person);
         });
@@ -51,7 +53,8 @@ public class PersonTest {
             PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(privateKeyPhrase);
             PublicKey publicKey = BlockchainManager.generatePublicKeyWithPrivateKey(privateKey);
 
-            Person person = new Person(privateKey, publicKey, privateKeyPhrase, birthDate, isVerified);
+            Person person = (Person) new PhysicalPerson(privateKey, publicKey, privateKeyPhrase, birthDate, isVerified,
+                    null);
 
             assertNotNull(person);
 
@@ -70,7 +73,8 @@ public class PersonTest {
             PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(privateKeyPhrase);
             PublicKey publicKey = BlockchainManager.generatePublicKeyWithPrivateKey(privateKey);
 
-            Person person = new Person(privateKey, publicKey, privateKeyPhrase, birthDate, isVerified);
+            Person person = (Person) new PhysicalPerson(privateKey, publicKey, privateKeyPhrase, birthDate, isVerified,
+                    null);
 
             assertNotNull(person);
 
@@ -89,7 +93,8 @@ public class PersonTest {
             PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(privateKeyPhrase);
             PublicKey publicKey = BlockchainManager.generatePublicKeyWithPrivateKey(privateKey);
 
-            Person person = new Person(privateKey, publicKey, privateKeyPhrase, birthDate, isVerified);
+            Person person = (Person) new PhysicalPerson(privateKey, publicKey, privateKeyPhrase, birthDate, isVerified,
+                    null);
 
             assertNotNull(person);
 

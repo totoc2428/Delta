@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 import model.entity.ChainObject;
 
-public class Person extends ChainObject {
+public abstract class Person extends ChainObject {
     private String name;
     private LocalDate brithDate;
 
