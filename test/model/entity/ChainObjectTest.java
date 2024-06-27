@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exception.system.util.primary.PrimaryLoadException;
+import model.entity.person.Person;
 import util.blockchain.BlockchainManager;
 import util.primary.Primary;
 
@@ -31,7 +32,7 @@ public class ChainObjectTest {
             PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(privateKeyPhrase);
             PublicKey publicKey = BlockchainManager.generatePublicKeyWithPrivateKey(privateKey);
 
-            ChainObject chainObject = new ChainObject(privateKey, publicKey);
+            ChainObject chainObject = (ChainObject) new Person(privateKey, publicKey, null, null, false);
 
             assertNotNull(chainObject);
         });
@@ -44,7 +45,7 @@ public class ChainObjectTest {
             PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(privateKeyPhrase);
             PublicKey publicKey = BlockchainManager.generatePublicKeyWithPrivateKey(privateKey);
 
-            ChainObject chainObject = new ChainObject(privateKey, publicKey);
+            ChainObject chainObject = (ChainObject) new Person(privateKey, publicKey, null, null, false);
             assertNotNull(chainObject);
 
             assertNotNull(chainObject.getPrivateKey());
@@ -59,7 +60,7 @@ public class ChainObjectTest {
             PrivateKey privateKey = BlockchainManager.generatePrivateKeyFromString(privateKeyPhrase);
             PublicKey publicKey = BlockchainManager.generatePublicKeyWithPrivateKey(privateKey);
 
-            ChainObject chainObject = new ChainObject(privateKey, publicKey);
+            ChainObject chainObject = (ChainObject) new Person(privateKey, publicKey, null, null, false);
             assertNotNull(chainObject);
 
             assertNotNull(chainObject.getPublicKey());
