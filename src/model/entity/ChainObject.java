@@ -3,7 +3,7 @@ package model.entity;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-public abstract class ChainObject {
+public class ChainObject {
     private PrivateKey privateKey;
     private PublicKey publicKey;
 

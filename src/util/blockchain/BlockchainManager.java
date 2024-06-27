@@ -41,23 +41,22 @@ public abstract class BlockchainManager {
 
     /* -LOADER */
     public static void load() throws BlockchainManagerLoadException {
-        try {
-            if (initBlockchainProperties == null) {
-                initBlockchainProperties = DataManager.readAFile(Primary.getBlockchainManagerInitPath());
-            }
-            if (initBlockchainPropertiesCheck()) {
-                keyAlgorithm = initBlockchainProperties.getProperty("KEY_ALGORITHM");
-                KeyRandomGeneratorInstance = initBlockchainProperties.getProperty("KEY_RANDOM_GENERATOR_INSTANCE");
-                keySize = Integer.parseInt(initBlockchainProperties.getProperty("KEY_SIZE"));
-                keyExponant = Integer.parseInt(initBlockchainProperties.getProperty("KEY_EXPONANT"));
-
-                DoneSystemMessage.show("BlockchainManagerLoad", 1);
-            } else {
+        if (initBlockchainProperties == null) {
+            try {
+                setInitFilePath(Primary.getBlockchainManagerInitPath());
+            } catch (BlockchainManagerInitFilePathSystemException e) {
+                e.show();
                 throw new BlockchainManagerLoadException();
             }
+        }
+        if (initBlockchainPropertiesCheck()) {
+            keyAlgorithm = initBlockchainProperties.getProperty("KEY_ALGORITHM");
+            KeyRandomGeneratorInstance = initBlockchainProperties.getProperty("KEY_RANDOM_GENERATOR_INSTANCE");
+            keySize = Integer.parseInt(initBlockchainProperties.getProperty("KEY_SIZE"));
+            keyExponant = Integer.parseInt(initBlockchainProperties.getProperty("KEY_EXPONANT"));
 
-        } catch (PropertiesReadingSystemException e) {
-            e.show();
+            DoneSystemMessage.show("BlockchainManagerLoad", 1);
+        } else {
             throw new BlockchainManagerLoadException();
         }
     }
@@ -68,6 +67,7 @@ public abstract class BlockchainManager {
         try {
             initBlockchainProperties = DataManager.readAFile(filePath);
         } catch (PropertiesReadingSystemException e) {
+            e.show();
             throw new BlockchainManagerInitFilePathSystemException();
         }
 
@@ -76,7 +76,6 @@ public abstract class BlockchainManager {
     /* --CHEKER */
     private static boolean initBlockchainPropertiesCheck() {
         return checkABlockchainProperty("KEY_ALGORITHM") && checkABlockchainProperty("KEY_RANDOM_GENERATOR_INSTANCE")
-                && checkABlockchainProperty("BLOCKCHAIN_MANAGER_INIT_PATH")
                 && checkABlockchainProperty("KEY_SIZE")
                 && checkABlockchainProperty("KEY_EXPONANT");
     }

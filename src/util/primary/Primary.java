@@ -54,6 +54,7 @@ public abstract class Primary {
 
                 messagePriority = Integer.parseInt(initPrimaryProperties.getProperty("MESSAGE_PRIORITY"));
                 version = Double.parseDouble(initPrimaryProperties.getProperty("VERSION"));
+
                 if (isLanguageAviable(initPrimaryProperties.getProperty("SYSTEM_LANGUAGE"))) {
                     SystemMessage.reset();
                     SystemMessage.load();
@@ -69,6 +70,7 @@ public abstract class Primary {
                 throw new PrimaryLoadException();
             }
         } catch (SystemException e) {
+            e.show();
             throw new PrimaryLoadException();
         }
 

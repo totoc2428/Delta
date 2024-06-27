@@ -64,19 +64,21 @@ public class BLockchainManagerTest {
             BlockchainManager.setInitFilePath(Primary.getBlockchainManagerInitPath());
         });
 
-        assertThrows(BlockchainManagerInitFilePathSystemException.class, () -> {
-            BlockchainManager.setInitFilePath("");
+        assertThrows(BlockchainManagerLoadException.class, () -> {
+            BlockchainManager.setInitFilePath("./test/testing_ressources_files/test.conf");
+
+            BlockchainManager.load();
+
         });
 
         assertThrows(BlockchainManagerInitFilePathSystemException.class, () -> {
             BlockchainManager.setInitFilePath("./non_existing_file.conf");
         });
 
-        assertThrows(BlockchainManagerLoadException.class, () -> {
-            BlockchainManager.setInitFilePath("./test/testing_ressources_files/test.conf");
-
-            BlockchainManager.load();
+        assertThrows(BlockchainManagerInitFilePathSystemException.class, () -> {
+            BlockchainManager.setInitFilePath("");
         });
+
     }
 
     @Test

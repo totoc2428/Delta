@@ -13,7 +13,7 @@ public class ErrorSystemMessage extends SystemMessage {
     }
 
     public void show() {
-        TerminalStyle.showNeutral(super.getMessage());
+        TerminalStyle.showError(super.getMessage());
     }
 
     public static void loadWithCode() throws LangueageMessageNotFoundSystemException {
