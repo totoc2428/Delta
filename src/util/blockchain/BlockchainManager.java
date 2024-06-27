@@ -13,6 +13,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Properties;
 
+import exception.system.util.blockchain.BlockchainManagerInitFilePathSystemException;
 import exception.system.util.blockchain.BlockchainManagerLoadException;
 import exception.system.util.blockchain.GeneratePrivateKeyFromStringSystemException;
 import exception.system.util.blockchain.GeneratePublicKeyWithPrivateKeySystemException;
@@ -41,19 +42,50 @@ public abstract class BlockchainManager {
     /* -LOADER */
     public static void load() throws BlockchainManagerLoadException {
         try {
-            initBlockchainProperties = DataManager.readAFile(Primary.getBlockchainManagerInitPath());
+            if (initBlockchainProperties == null) {
+                initBlockchainProperties = DataManager.readAFile(Primary.getBlockchainManagerInitPath());
+            }
+            if (initBlockchainPropertiesCheck()) {
+                keyAlgorithm = initBlockchainProperties.getProperty("KEY_ALGORITHM");
+                KeyRandomGeneratorInstance = initBlockchainProperties.getProperty("KEY_RANDOM_GENERATOR_INSTANCE");
+                keySize = Integer.parseInt(initBlockchainProperties.getProperty("KEY_SIZE"));
+                keyExponant = Integer.parseInt(initBlockchainProperties.getProperty("KEY_EXPONANT"));
 
-            keyAlgorithm = initBlockchainProperties.getProperty("KEY_ALGORITHM");
-            KeyRandomGeneratorInstance = initBlockchainProperties.getProperty("KEY_RANDOM_GENERATOR_INSTANCE");
-            keySize = Integer.parseInt(initBlockchainProperties.getProperty("KEY_SIZE"));
-            keyExponant = Integer.parseInt(initBlockchainProperties.getProperty("KEY_EXPONANT"));
+                DoneSystemMessage.show("BlockchainManagerLoad", 1);
+            } else {
+                throw new BlockchainManagerLoadException();
+            }
 
-            DoneSystemMessage.show("BlockchainManagerLoad", 1);
         } catch (PropertiesReadingSystemException e) {
             e.show();
-
             throw new BlockchainManagerLoadException();
         }
+    }
+
+    /* -INIT */
+    /* --SETTER */
+    public static void setInitFilePath(String filePath) throws BlockchainManagerInitFilePathSystemException {
+        try {
+            initBlockchainProperties = DataManager.readAFile(filePath);
+        } catch (PropertiesReadingSystemException e) {
+            throw new BlockchainManagerInitFilePathSystemException();
+        }
+
+    }
+
+    /* --CHEKER */
+    private static boolean initBlockchainPropertiesCheck() {
+        return checkABlockchainProperty("KEY_ALGORITHM") && checkABlockchainProperty("KEY_RANDOM_GENERATOR_INSTANCE")
+                && checkABlockchainProperty("BLOCKCHAIN_MANAGER_INIT_PATH")
+                && checkABlockchainProperty("KEY_SIZE")
+                && checkABlockchainProperty("KEY_EXPONANT");
+    }
+
+    private static boolean checkABlockchainProperty(String primaryCode) {
+        return (initBlockchainProperties.getProperty(primaryCode) != null && (!initBlockchainProperties
+                .getProperty(
+                        primaryCode)
+                .isBlank() && !initBlockchainProperties.getProperty(primaryCode).isEmpty()));
     }
 
     /* -KEY */

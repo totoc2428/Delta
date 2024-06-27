@@ -12,6 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exception.system.SystemException;
+import exception.system.util.blockchain.BlockchainManagerInitFilePathSystemException;
+import exception.system.util.blockchain.BlockchainManagerLoadException;
 import exception.system.util.blockchain.GeneratePrivateKeyFromStringSystemException;
 import exception.system.util.blockchain.GeneratePublicKeyWithPrivateKeySystemException;
 import exception.system.util.blockchain.PrivateKeyToSavedFormatSystemException;
@@ -53,6 +55,27 @@ public class BLockchainManagerTest {
 
         assertThrows(GeneratePrivateKeyFromStringSystemException.class, () -> {
             BlockchainManager.generatePrivateKeyFromString("   ");
+        });
+    }
+
+    @Test
+    public void setInitFilePath() {
+        assertDoesNotThrow(() -> {
+            BlockchainManager.setInitFilePath(Primary.getBlockchainManagerInitPath());
+        });
+
+        assertThrows(BlockchainManagerInitFilePathSystemException.class, () -> {
+            BlockchainManager.setInitFilePath("");
+        });
+
+        assertThrows(BlockchainManagerInitFilePathSystemException.class, () -> {
+            BlockchainManager.setInitFilePath("./non_existing_file.conf");
+        });
+
+        assertThrows(BlockchainManagerLoadException.class, () -> {
+            BlockchainManager.setInitFilePath("./test/testing_ressources_files/test.conf");
+
+            BlockchainManager.load();
         });
     }
 
