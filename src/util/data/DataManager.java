@@ -39,7 +39,7 @@ public abstract class DataManager {
                 throw new DataManagerLoadException();
             }
         }
-        if (initPrimaryPropertiesCheck()) {
+        if (initDataPropertiesCheck()) {
             savedListSpace = initDataProperties.getProperty("SAVED_LIST_SPACE");
             savedDicSpace = initDataProperties.getProperty("SAVED_DIC_SPACE");
 
@@ -63,12 +63,12 @@ public abstract class DataManager {
     }
 
     /* --CHECKER */
-    private static boolean initPrimaryPropertiesCheck() {
-        return checkAPrimaryProperty("SAVED_LIST_SPACE") && checkAPrimaryProperty("SAVED_DIC_SPACE")
-                && checkAPrimaryProperty("LIST_TAG") && checkAPrimaryProperty("DIC_TAG");
+    private static boolean initDataPropertiesCheck() {
+        return checkADataProperty("SAVED_LIST_SPACE") && checkADataProperty("SAVED_DIC_SPACE")
+                && checkADataProperty("LIST_TAG") && checkADataProperty("DIC_TAG");
     }
 
-    private static boolean checkAPrimaryProperty(String primaryCode) {
+    private static boolean checkADataProperty(String primaryCode) {
         return (initDataProperties.getProperty(primaryCode) != null && (!initDataProperties
                 .getProperty(
                         primaryCode)
