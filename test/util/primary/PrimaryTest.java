@@ -57,6 +57,13 @@ public class PrimaryTest {
     }
 
     @Test
+    public void testGetVersion() {
+        assertNotNull(Primary.getVersion());
+        assertTrue(Primary.getVersion() > 0);
+
+    }
+
+    @Test
     public void testAllPrimaryProprety() {
 
         assertNotNull(Primary.getDataManagerInitPath());

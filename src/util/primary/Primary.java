@@ -32,6 +32,7 @@ public abstract class Primary {
     private static String warningMessageFolderPath;
 
     private static int messagePriority;
+    private static double version;
 
     /* -LOADER */
     public static void load() throws PrimaryLoadException {
@@ -52,7 +53,7 @@ public abstract class Primary {
                 warningMessageFolderPath = initPrimaryProperties.getProperty("WARNING_MESSAGE_FOLDER_PATH");
 
                 messagePriority = Integer.parseInt(initPrimaryProperties.getProperty("MESSAGE_PRIORITY"));
-
+                version = Double.parseDouble(initPrimaryProperties.getProperty("VERSION"));
                 if (isLanguageAviable(initPrimaryProperties.getProperty("SYSTEM_LANGUAGE"))) {
                     SystemMessage.reset();
                     SystemMessage.load();
@@ -94,7 +95,8 @@ public abstract class Primary {
                 && checkAPrimaryProperty("INFORMATION_MESSAGE_FOLDER_PATH")
                 && checkAPrimaryProperty("NEUTRAL_MESSAGE_FOLDER_PATH")
                 && checkAPrimaryProperty("WARNING_MESSAGE_FOLDER_PATH")
-                && checkAPrimaryProperty("MESSAGE_PRIORITY");
+                && checkAPrimaryProperty("MESSAGE_PRIORITY")
+                && checkAPrimaryProperty("VERSION");
     }
 
     private static boolean checkAPrimaryProperty(String primaryCode) {
@@ -102,6 +104,12 @@ public abstract class Primary {
                 .getProperty(
                         primaryCode)
                 .isBlank() && !initPrimaryProperties.getProperty(primaryCode).isEmpty()));
+    }
+
+    /* -VERSION */
+    /* --GETTER */
+    public static double getVersion() {
+        return version;
     }
 
     /* -INIT_PATH */
