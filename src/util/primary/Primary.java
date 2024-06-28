@@ -25,6 +25,9 @@ public abstract class Primary {
     private static String dataManagerInitPath;
     private static String blockchainManagerInitPath;
     private static String securityManagerInitPath;
+
+    private static String chainObjectManagerInitPath;
+
     private static String doneMessageInitPath;
     private static String errorMessageFolderPath;
     private static String informationMessageFolderPath;
@@ -43,9 +46,13 @@ public abstract class Primary {
             if (initPrimaryPropertiesCheck()) {
 
                 systemLanguageValue = initPrimaryProperties.getProperty("SYSTEM_LANGUAGE");
+
                 dataManagerInitPath = initPrimaryProperties.getProperty("DATA_MANAGER_INIT_PATH");
                 blockchainManagerInitPath = initPrimaryProperties.getProperty("BLOCKCHAIN_MANAGER_INIT_PATH");
                 securityManagerInitPath = initPrimaryProperties.getProperty("SECURITY_MANAGER_INIT_PATH");
+
+                chainObjectManagerInitPath = initPrimaryProperties.getProperty("CHAINOBJECT_MANAGER_INTI_PATH");
+
                 doneMessageInitPath = initPrimaryProperties.getProperty("DONE_MESSAGE_FOLDER_PATH");
                 errorMessageFolderPath = initPrimaryProperties.getProperty("ERROR_MESSAGE_FOLDER_PATH");
                 informationMessageFolderPath = initPrimaryProperties.getProperty("INFORMATION_MESSAGE_FOLDER_PATH");
@@ -92,6 +99,7 @@ public abstract class Primary {
         return checkAPrimaryProperty("SYSTEM_LANGUAGE") && checkAPrimaryProperty("DATA_MANAGER_INIT_PATH")
                 && checkAPrimaryProperty("BLOCKCHAIN_MANAGER_INIT_PATH")
                 && checkAPrimaryProperty("SECURITY_MANAGER_INIT_PATH")
+                && checkAPrimaryProperty("CHAINOBJECT_MANAGER_INTI_PATH")
                 && checkAPrimaryProperty("DONE_MESSAGE_FOLDER_PATH")
                 && checkAPrimaryProperty("ERROR_MESSAGE_FOLDER_PATH")
                 && checkAPrimaryProperty("INFORMATION_MESSAGE_FOLDER_PATH")
@@ -129,6 +137,11 @@ public abstract class Primary {
     /* ---SECURITY */
     public static String getSecurityManagerInitPath() {
         return securityManagerInitPath;
+    }
+
+    /* ---CHAINOBJECT */
+    public static String getChainObjectManagerInitPath() {
+        return chainObjectManagerInitPath;
     }
 
     /* -FOLDER_PATH */
